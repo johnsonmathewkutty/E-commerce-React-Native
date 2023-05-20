@@ -14,7 +14,7 @@ const Itemdetails=()=>{
    const userId=useSelector(state=>state.Datainfo.userid)
  const searchtext=useSelector(state=>state.Datainfo.searchdata)
  const itemdata=useSelector(state=>state.Datainfo.itemdatas)
- const cartdatas=useSelector(state=>state.Cartdatas)
+ const cartdatas=useSelector(state=>state.Cartdatas.cartdata)
   const navigation=useNavigation()
   const[search,setsearch]=useState(false)
   const[display,setdisplay]=useState(false)
@@ -149,11 +149,33 @@ const Itemdetails=()=>{
 
     }
   }
-  const cartadd=(item)=>{
-   const  userref=firestore().collection('users').doc(userId)
-   const cartref=userref.collection('cart');
-   cartref.add(cartdatas)
+  const cartadd=async(items)=>{
+ const user=await firestore().collection('users').doc(userId).get();
+ let tempdata=user.data().cart;
+ if(tempdata.length>0){
+  let exsiting=false
+  tempdata.map((itm)=>{
+if(itm.id==items.id){
+    exsiting=true
+    itm.quantity=itm.quantity +1
+}
+  })
+  if(exsiting==false){
+    tempdata.push({...items,quantity:1})
   }
+  firestore().collection('users').doc(userId).update({
+    cart:tempdata
+   })
+ }
+ else{
+  tempdata.push({...items,quantity:1})
+ }
+ firestore().collection('users').doc(userId).update({
+  cart:tempdata
+ })
+ 
+}
+
   const addtocart=(item)=>{
     dispatch(addcart(item))
   }
@@ -197,7 +219,7 @@ const Itemdetails=()=>{
           </View>
            <Details/>
            < View style={styles.buttoncontainer}>
-           <TouchableOpacity style={styles.buttonaction} onPress={()=>{addtocart(item),cartadd(item)}}>
+           <TouchableOpacity style={styles.buttonaction} onPress={()=>cartadd(item)}>
             <Text style={styles.buttontext}>Add To Cart</Text>
            </TouchableOpacity>
            <TouchableOpacity style={styles.buttonaction}>

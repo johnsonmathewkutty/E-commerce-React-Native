@@ -18,7 +18,11 @@ function Home({navigation,route}){
     const userId=useSelector(state=>state.Datainfo.userid)
     const mytext=useRef('')
    useEffect(()=>{
-    dispatch(Getdatainfo())
+    dispatch(Getdatainfo()) 
+    datafirestore()  
+   },[])
+
+   const datafirestore=()=>{
     const { email } = route.params;
     const {password}=route.params;
         const usersRef = firestore().collection('users');
@@ -32,14 +36,15 @@ function Home({navigation,route}){
               .set({
                 Email: email,
                 Password: password,
-              })}  
+                cart:[],
+              })}
           })
           .catch((error) => {
             console.error(error);
           });
-       
     
-   },[])
+   }
+
    const additemdetails=(item)=>{
     dispatch(itemdetails(item))
 

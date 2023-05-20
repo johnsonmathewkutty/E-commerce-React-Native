@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View,Text,StyleSheet,FlatList } from "react-native";
 import { useSelector } from "react-redux";
 
