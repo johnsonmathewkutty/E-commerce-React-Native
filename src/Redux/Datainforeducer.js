@@ -37,8 +37,7 @@ const DatainfoSlice=createSlice({
       loading:false,
       error:'',
       itemdatas:[],
-      searchdata:[],
-      userid:''
+      searchdata:[]
      
   },
   reducers:{
@@ -54,10 +53,6 @@ const DatainfoSlice=createSlice({
          state.itemdatas.push(action.payload)
         }
            
-    },
-    firestoreuserid:(state,action)=>{
-       
-            state.userid=action.payload
     }
  },
     extraReducers:(builder)=>{
@@ -83,6 +78,6 @@ const DatainfoSlice=createSlice({
     },
 })
 
- export const {itemdetails,firestoreuserid}=DatainfoSlice.actions;
+ export const {itemdetails}=DatainfoSlice.actions;
   export {Getdatainfo}  
 export default DatainfoSlice.reducer;

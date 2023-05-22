@@ -1,39 +1,65 @@
-import React,{useEffect, useState,useRef} from "react";
+import React,{useEffect, useState,useCallback, useId} from "react";
 import { View,StyleSheet,TouchableOpacity,TextInput,FlatList,Image,Text,ScrollView,TouchableHighlight} from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation,useFocusEffect } from "@react-navigation/native";
 import  Icon  from "react-native-vector-icons/MaterialIcons";
 import { searchbarAsync,itemdetails } from "../Redux/Datainforeducer";
-import { addcart } from "../Redux/Cartreducer";
+import { additemcount} from "../Redux/Cartreducer";
 import { useDispatch, useSelector } from "react-redux";
 import { AirbnbRating,Rating } from "react-native-ratings";
 import firestore from '@react-native-firebase/firestore'
 
 const Itemdetails=()=>{
    const dispatch=useDispatch()
-   const userId=useSelector(state=>state.Datainfo.userid)
+   const userId=useSelector(state=>state.Cartdatas.userid)
  const searchtext=useSelector(state=>state.Datainfo.searchdata)
  const itemdata=useSelector(state=>state.Datainfo.itemdatas)
- const cartdatas=useSelector(state=>state.Cartdatas.cartdata)
+ const cartcounts=useSelector(state=>state.Cartdatas.cartcount)
   const navigation=useNavigation()
   const[search,setsearch]=useState(false)
   const[display,setdisplay]=useState(false)
+  const[countchange,setcountchange]=useState(false)
+  console.log(countchange)
   useEffect(()=>{
+    dispatch(additemcount(userId)),
+    Headershow()
+  },[cartcounts,itemdata,countchange])
+ 
+  const Headershow=()=>{
+    if(cartcounts>0){
     navigation.setOptions({
       headerRight:()=>(
         <View style={styles.headericon} >
           <TouchableOpacity style={styles.searchicon} onPress={handlesearchbar} >
-            <Icon name="search" size={28}/>
+            <Icon name="search" size={38}/>
           </TouchableOpacity>
           <TouchableOpacity>
-            <Icon name="shopping-cart" size={24}/>
+            <Icon name="shopping-cart" size={34}/>
+            <View style={styles.cartcount}>
+                <Text style={styles.textcartcount}>{cartcounts}</Text>
+              </View>
           </TouchableOpacity>
         </View>
       ),
+    
     })
-   
-   
-  },[])
+  }
+  else{
+    navigation.setOptions({
+      headerRight:()=>(
+        <View style={styles.headericon} >
+          <TouchableOpacity style={styles.searchicon} onPress={handlesearchbar} >
+            <Icon name="search" size={38}/>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Icon name="shopping-cart" size={34}/>
+          </TouchableOpacity>
+        </View>
+      ),
+    
+    })
+  }
+  }
   const handlesearchbar=()=>{
     navigation.setOptions({
       headerRight:()=>(
@@ -55,18 +81,37 @@ const Itemdetails=()=>{
     })
 }
   const handleclose=()=>{
-    navigation.setOptions({
-    headerRight:()=>(
-      <View style={styles.headericon} >
-        <TouchableOpacity style={styles.searchicon} onPress={()=>{handlesearchbar() }} >
-          <Icon name="search" size={24}/>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Icon name="shopping-cart" size={24}/>
-        </TouchableOpacity>
-      </View>
-    ),
-    })
+    if(cartcounts>0){ 
+       navigation.setOptions({
+        headerRight:()=>(
+          <View style={styles.headericon} >
+            <TouchableOpacity style={styles.searchicon} onPress={()=>{handlesearchbar() }} >
+              <Icon name="search" size={38}/>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Icon name="shopping-cart" size={34}/>
+              <View style={styles.cartcount}>
+                <Text style={styles.textcartcount}>{cartcounts}</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        ),
+        })}
+      else{
+        navigation.setOptions({
+          headerRight:()=>(
+            <View style={styles.headericon} >
+              <TouchableOpacity style={styles.searchicon} onPress={()=>{handlesearchbar() }} >
+                <Icon name="search" size={38}/>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Icon name="shopping-cart" size={34}/>
+              </TouchableOpacity>
+            </View>
+          ),
+          })
+      }
+  
   }
   const additemdetails=(item)=>{
     dispatch(itemdetails(item))
@@ -149,7 +194,8 @@ const Itemdetails=()=>{
 
     }
   }
-  const cartadd=async(items)=>{
+  
+  const addcart=async(items)=>{
  const user=await firestore().collection('users').doc(userId).get();
  let tempdata=user.data().cart;
  if(tempdata.length>0){
@@ -175,10 +221,13 @@ if(itm.id==items.id){
  })
  
 }
+const addcartitem=(item)=>{
+    addcart(item)
+    setTimeout(() => {
+      setcountchange(true)
+    }, 2000);
+}
 
-  const addtocart=(item)=>{
-    dispatch(addcart(item))
-  }
   return(
     <View style={styles.container}>
       <FlatList
@@ -198,7 +247,7 @@ if(itm.id==items.id){
           </View>
         <Text style={styles.extraoffertext}>Top Discount of the sale</Text>
           <View style={styles.pricecontainer}>
-          <Text style={styles.offertext} >30% off</Text>
+          <Text style={styles.offertext} >30%</Text>
             <Text style={styles.textprice} >$499</Text>
             <Text style={styles.pricetext}>${item.price}</Text>
           </View>
@@ -219,7 +268,7 @@ if(itm.id==items.id){
           </View>
            <Details/>
            < View style={styles.buttoncontainer}>
-           <TouchableOpacity style={styles.buttonaction} onPress={()=>cartadd(item)}>
+           <TouchableOpacity style={styles.buttonaction} onPress={()=>{addcartitem(item)}}>
             <Text style={styles.buttontext}>Add To Cart</Text>
            </TouchableOpacity>
            <TouchableOpacity style={styles.buttonaction}>
@@ -463,6 +512,21 @@ buttontext:{
 },
 buttoncontainer:{
   marginBottom:50
+},
+cartcount:{
+  width:20,
+  height:20,
+  borderRadius:50,
+  backgroundColor:'#00cc00',
+  position:'absolute',
+  right:-3,
+  top:-4,
+  alignItems:'center'
+},
+textcartcount:{
+  color:'#fff',
+  fontSize:15,
+  fontWeight:'900'
 }
 })
 

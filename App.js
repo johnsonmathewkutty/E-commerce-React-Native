@@ -1,10 +1,10 @@
 import React from "react";
+import { View,StyleSheet,Text} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import Icon  from "react-native-vector-icons/MaterialIcons";
-import { Provider} from "react-redux";
-
+import { Provider,useSelector} from "react-redux";
 import Home from "./src/Screens/Home";
 import Cart from "./src/Screens/Cart";
 import Order from "./src/Screens/Order";
@@ -16,6 +16,7 @@ import Register from "./src/Screens/Register";
 
 function Bottomtabs(){
  const bottomtab=createBottomTabNavigator()
+ const cartcounts=useSelector(state=>state.Cartdatas.cartcount)
   return(
   <bottomtab.Navigator>
     <bottomtab.Screen
@@ -23,7 +24,7 @@ function Bottomtabs(){
     component={Home}
     options={{
       headerShown:false,
-      tabBarIcon:({focused})=> focused ?
+      tabBarIcon:({focused})=>focused ?
       <Icon name='home' size={25} color='#00D100' /> : <Icon name="home" size={22} color='#87ACA3' />,
         tabBarLabelStyle:{
           fontSize:13,
@@ -40,7 +41,7 @@ function Bottomtabs(){
     <bottomtab.Screen
     name="Cart"
     component={Cart}
-    options={{
+    options={({route})=>({
       headerShown:false,
       tabBarActiveTintColor:'#000C66',
       tabBarInactiveTintColor:'#87ACA3',
@@ -49,12 +50,25 @@ function Bottomtabs(){
          fontWeight:'bold',
          marginBottom:3
       },
-      tabBarIcon:({focused})=> focused?
-      <Icon name="shopping-cart" size={25} color='#00D100' />:<Icon name="shopping-cart" size={22} color='#87ACA3' />,
+      tabBarIcon:({focused})=>(
+        <View>
+        { focused?(
+      <Icon name="shopping-cart" size={35} color='#00D100' />
+      )
+      :(
+      <Icon name="shopping-cart" size={35} color='#87ACA3' />
+      )}
+       {route.name === 'Cart' && cartcounts > 0 && (
+                <View style={styles.cartcount}>
+                  <Text style={styles.textcartcount}>{cartcounts}</Text>
+                </View>
+              )}
+      </View>
+      ),
       tabBarIconStyle:{
         marginTop:5
       },
-    }}
+    })}
     />
     <bottomtab.Screen
     name="Order"
@@ -148,3 +162,21 @@ const App=()=>{
 
 
 export default App;
+
+const styles=StyleSheet.create({
+  cartcount:{
+    width:20,
+    height:20,
+    borderRadius:50,
+    backgroundColor:'#00cc00',
+    position:'absolute',
+    right:-3,
+    top:-4,
+    alignItems:'center'
+  },
+  textcartcount:{
+    color:'#fff',
+    fontSize:15,
+    fontWeight:'900'
+  }
+})

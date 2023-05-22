@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 
 import auth from '@react-native-firebase/auth'
 import { useDispatch,useSelector } from 'react-redux'
-import { firestoreuserid } from '../Redux/Datainforeducer'
+import { firestoreuserid } from '../Redux/Cartreducer'
 
 const Login = ({navigation}) => {
     const [email,setemail]=useState('')

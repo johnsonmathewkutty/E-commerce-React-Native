@@ -9,17 +9,19 @@ import  Icon  from "react-native-vector-icons/MaterialIcons";
 import firestore from '@react-native-firebase/firestore'
 
 import { Getdatainfo,itemdetails,searchAsync} from "../Redux/Datainforeducer";
+import { additemcount } from "../Redux/Cartreducer";
 
 function Home({navigation,route}){
     const dispatch=useDispatch()
     const data=useSelector(state=>state.Datainfo.datas)
     const loading=useSelector(state=>state.Datainfo.loading)
     const error=useSelector(state=>state.Datainfo.error)
-    const userId=useSelector(state=>state.Datainfo.userid)
+    const userId=useSelector(state=>state.Cartdatas.userid)
     const mytext=useRef('')
    useEffect(()=>{
     dispatch(Getdatainfo()) 
-    datafirestore()  
+    datafirestore() ,
+    dispatch(additemcount(userId))
    },[])
 
    const datafirestore=()=>{

@@ -1,24 +1,30 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import firestore from '@react-native-firebase/firestore'
 
+
+const additemcount=createAsyncThunk('cart/count',async(userid)=>{
+    const user= await firestore().collection('users').doc(userid).get();
+    let itemcount=user.data().cart.length
+    return itemcount
+})
 
 const CartreducerSlice=createSlice({
     name:'cart',
     initialState:{
-        cartdata:[]
+        cartcount:0,
+        userid:''
     },
     reducers:{
-        addcart:(state,action)=>{
-        // const itemindex=state.cartdata.findIndex((item)=>item.id === action.payload.id)
-        // if(itemindex>=0){
-        //     state.cartdata[itemindex].quantity+=1
-        // }
-        // else{
-        //     state.cartdata.push({...action.payload, quantity:1})
-
-        //    } 
-        state.cartdata=({...action.payload, quantity:1})
-        },
+        firestoreuserid:(state,action)=>{
+            state.userid=action.payload
+    },
+    },
+    extraReducers:(builder)=>{
+      builder.addCase(additemcount.fulfilled,(state,action)=>{
+        state.cartcount=action.payload
+      })
     }
 })
-export const {addcart}=CartreducerSlice.actions
+export{additemcount}
+export const {firestoreuserid}=CartreducerSlice.actions
 export default CartreducerSlice.reducer;
