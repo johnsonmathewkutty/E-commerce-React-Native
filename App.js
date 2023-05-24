@@ -35,6 +35,10 @@ function Bottomtabs(){
         tabBarInactiveTintColor:'#87ACA3',
         tabBarIconStyle:{
           marginTop:5
+        },
+        params:{
+          screen:'Cart',
+          screennavigate:cartcounts,
         }
       }}
     />
@@ -42,7 +46,7 @@ function Bottomtabs(){
     name="Cart"
     component={Cart}
     options={({route})=>({
-      headerShown:false,
+      headerShown:true,
       tabBarActiveTintColor:'#000C66',
       tabBarInactiveTintColor:'#87ACA3',
       tabBarLabelStyle:{
@@ -68,6 +72,7 @@ function Bottomtabs(){
       tabBarIconStyle:{
         marginTop:5
       },
+
     })}
     />
     <bottomtab.Screen
@@ -153,7 +158,8 @@ const App=()=>{
         />
         <stack.Screen
         name="Cart"
-        component={Cart}/>
+        component={Cart}
+      />
       </stack.Navigator>
     </NavigationContainer>
     </Provider>

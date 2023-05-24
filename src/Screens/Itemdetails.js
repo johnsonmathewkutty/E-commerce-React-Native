@@ -8,6 +8,8 @@ import { additemcount} from "../Redux/Cartreducer";
 import { useDispatch, useSelector } from "react-redux";
 import { AirbnbRating,Rating } from "react-native-ratings";
 import firestore from '@react-native-firebase/firestore'
+import Cart from "./Cart";
+
 
 const Itemdetails=()=>{
    const dispatch=useDispatch()
@@ -19,10 +21,16 @@ const Itemdetails=()=>{
   const[search,setsearch]=useState(false)
   const[display,setdisplay]=useState(false)
   const[countchange,setcountchange]=useState(false)
-  console.log(countchange)
   useEffect(()=>{
     dispatch(additemcount(userId)),
     Headershow()
+    navigation.setOptions({
+      headerLeft:()=>(
+        <TouchableOpacity onPress={()=>navigation.navigate('Bottomtabs',{screen:'Home'})}>
+        <Icon name="arrow-back" size={24} color={'#000'}/>
+      </TouchableOpacity>  
+      )
+    })
   },[cartcounts,itemdata,countchange])
  
   const Headershow=()=>{
@@ -33,7 +41,11 @@ const Itemdetails=()=>{
           <TouchableOpacity style={styles.searchicon} onPress={handlesearchbar} >
             <Icon name="search" size={38}/>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>navigation.navigate('Bottomtabs',
+          {screen:'Cart',
+          params:{
+          previousScreen: 'previousscreens' } }
+          )}>
             <Icon name="shopping-cart" size={34}/>
             <View style={styles.cartcount}>
                 <Text style={styles.textcartcount}>{cartcounts}</Text>
@@ -51,7 +63,10 @@ const Itemdetails=()=>{
           <TouchableOpacity style={styles.searchicon} onPress={handlesearchbar} >
             <Icon name="search" size={38}/>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>navigation.navigate('Bottomtabs',
+          {screen:'Cart',
+          params:{previousScreen:'previousscreen'}
+          })}>
             <Icon name="shopping-cart" size={34}/>
           </TouchableOpacity>
         </View>
@@ -88,7 +103,9 @@ const Itemdetails=()=>{
             <TouchableOpacity style={styles.searchicon} onPress={()=>{handlesearchbar() }} >
               <Icon name="search" size={38}/>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>navigation.navigate('Bottomtabs',
+            {screen:'Cart',
+            params:{previousScreen:'previousscreen'}})}>
               <Icon name="shopping-cart" size={34}/>
               <View style={styles.cartcount}>
                 <Text style={styles.textcartcount}>{cartcounts}</Text>
@@ -104,7 +121,9 @@ const Itemdetails=()=>{
               <TouchableOpacity style={styles.searchicon} onPress={()=>{handlesearchbar() }} >
                 <Icon name="search" size={38}/>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>navigation.navigate('Bottomtabs',
+              {screen:'Cart',
+              params:{previousScreen:'previousscreen'}})}>
                 <Icon name="shopping-cart" size={34}/>
               </TouchableOpacity>
             </View>
@@ -222,7 +241,7 @@ if(itm.id==items.id){
  
 }
 const addcartitem=(item)=>{
-    addcart(item)
+   addcart(item)
     setTimeout(() => {
       setcountchange(true)
     }, 2000);

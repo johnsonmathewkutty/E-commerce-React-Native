@@ -8,11 +8,18 @@ const additemcount=createAsyncThunk('cart/count',async(userid)=>{
     return itemcount
 })
 
+const getcartdata=createAsyncThunk('cart/firestoredata',async(userid)=>{
+ const user =await firestore().collection('users').doc(userid).get();
+   let datas=user.data().cart
+   return datas
+})
+
 const CartreducerSlice=createSlice({
     name:'cart',
     initialState:{
         cartcount:0,
-        userid:''
+        userid:'',
+        cartdata:[]
     },
     reducers:{
         firestoreuserid:(state,action)=>{
@@ -22,9 +29,12 @@ const CartreducerSlice=createSlice({
     extraReducers:(builder)=>{
       builder.addCase(additemcount.fulfilled,(state,action)=>{
         state.cartcount=action.payload
+      }),
+      builder.addCase(getcartdata.fulfilled,(state,action)=>{
+        state.cartdata=action.payload
       })
     }
 })
-export{additemcount}
+export{additemcount,getcartdata}
 export const {firestoreuserid}=CartreducerSlice.actions
 export default CartreducerSlice.reducer;
