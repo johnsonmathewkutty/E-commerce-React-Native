@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from "react";
-import { View,Text,StyleSheet,FlatList,TouchableOpacity,Image } from "react-native";
+import { View,Text,StyleSheet,FlatList,TouchableOpacity,Image,Button } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation,useIsFocused} from "@react-navigation/native";
 import  Icon  from "react-native-vector-icons/MaterialIcons";
@@ -8,41 +8,82 @@ import firestore from '@react-native-firebase/firestore'
 
 import { getcartdata } from "../Redux/Cartreducer";
 
-function Cart({route}){
+function Cart(){
   const userId=useSelector(state=>state.Cartdatas.userid)
    const cartdatas=useSelector(state=>state.Cartdatas.cartdata)
    const dispatch=useDispatch()
    const navigation=useNavigation()
-   const isFocused = useIsFocused();
-   const { previousScreen}=route.params;
    useEffect(() => {
     dispatch(getcartdata(userId))
-    const handleBackPress = () => {
-      // Determine the previous screen based on the route name
-      if (previousScreen != 'previousScreens') {
-        navigation.navigate('Itemdetails')
-        console.log('its work if')
-      } else {
-        navigation.navigate('Home')
-        console.log('its work else')
-      }
-      return true; // Prevent default back button action
-    };
+  }, [cartdatas]);
 
-    if (isFocused) {
-      navigation.setOptions({
-        headerLeft: () => (
-          <TouchableOpacity onPress={handleBackPress}>
-            <Icon name="arrow-back" size={24} color="#000" />
-          </TouchableOpacity>
-        ),
-      });
-    }
-  }, [navigation, isFocused,cartdatas]);
+  const additem=async(items)=>{
+ const user=await firestore().collection('users').doc(userId).get()
+ let tempdata=user.data().cart;
+  tempdata.map((itm)=>{
+if(itm.id==items.id){
+    itm.quantity=itm.quantity +1
+}
+  })
+  firestore().collection('users').doc(userId).update({
+    cart:tempdata
+   })
+}
 
-  const additem=()=>{
-    
-  }
+const removeitem=async(items)=>{
+  const user=await firestore().collection('users').doc(userId).get()
+  let tempdata=user.data().cart;
+   tempdata.map((itm)=>{
+    if(itm.quantity>1){
+ if(itm.id==items.id){
+     itm.quantity=itm.quantity -1
+ }
+}
+   })
+   firestore().collection('users').doc(userId).update({
+     cart:tempdata
+    })
+}
+const deleteitem=async(index)=>{
+  const user=await firestore().collection('users').doc(userId).get()
+  let tempdata=user.data().cart;
+  tempdata.splice(index,1)
+  firestore().collection('users').doc(userId).update({
+    cart:tempdata
+   })
+}
+     if(userId==''){
+      return(
+        <View style={styles.emptycontainer}>
+        <View style={styles.imagecontainerempty}>
+        <Image source={require('../images/cartimage.webp')} style={styles.emptyimage}/>
+        </View>
+       <Text style={styles.emptytext}>Missing Cart Items</Text>
+       <Text style={styles.emptysubtext}>Login to see the items you added previously</Text>
+      <TouchableOpacity style={styles.buttonempty} onPress={()=>navigation.navigate('Login')}>
+        <Text style={styles.emptybuttontext}>Login</Text>
+      </TouchableOpacity>
+      </View>
+      )
+     }
+     if(cartdatas.length<=0 && userId != ''){
+      return(
+        <View style={styles.emptycontainer}>
+          <View style={styles.imagecontainerempty}>
+          <Image source={require('../images/cartimage.webp')} style={styles.emptyimage}/>
+          </View>
+         <Text style={styles.emptytext}>your cart is empty !</Text>
+         <Text style={styles.emptysubtext}>Add item to it now</Text>
+        <TouchableOpacity style={styles.buttonempty} onPress={()=>navigation.navigate('Bottomtabs',
+        {screen:'Home',
+        params:{email:'',password:''}
+        }
+        )}>
+          <Text style={styles.emptybuttontext}>Continue Shopping</Text>
+        </TouchableOpacity>
+        </View>
+      )
+     }
     return(
         <View style={styles.container}>
         <FlatList
@@ -52,11 +93,17 @@ function Cart({route}){
           <View style={styles.imagcontainer}>
          <Image source={{uri:item.image}} style={styles.image}/>
          <View style={styles.quantitycontainer}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>{
+                if(item.quantity>1){
+                  removeitem(item)
+                }else{
+                  deleteitem(index)
+                }
+                }}>
                 <Text style={styles.quantitytext}>-</Text>
               </TouchableOpacity>
               <Text style={styles.quantitytext}>{item.quantity}</Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>additem(item)}>
                 <Text style={styles.quantitytext}>+</Text>
               </TouchableOpacity>
             </View>
@@ -76,7 +123,7 @@ function Cart({route}){
               <Text style={styles.offerprice}>${item.price}</Text>
             </View>
             <View style={styles.buttoncontainer}>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity style={styles.button} onPress={()=>deleteitem(index)}>
                 <Text style={styles.buttontext}>Remove</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.button1}>
@@ -204,7 +251,51 @@ const styles=StyleSheet.create({
      borderRadius:6,
      justifyContent:'center',
      alignItems:'center'
-    }
+    },
+    emptytext:{
+    fontSize:24,
+    fontWeight:'600',
+    color:'#212121',
+    fontFamily:'aira,sans-serif'
+    },
+    emptycontainer:{
+      flex:1,
+      justifyContent:'center',
+      alignItems:'center',
+      backgroundColor:'#fff'
+    },
+    buttonempty:{
+      width:200,
+      height:50,
+      backgroundColor:'#00cc00',
+      alignItems:'center',
+      justifyContent:'center',
+      marginTop:15,
+      borderRadius:10
+    },
+    emptybuttontext:{
+      color:'#fff',
+      fontSize:18,
+      fontWeight:'900'
+    },
+    imagecontainerempty:{
+      width:'90%',
+      height:'40%',
+     
+    },
+    emptyimage:{
+      width:'90%',
+      height:'90%',
+      alignSelf:'center'
+    },
+    emptysubtext:{
+      fontSize:17,
+      marginTop:5,
+      color:'#000',
+      fontWeight:'400',
+      fontFamily:'aira,sans-serif'
+    },
+   
 })
 
 

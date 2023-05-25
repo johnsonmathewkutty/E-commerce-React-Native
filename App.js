@@ -17,6 +17,7 @@ import Register from "./src/Screens/Register";
 function Bottomtabs(){
  const bottomtab=createBottomTabNavigator()
  const cartcounts=useSelector(state=>state.Cartdatas.cartcount)
+ const  previous_Screen=''
   return(
   <bottomtab.Navigator>
     <bottomtab.Screen
@@ -35,12 +36,9 @@ function Bottomtabs(){
         tabBarInactiveTintColor:'#87ACA3',
         tabBarIconStyle:{
           marginTop:5
-        },
-        params:{
-          screen:'Cart',
-          screennavigate:cartcounts,
         }
       }}
+      initialParams={{previousScreen:previous_Screen}}
     />
     <bottomtab.Screen
     name="Cart"

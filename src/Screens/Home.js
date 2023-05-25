@@ -18,15 +18,16 @@ function Home({navigation,route}){
     const error=useSelector(state=>state.Datainfo.error)
     const userId=useSelector(state=>state.Cartdatas.userid)
     const mytext=useRef('')
-   useEffect(()=>{
-    dispatch(Getdatainfo()) 
-    datafirestore() ,
-    dispatch(additemcount(userId))
-   },[])
-
-   const datafirestore=()=>{
     const { email } = route.params;
     const {password}=route.params;
+   useEffect(()=>{
+    dispatch(Getdatainfo()) 
+    dispatch(additemcount(userId))
+    datafirestore()
+   },[])
+  
+    const datafirestore=()=>{
+        if(email!='' && password!=''){
         const usersRef = firestore().collection('users');
         usersRef
           .where('Email', '==', email || 'Email','!=','')
@@ -47,6 +48,8 @@ function Home({navigation,route}){
     
    }
 
+  }
+  
    const additemdetails=(item)=>{
     dispatch(itemdetails(item))
 

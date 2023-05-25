@@ -1,11 +1,11 @@
-import React,{useEffect, useState,useCallback, useId} from "react";
-import { View,StyleSheet,TouchableOpacity,TextInput,FlatList,Image,Text,ScrollView,TouchableHighlight} from "react-native";
+import React,{useEffect, useState} from "react";
+import { View,StyleSheet,TouchableOpacity,TextInput,FlatList,Image,Text,ScrollView,TouchableHighlight, Alert} from "react-native";
 
 import { useNavigation,useFocusEffect } from "@react-navigation/native";
 import  Icon  from "react-native-vector-icons/MaterialIcons";
 import { searchbarAsync,itemdetails } from "../Redux/Datainforeducer";
 import { additemcount} from "../Redux/Cartreducer";
-import { useDispatch, useSelector } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import { AirbnbRating,Rating } from "react-native-ratings";
 import firestore from '@react-native-firebase/firestore'
 import Cart from "./Cart";
@@ -42,9 +42,7 @@ const Itemdetails=()=>{
             <Icon name="search" size={38}/>
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>navigation.navigate('Bottomtabs',
-          {screen:'Cart',
-          params:{
-          previousScreen: 'previousscreens' } }
+          {screen:'Cart',}
           )}>
             <Icon name="shopping-cart" size={34}/>
             <View style={styles.cartcount}>
@@ -241,10 +239,16 @@ if(itm.id==items.id){
  
 }
 const addcartitem=(item)=>{
-   addcart(item)
+  if(userId==''){
+    Alert.alert('Login to continue')
+    navigation.navigate('Login')
+  }else{
+    addcart(item)
+  }
+  
     setTimeout(() => {
       setcountchange(true)
-    }, 2000);
+    },2000);
 }
 
   return(
@@ -287,12 +291,13 @@ const addcartitem=(item)=>{
           </View>
            <Details/>
            < View style={styles.buttoncontainer}>
-           <TouchableOpacity style={styles.buttonaction} onPress={()=>{addcartitem(item)}}>
+           <TouchableOpacity style={styles.buttonaction} onPress={()=>addcartitem(item)}>
             <Text style={styles.buttontext}>Add To Cart</Text>
            </TouchableOpacity>
            <TouchableOpacity style={styles.buttonaction}>
             <Text style={styles.buttontext}>Buy Now</Text>
            </TouchableOpacity></View>
+          
             </View>
       )}/>
     </View>

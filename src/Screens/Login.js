@@ -9,7 +9,6 @@ const Login = ({navigation}) => {
     const [email,setemail]=useState('')
     const [password,setpassword]=useState('')
     const dispatch=useDispatch()
-   
     const userid=(userId)=>{
       dispatch(firestoreuserid(userId))
     }
@@ -61,6 +60,17 @@ else{
         <Text style={styles.signuptext}>Don't have an account?</Text>
         <TouchableOpacity onPress={()=>navigation.navigate('Register')}>
             <Text style={styles.buttontextsignup}>Sign up</Text>
+        </TouchableOpacity>
+      </View>
+      <View>
+        <Text style={styles.textor}>-- OR --</Text>
+        <TouchableOpacity style={styles.skipbutton} onPress={()=>navigation.navigate('Bottomtabs', {
+        screen: 'Home',
+        params: { email:'',
+                 password:''
+        },
+      })}>
+            <Text style={styles.logintext}>skip Now</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -121,5 +131,20 @@ const styles = StyleSheet.create({
         fontSize:18,
         marginLeft:5,
         fontWeight:'500'
+    },
+    skipbutton:{
+        width:200,
+        height:50,
+        backgroundColor:'#00cc00',
+        justifyContent:'center',
+        alignItems:'center',
+        borderRadius:8,
+        marginTop:20
+    },
+    textor:{
+        fontSize:20,
+        fontWeight:'600',
+        marginTop:20,
+        alignSelf:'center'
     }
 })
