@@ -40,6 +40,8 @@ function Home({navigation,route}){
                 Email: email,
                 Password: password,
                 cart:[],
+                Adress:[],
+                Defaultadress:[],
               })}
           })
           .catch((error) => {

@@ -6,7 +6,8 @@ import  Icon  from "react-native-vector-icons/MaterialIcons";
 import { Rating } from "react-native-ratings";
 import firestore from '@react-native-firebase/firestore'
 
-import { getcartdata } from "../Redux/Cartreducer";
+import { getcartdata,addquantity,decreasequantity,deleteitem} from "../Redux/Cartreducer";
+import { useId } from "react";
 
 function Cart(){
   const userId=useSelector(state=>state.Cartdatas.userid)
@@ -17,40 +18,16 @@ function Cart(){
     dispatch(getcartdata(userId))
   }, [cartdatas]);
 
-  const additem=async(items)=>{
- const user=await firestore().collection('users').doc(userId).get()
- let tempdata=user.data().cart;
-  tempdata.map((itm)=>{
-if(itm.id==items.id){
-    itm.quantity=itm.quantity +1
-}
-  })
-  firestore().collection('users').doc(userId).update({
-    cart:tempdata
-   })
+  const additem=(items)=>{
+  dispatch(addquantity({items,userId}))
 }
 
-const removeitem=async(items)=>{
-  const user=await firestore().collection('users').doc(userId).get()
-  let tempdata=user.data().cart;
-   tempdata.map((itm)=>{
-    if(itm.quantity>1){
- if(itm.id==items.id){
-     itm.quantity=itm.quantity -1
- }
+const removeitem=(items)=>{
+dispatch(decreasequantity({items,userId}))
+console.log(items)
 }
-   })
-   firestore().collection('users').doc(userId).update({
-     cart:tempdata
-    })
-}
-const deleteitem=async(index)=>{
-  const user=await firestore().collection('users').doc(userId).get()
-  let tempdata=user.data().cart;
-  tempdata.splice(index,1)
-  firestore().collection('users').doc(userId).update({
-    cart:tempdata
-   })
+const deleteitems=(items)=>{
+  dispatch(deleteitem({items,userId}))
 }
      if(userId==''){
       return(
@@ -97,7 +74,7 @@ const deleteitem=async(index)=>{
                 if(item.quantity>1){
                   removeitem(item)
                 }else{
-                  deleteitem(index)
+                  deleteitems(item)
                 }
                 }}>
                 <Text style={styles.quantitytext}>-</Text>
@@ -112,7 +89,7 @@ const deleteitem=async(index)=>{
             <Text style={styles.titletext}>{item.title}</Text>
             <View style={styles.ratingcontainer}>
             <Rating imageSize={20}
-           startingValue={item.rating.rate}
+           startingValue={3}
              readonly
             />
             <Text style={styles.ratingtext}>({item.rating.count})</Text>
@@ -123,7 +100,7 @@ const deleteitem=async(index)=>{
               <Text style={styles.offerprice}>${item.price}</Text>
             </View>
             <View style={styles.buttoncontainer}>
-              <TouchableOpacity style={styles.button} onPress={()=>deleteitem(index)}>
+              <TouchableOpacity style={styles.button} onPress={()=>deleteitems(item)}>
                 <Text style={styles.buttontext}>Remove</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.button1}>

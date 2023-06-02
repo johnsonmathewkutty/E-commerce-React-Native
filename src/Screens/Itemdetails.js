@@ -4,7 +4,9 @@ import { View,StyleSheet,TouchableOpacity,TextInput,FlatList,Image,Text,ScrollVi
 import { useNavigation,useFocusEffect } from "@react-navigation/native";
 import  Icon  from "react-native-vector-icons/MaterialIcons";
 import { searchbarAsync,itemdetails } from "../Redux/Datainforeducer";
-import { additemcount} from "../Redux/Cartreducer";
+import { additemcount,cartdataadd,getcartdata} from "../Redux/Cartreducer";
+import { getadress,getDefaultadress} from '../Redux/Adressreducer'
+
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { AirbnbRating,Rating } from "react-native-ratings";
 import firestore from '@react-native-firebase/firestore'
@@ -17,12 +19,15 @@ const Itemdetails=()=>{
  const searchtext=useSelector(state=>state.Datainfo.searchdata)
  const itemdata=useSelector(state=>state.Datainfo.itemdatas)
  const cartcounts=useSelector(state=>state.Cartdatas.cartcount)
+ const defaultadress=useSelector(state=>state.Adressdatas.defaultadress)
   const navigation=useNavigation()
   const[search,setsearch]=useState(false)
   const[display,setdisplay]=useState(false)
   const[countchange,setcountchange]=useState(false)
   useEffect(()=>{
     dispatch(additemcount(userId)),
+    dispatch(getcartdata(userId)),
+    dispatch(getDefaultadress(userId))
     Headershow()
     navigation.setOptions({
       headerLeft:()=>(
@@ -79,7 +84,6 @@ const Itemdetails=()=>{
          <View style={styles.searchbar}>
           <TextInput
           placeholder="search"
-          autoFocus={true}
           onChangeText={(text)=>{
             dispatch(searchbarAsync(text))
             setsearch(true)
@@ -132,7 +136,6 @@ const Itemdetails=()=>{
   }
   const additemdetails=(item)=>{
     dispatch(itemdetails(item))
-
    }
  
   if(search){
@@ -211,46 +214,27 @@ const Itemdetails=()=>{
 
     }
   }
-  
-  const addcart=async(items)=>{
- const user=await firestore().collection('users').doc(userId).get();
- let tempdata=user.data().cart;
- if(tempdata.length>0){
-  let exsiting=false
-  tempdata.map((itm)=>{
-if(itm.id==items.id){
-    exsiting=true
-    itm.quantity=itm.quantity +1
-}
-  })
-  if(exsiting==false){
-    tempdata.push({...items,quantity:1})
-  }
-  firestore().collection('users').doc(userId).update({
-    cart:tempdata
-   })
- }
- else{
-  tempdata.push({...items,quantity:1})
- }
- firestore().collection('users').doc(userId).update({
-  cart:tempdata
- })
  
-}
 const addcartitem=(item)=>{
   if(userId==''){
     Alert.alert('Login to continue')
     navigation.navigate('Login')
   }else{
-    addcart(item)
+    dispatch(cartdataadd({item,userId}))
   }
   
     setTimeout(() => {
       setcountchange(true)
-    },2000);
+    },1000);
 }
 
+const handlebuynow=()=>{
+  if(defaultadress.length>0){
+    navigation.navigate('Orderdetails')
+  }else{
+    navigation.navigate('Addnewadress')
+  }
+}
   return(
     <View style={styles.container}>
       <FlatList
@@ -294,7 +278,7 @@ const addcartitem=(item)=>{
            <TouchableOpacity style={styles.buttonaction} onPress={()=>addcartitem(item)}>
             <Text style={styles.buttontext}>Add To Cart</Text>
            </TouchableOpacity>
-           <TouchableOpacity style={styles.buttonaction}>
+           <TouchableOpacity style={styles.buttonaction}onPress={()=>handlebuynow()}>
             <Text style={styles.buttontext}>Buy Now</Text>
            </TouchableOpacity></View>
           

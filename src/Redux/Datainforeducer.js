@@ -45,12 +45,12 @@ const DatainfoSlice=createSlice({
          if(state.itemdatas.length>0){
           const index=state.itemdatas.findIndex((item)=>item.id !== action.payload.id)
          if(index>=0){
-          state.itemdatas[index]=action.payload
+          state.itemdatas[index]={...action.payload,quantity:1}
          }
         }
         else
         {
-         state.itemdatas.push(action.payload)
+         state.itemdatas.push({...action.payload,quantity:1})
         }
            
     }

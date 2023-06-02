@@ -13,6 +13,9 @@ import Store from "./src/Redux/Store";
 import Itemdetails from "./src/Screens/Itemdetails";
 import Login from "./src/Screens/Login";
 import Register from "./src/Screens/Register";
+import Addnewadress from "./src/Screens/Addnewadress";
+import Adress from "./src/Screens/Adress";
+import Orderdetails from "./src/Screens/Orderdetails";
 
 function Bottomtabs(){
  const bottomtab=createBottomTabNavigator()
@@ -158,6 +161,15 @@ const App=()=>{
         name="Cart"
         component={Cart}
       />
+      <stack.Screen
+      name="Addnewadress"
+      component={Addnewadress}/>
+      <stack.Screen
+      name="Adress"
+      component={Adress}/>
+      <stack.Screen 
+      name="Orderdetails"
+      component={Orderdetails}/>
       </stack.Navigator>
     </NavigationContainer>
     </Provider>
