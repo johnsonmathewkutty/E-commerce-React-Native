@@ -2,29 +2,29 @@ import React, { useEffect, useState} from "react";
 import { View,Text,StyleSheet,FlatList,TouchableOpacity,Image,Button } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation,useIsFocused} from "@react-navigation/native";
-import  Icon  from "react-native-vector-icons/MaterialIcons";
 import { Rating } from "react-native-ratings";
 import firestore from '@react-native-firebase/firestore'
 
-import { getcartdata,addquantity,decreasequantity,deleteitem} from "../Redux/Cartreducer";
-import { useId } from "react";
+import { getcartdata,addquantity,decreasequantity,deleteitem,buynowaction} from "../Redux/Cartreducer";
+import { getDefaultadress } from "../Redux/Adressreducer";
 
 function Cart(){
   const userId=useSelector(state=>state.Cartdatas.userid)
    const cartdatas=useSelector(state=>state.Cartdatas.cartdata)
+   const defaultadress=useSelector(state=>state.Adressdatas.defaultadress)
    const dispatch=useDispatch()
    const navigation=useNavigation()
    useEffect(() => {
     dispatch(getcartdata(userId))
+    dispatch(getDefaultadress(userId))
   }, [cartdatas]);
 
   const additem=(items)=>{
-  dispatch(addquantity({items,userId}))
+   dispatch(addquantity({items,userId}))
 }
 
 const removeitem=(items)=>{
 dispatch(decreasequantity({items,userId}))
-console.log(items)
 }
 const deleteitems=(items)=>{
   dispatch(deleteitem({items,userId}))
@@ -60,6 +60,15 @@ const deleteitems=(items)=>{
         </TouchableOpacity>
         </View>
       )
+     }
+
+     const handlebuynow=(item)=>{
+     if(defaultadress.length>0){
+      navigation.navigate('Orderdetails',{from:'cart'})
+      dispatch(buynowaction(item))
+     }else{
+      navigation.navigate('Addnewadress')
+     }
      }
     return(
         <View style={styles.container}>
@@ -103,7 +112,7 @@ const deleteitems=(items)=>{
               <TouchableOpacity style={styles.button} onPress={()=>deleteitems(item)}>
                 <Text style={styles.buttontext}>Remove</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.button1}>
+              <TouchableOpacity style={styles.button1}onPress={()=>handlebuynow(item)}>
                 <Text style={styles.buttontext}>Buy Now</Text>
               </TouchableOpacity>
             </View>

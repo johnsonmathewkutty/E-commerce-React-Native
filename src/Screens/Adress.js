@@ -10,12 +10,10 @@ const Adress=({navigation})=>{
     const dispatch=useDispatch()
     const userId=useSelector(state=>state.Cartdatas.userid)
     const adressdatas=useSelector(state=>state.Adressdatas.adressdata)
-    const items=useSelector(state=>state.Adressdatas.defaultadress)
-   useEffect(()=>{
-     dispatch(setdefaultaddress({items,userId}))
-   },[adressdatas])
-   const radiobuttonhandle=(items)=>{
-    dispatch(setdefaultaddress({items,userId}))
+    const item=useSelector(state=>state.Adressdatas.defaultadress)
+ 
+   const radiobuttonhandle=(item)=>{
+    dispatch(setdefaultaddress({item,userId}))
    }
    const handleremove=(item)=>{
    dispatch(removeadress({userId,item}))

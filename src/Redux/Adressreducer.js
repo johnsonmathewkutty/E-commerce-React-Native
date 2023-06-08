@@ -34,7 +34,7 @@ const AdressSlices=createSlice({
           })
     },
     setdefaultaddress:(state,action)=>{
-         const item=action.payload.items
+         const item=action.payload.item
          const userId=action.payload.userId
       const itemdata=item
         state.adressdata.map((items)=>{
@@ -53,9 +53,12 @@ const AdressSlices=createSlice({
         const item=action.payload.item
         const userId=action.payload.userId
         const itemdata=state.adressdata.filter((itm)=>itm.id !== item.id)
+        const removedata=state.defaultadress.filter((itm)=>itm.id !== item.id)
         firestore().collection('users').doc(userId).update({
-            Adress:itemdata
+            Adress:itemdata,
+            Defaultadress:removedata
         })
+
     }
     },
     extraReducers:(bulider)=>{

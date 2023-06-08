@@ -3,39 +3,26 @@ import React, { useEffect } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { AirbnbRating,Rating } from "react-native-ratings";
 
-import { getadress } from '../Redux/Adressreducer';
+import { getadress} from '../Redux/Adressreducer';
 
-const Orderdetails = () => {
+const Orderdetails = ({navigation,route}) => {
   const itemdata=useSelector(state=>state.Datainfo.itemdatas)
+  const cartitemdata=useSelector(state=>state.Cartdatas.itemdetails)
   const defaultadress=useSelector(state=>state.Adressdatas.defaultadress)
   const userId=useSelector(state=>state.Cartdatas.userid)
+  const item=useSelector(state=>state.Adressdatas.defaultadress)
   const dispatch=useDispatch()
+  const {from} =route.params;
   useEffect(()=>{
 dispatch(getadress(userId))
   },[])
-  return (
-    <View style={styles.container}>
-     <View style={styles.adresscontainer}>
-      <View style={styles.headcontainer}>
-        <Text style={styles.headtext}>Deliver to:</Text>
-        <TouchableOpacity style={styles.adressbtn}>
-          <Text style={styles.adressbtntext}>Change</Text>
-        </TouchableOpacity>
-      </View>
-     <FlatList
-     data={defaultadress}
-     renderItem={({item})=>(
-      <View style={styles.datasubcontainer}>
-       <Text style={styles.nametext}>{item.name}</Text>
-       <Text style={styles.textdetails}>{item.buildingname},{item.street},{item.city},{item.state}-
-       {item.pincode}</Text>
-       <Text style={styles.phnotext}>{item.phno}</Text>
-      </View>
-     )}/>
-     </View>
-     <View>
+ 
+  const Handleitemdata=()=>{
+    if(from =='cart'){
+      return (
+      <View>
       <FlatList
-      data={itemdata}
+      data={cartitemdata}
       renderItem={({item})=>(
           <View style={styles.subcontainer}>
           <View style={styles.imagcontainer}>
@@ -60,8 +47,66 @@ dispatch(getadress(userId))
             </View>
           </View>
         </View>
-      )}/>
+      )}
+      keyExtractor={item => item.id.toString()} />
      </View>
+      )
+    }else{
+      return(
+        <View>
+        <FlatList
+        data={itemdata}
+        renderItem={({item})=>(
+            <View style={styles.subcontainer}>
+            <View style={styles.imagcontainer}>
+           <Image source={{uri:item.image}} style={styles.image}/>
+           <View style={styles.quantitycontainer}>
+            <Text style={styles.quantitytext}>Qty:{item.quantity}</Text>
+              </View>
+            </View>
+            <View style={styles.detailscontainer}>
+              <Text style={styles.titletext}>{item.title}</Text>
+              <View style={styles.ratingcontainer}>
+              <Rating imageSize={20}
+             startingValue={3}
+               readonly
+              />
+              <Text style={styles.ratingtext}>({item.rating.count})</Text>
+              </View>
+              <View style={styles.pricecontainer}>
+                <Text style={styles.priceoffer}>30%</Text>
+                <Text style={styles.pricetext}>$499</Text>
+                <Text style={styles.offerprice}>${item.price}</Text>
+              </View>
+            </View>
+          </View>
+        )}
+        keyExtractor={item => item.id.toString()} />
+       </View>
+      )
+    }
+  }
+  return (
+    <View style={styles.container}>
+     <View style={styles.adresscontainer}>
+      <View style={styles.headcontainer}>
+        <Text style={styles.headtext}>Deliver to:</Text>
+        <TouchableOpacity style={styles.adressbtn} onPress={()=>{navigation.navigate('Adress')}}>
+          <Text style={styles.adressbtntext}>Change</Text>
+        </TouchableOpacity>
+      </View>
+     <FlatList
+     data={defaultadress}
+     renderItem={({item})=>(
+      <View style={styles.datasubcontainer}>
+       <Text style={styles.nametext}>{item.name}</Text>
+       <Text style={styles.textdetails}>{item.buildingname},{item.street},{item.city},{item.state}-
+       {item.pincode}</Text>
+       <Text style={styles.phnotext}>{item.phno}</Text>
+      </View>
+     )}/>
+     </View>
+    <Handleitemdata/>
     </View>
   )
 }
