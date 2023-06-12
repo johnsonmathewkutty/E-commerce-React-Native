@@ -26,7 +26,7 @@ const Addnewadress = ({navigation}) => {
           const id = uuidv4(); 
             const items={id,name,buildingname,street,city,state,pincode,phno,select}
           dispatch(saveadress({userId,items}))
-          navigation.navigate('Orderdetails')
+          navigation.navigate('Orderdetails',{from:''})
         }
       };
   return (

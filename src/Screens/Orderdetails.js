@@ -3,14 +3,13 @@ import React, { useEffect } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { AirbnbRating,Rating } from "react-native-ratings";
 
-import { getadress} from '../Redux/Adressreducer';
+import { getadress,setdefaultaddress} from '../Redux/Adressreducer';
 
 const Orderdetails = ({navigation,route}) => {
   const itemdata=useSelector(state=>state.Datainfo.itemdatas)
   const cartitemdata=useSelector(state=>state.Cartdatas.itemdetails)
   const defaultadress=useSelector(state=>state.Adressdatas.defaultadress)
   const userId=useSelector(state=>state.Cartdatas.userid)
-  const item=useSelector(state=>state.Adressdatas.defaultadress)
   const dispatch=useDispatch()
   const {from} =route.params;
   useEffect(()=>{
@@ -89,16 +88,16 @@ dispatch(getadress(userId))
   return (
     <View style={styles.container}>
      <View style={styles.adresscontainer}>
-      <View style={styles.headcontainer}>
-        <Text style={styles.headtext}>Deliver to:</Text>
-        <TouchableOpacity style={styles.adressbtn} onPress={()=>{navigation.navigate('Adress')}}>
-          <Text style={styles.adressbtntext}>Change</Text>
-        </TouchableOpacity>
-      </View>
      <FlatList
      data={defaultadress}
      renderItem={({item})=>(
       <View style={styles.datasubcontainer}>
+          <View style={styles.headcontainer}>
+        <Text style={styles.headtext}>Deliver to:</Text>
+        <TouchableOpacity style={styles.adressbtn} onPress={()=>{navigation.navigate('Adress'),dispatch(setdefaultaddress({item,userId}))}}>
+          <Text style={styles.adressbtntext}>Change</Text>
+        </TouchableOpacity>
+      </View>
        <Text style={styles.nametext}>{item.name}</Text>
        <Text style={styles.textdetails}>{item.buildingname},{item.street},{item.city},{item.state}-
        {item.pincode}</Text>
@@ -126,11 +125,11 @@ const styles=StyleSheet.create({
   },
   headcontainer:{
     flexDirection:'row',
-    paddingTop:18,
+    paddingTop:10,
     display:'flex',
     justifyContent:'space-between',
-    paddingLeft:15,
-    paddingRight:18
+    paddingLeft:5,
+    marginBottom:10
   },
   adressbtn:{
     width:90,
@@ -139,6 +138,7 @@ const styles=StyleSheet.create({
   borderColor:'#eee',
     alignItems:'center',
     justifyContent:'center',
+    marginRight:-8,
   },
   adressbtntext:{
     color:'blue',
@@ -147,9 +147,10 @@ const styles=StyleSheet.create({
   },
   headtext:{
     color:'#212121',
-    fontSize:20,
+    fontSize:22,
     fontWeight:'800',
     fontFamily:'Arial,sansserif',
+    marginTop:3
   },
   datasubcontainer:{
     width:'80%',
@@ -160,17 +161,20 @@ const styles=StyleSheet.create({
     fontSize:18,
     fontWeight:'700',
     color:'#212121',
-    marginBottom:5
+    marginBottom:5,
+    marginLeft:5
   },
   textdetails:{
     fontSize:16,
     color:'#212121',
-    fontWeight:'400'
+    fontWeight:'400',
+    marginLeft:5
   },
   phnotext:{
     color:'#212121',
     marginTop:5,
-    fontSize:17
+    fontSize:17,
+    marginLeft:5
   },
   subcontainer:{
     width:'100%',

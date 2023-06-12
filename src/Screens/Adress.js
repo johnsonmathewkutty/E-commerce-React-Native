@@ -1,22 +1,42 @@
 import React,{useEffect,useState}from "react";
-import { View,Text,StyleSheet,FlatList,TouchableOpacity} from "react-native";
+import { View,Text,StyleSheet,FlatList,TouchableOpacity, Alert} from "react-native";
 
 import { useDispatch, useSelector } from "react-redux";
 import  Icon  from "react-native-vector-icons/MaterialIcons";
-
 import { getadress,setdefaultaddress,removeadress} from '../Redux/Adressreducer'
+import { useNavigation } from "@react-navigation/native";
 
-const Adress=({navigation})=>{
+const Adress=()=>{
     const dispatch=useDispatch()
     const userId=useSelector(state=>state.Cartdatas.userid)
     const adressdatas=useSelector(state=>state.Adressdatas.adressdata)
-    const item=useSelector(state=>state.Adressdatas.defaultadress)
- 
+    const defaultadress=useSelector(state=>state.Adressdatas.defaultadress)
+    const navigation=useNavigation()
+    if(defaultadress.length>0){
+        navigation.setOptions({
+            headerLeft:()=>(
+                <View>
+                    <Icon name="arrow-back" size={24} color={'#000'} onPress={()=>navigation.goBack()}/>
+                </View>
+            )
+        })
+    }else{
+        navigation.setOptions({
+            headerLeft:()=>(
+                <View>
+                    <Icon size={24} name="arrow-back" color={'#000'} onPress={()=>Alert.alert('pelase select the adress or add new adress')}/>
+                </View>
+            )
+        })
+    }
    const radiobuttonhandle=(item)=>{
     dispatch(setdefaultaddress({item,userId}))
    }
    const handleremove=(item)=>{
    dispatch(removeadress({userId,item}))
+   setTimeout(() => {
+    dispatch(getadress(userId))
+   },2000);
    }
     return(
 <View style={styles.container}>
