@@ -1,4 +1,4 @@
-import { View, Text ,StyleSheet,FlatList,TouchableOpacity,Image} from 'react-native'
+import { View, Text ,StyleSheet,FlatList,TouchableOpacity,Image,ScrollView} from 'react-native'
 import React, { useEffect } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { AirbnbRating,Rating } from "react-native-ratings";
@@ -19,10 +19,10 @@ dispatch(getadress(userId))
   const Handleitemdata=()=>{
     if(from =='cart'){
       return (
-      <View>
       <FlatList
       data={cartitemdata}
       renderItem={({item})=>(
+        <View>
           <View style={styles.subcontainer}>
           <View style={styles.imagcontainer}>
          <Image source={{uri:item.image}} style={styles.image}/>
@@ -46,16 +46,31 @@ dispatch(getadress(userId))
             </View>
           </View>
         </View>
+        <View style={styles.pricesubcontainer}>
+         <View>
+          <Text style={styles.priceheadtext}>Price  details</Text>
+          <Text style={styles.subtextprice}>price({item.quantity}item)</Text>
+          <Text style={styles.subtextprice}>Discount</Text>
+          <Text style={styles.subtextprice}>Delivery charge</Text>
+          <Text  style={styles.subtotalprice}>Total Amount</Text>
+         </View>
+         <View style={styles.pricevaluecontainer}>
+          <Text style={styles.subtextprice}>$499</Text>
+          <Text style={styles.subtextprice}>$256</Text>
+          <Text style={styles.deliverycharge}>Free Delivery</Text>
+          <Text style={styles.subtotalprice}>${item.price}</Text>
+         </View>
+          </View>
+        </View>
       )}
       keyExtractor={item => item.id.toString()} />
-     </View>
-      )
+        )
     }else{
       return(
-        <View>
         <FlatList
         data={itemdata}
         renderItem={({item})=>(
+          <View>
             <View style={styles.subcontainer}>
             <View style={styles.imagcontainer}>
            <Image source={{uri:item.image}} style={styles.image}/>
@@ -79,14 +94,70 @@ dispatch(getadress(userId))
               </View>
             </View>
           </View>
+          <View style={styles.pricesubcontainer}>
+         <View>
+          <Text style={styles.priceheadtext}>Price  details</Text>
+          <Text style={styles.subtextprice}>price({item.quantity}item)</Text>
+          <Text style={styles.subtextprice}>Discount</Text>
+          <Text style={styles.subtextprice}>Delivery charge</Text>
+          <Text  style={styles.subtotalprice}>Total Amount</Text>
+         </View>
+         <View style={styles.pricevaluecontainer}>
+          <Text style={styles.subtextprice}>$499</Text>
+          <Text style={styles.subtextprice}>$256</Text>
+          <Text style={styles.deliverycharge}>Free Delivery</Text>
+          <Text style={styles.subtotalprice}>${item.price}</Text>
+         </View>
+          </View>
+          </View>
         )}
         keyExtractor={item => item.id.toString()} />
-       </View>
       )
     }
   }
+const Handlebottomview=()=>{
+  if(from =='cart'){
+    return(
+      <FlatList
+      data={cartitemdata}
+      renderItem={({item})=>(
+       <View style={styles.bottomtab}>
+       <View>
+         <Text style={styles.bottomprice}>${item.price}</Text>
+         <Text style={styles.bottomtext}>View price details</Text>
+       </View>
+       <View>
+         <TouchableOpacity style={styles.bottombtn}>
+           <Text style={styles.bottombtntext}>Continue</Text>
+         </TouchableOpacity>
+       </View>
+       </View>
+      )}/>
+    )
+  }else{
+    return(
+   <FlatList
+   data={itemdata}
+   renderItem={({item})=>(
+    <View style={styles.bottomtab}>
+    <View>
+      <Text style={styles.bottomprice}>${item.price}</Text>
+      <Text style={styles.bottomtext}>View price details</Text>
+    </View>
+    <View>
+      <TouchableOpacity style={styles.bottombtn}>
+        <Text style={styles.bottombtntext}>Continue</Text>
+      </TouchableOpacity>
+    </View>
+    </View>
+   )}/>
+    )
+  }
+}
   return (
+    
     <View style={styles.container}>
+       <View style={styles.maincontainer}>
      <View style={styles.adresscontainer}>
      <FlatList
      data={defaultadress}
@@ -105,7 +176,9 @@ dispatch(getadress(userId))
       </View>
      )}/>
      </View>
-    <Handleitemdata/>
+    <View style={{ flex: 1 }}>{Handleitemdata()}</View>
+   <View>{Handlebottomview()}</View>
+   </View>
     </View>
   )
 }
@@ -114,14 +187,15 @@ export default Orderdetails
 
 const styles=StyleSheet.create({
   container:{
-    flex:1
+    flex:1,
   },
   adresscontainer:{
     width:'100%',
     height:200,
     alignSelf:'center',
     backgroundColor:'#fff',
-    marginTop:2
+    marginTop:2,
+    marginBottom:10,
   },
   headcontainer:{
     flexDirection:'row',
@@ -263,6 +337,84 @@ textDecorationLine:'line-through'
     fontWeight:'700',
     color:'#212121'
   },
- 
- 
+pricesubcontainer:{
+  width:'100%',
+  height:230,
+  borderWidth:1,
+  alignSelf:'center',
+  backgroundColor:'#fff',
+  borderColor:'#fff',
+  flexDirection:'row',
+  marginTop:15,
+  marginBottom:10,
+  justifyContent:'space-between',
+  paddingLeft:20,
+  paddingRight:20,
+  paddingTop:20
+},
+maincontainer:{
+  flex:1
+},
+priceheadtext:{
+  fontSize:22,
+  color:'#000',
+  fontWeight:'700',
+  marginBottom:15
+},
+subtextprice:{
+fontSize:18,
+fontWeight:'500',
+marginBottom:10,
+},
+subtotalprice:{
+  fontSize:19,
+fontWeight:'500',
+color:'#000',
+marginTop:10
+},
+pricevaluecontainer:{
+  marginTop:45
+},
+deliverycharge:{
+  fontSize:18,
+fontWeight:'500',
+marginBottom:10,
+color:'#00cc00'
+},
+bottombtn:{
+  width:190,
+  height:48,
+  backgroundColor:'#00cc00',
+  justifyContent:'center',
+  alignItems:'center',
+  marginRight:12,
+  borderRadius:8
+},
+bottomtab:{
+  width:'100%',
+  height:60,
+  backgroundColor:'#fff',
+  flexDirection:'row',
+  justifyContent:'space-between',
+  alignItems:'center',
+  borderTopWidth:2,
+  borderTopColor:'#eee'
+},
+ bottombtntext:{
+  color:'#fff',
+  fontWeight:'700',
+  fontSize:20
+ },
+ bottomprice:{
+  fontSize:24,
+  color:'#000',
+  fontWeight:'700',
+  marginLeft:15
+ },
+ bottomtext:{
+  marginLeft:16,
+  color:'blue',
+  fontWeight:'700',
+  fontSize:15
+ }
 })

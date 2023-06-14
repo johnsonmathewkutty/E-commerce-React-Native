@@ -44,7 +44,7 @@ const CartreducerSlice=createSlice({
         itemdata.push({...Items})
       }
       }else{
-        itemdata.push({...Items,quantity:1})
+        itemdata.push({...Items})
       }
       updateFirestoreData(userId, itemdata);
     },
@@ -54,7 +54,8 @@ const CartreducerSlice=createSlice({
       const itemdata=state.cartdata
       const itemindex=itemdata.findIndex((items)=> items.id == item.id )
       if(itemindex>=0){
-        itemdata[itemindex].quantity+=1
+        itemdata[itemindex].quantity+=1,
+        itemdata[itemindex].price+=item.price
       }
       updateFirestoreData(userId, itemdata);
     },
