@@ -6,11 +6,12 @@ import { Rating } from "react-native-ratings";
 import firestore from '@react-native-firebase/firestore'
 
 import { getcartdata,addquantity,decreasequantity,deleteitem,buynowaction} from "../Redux/Cartreducer";
-import { getDefaultadress } from "../Redux/Adressreducer";
+import { getDefaultadress } from "../Redux/Addressreducer";
 
 function Cart(){
   const userId=useSelector(state=>state.Cartdatas.userid)
    const cartdatas=useSelector(state=>state.Cartdatas.cartdata)
+   const loading=useSelector(state=>state.Cartdatas.loading)
    const defaultadress=useSelector(state=>state.Adressdatas.defaultadress)
    const dispatch=useDispatch()
    const navigation=useNavigation()
@@ -67,9 +68,10 @@ const deleteitems=(items)=>{
       navigation.navigate('Orderdetails',{from:'cart'})
       dispatch(buynowaction(item))
      }else{
-      navigation.navigate('Addnewadress')
+      navigation.navigate('Addnewadress',{from:'cart'})
      }
      }
+
     return(
         <View style={styles.container}>
         <FlatList

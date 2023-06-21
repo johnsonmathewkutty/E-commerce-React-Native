@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import firestore from '@react-native-firebase/firestore'
+import { act } from "react-test-renderer";
 
 
 const updateFirestoreData =async(userId, data) => {
@@ -27,6 +28,7 @@ const CartreducerSlice=createSlice({
         userid:'',
         cartdata:[],
         itemdetails:[],
+        loading:false
     },
     reducers:{
         firestoreuserid:(state,action)=>{
@@ -52,6 +54,7 @@ const CartreducerSlice=createSlice({
       const item=action.payload.items
       const userId=action.payload.userId
       const itemdata=state.cartdata
+      state.loading=true
       const itemindex=itemdata.findIndex((items)=> items.id == item.id )
       if(itemindex>=0){
         itemdata[itemindex].quantity+=1,
@@ -92,7 +95,12 @@ const CartreducerSlice=createSlice({
         state.cartcount=action.payload
       }),
       builder.addCase(getcartdata.fulfilled,(state,action)=>{
+        state.loading=false
         state.cartdata=action.payload
+       
+      }),
+      builder.addCase(getcartdata.pending,(state,action)=>{
+        state.loading=true
       })
     }
 })

@@ -16,6 +16,7 @@ import Register from "./src/Screens/Register";
 import Addnewadress from "./src/Screens/Addnewadress";
 import Adress from "./src/Screens/Adress";
 import Orderdetails from "./src/Screens/Orderdetails";
+import Orderstatus from "./src/Screens/Orderstatus";
 
 function Bottomtabs(){
  const bottomtab=createBottomTabNavigator()
@@ -170,6 +171,12 @@ const App=()=>{
       <stack.Screen 
       name="Orderdetails"
       component={Orderdetails}/>
+      <stack.Screen
+      name="Orderstatus"
+      component={Orderstatus}
+      options={{
+        headerShown:false
+      }}/>
       </stack.Navigator>
     </NavigationContainer>
     </Provider>

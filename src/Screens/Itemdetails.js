@@ -5,7 +5,7 @@ import { useNavigation,useFocusEffect } from "@react-navigation/native";
 import  Icon  from "react-native-vector-icons/MaterialIcons";
 import { searchbarAsync,itemdetails } from "../Redux/Datainforeducer";
 import { additemcount,cartdataadd,getcartdata} from "../Redux/Cartreducer";
-import { getDefaultadress} from '../Redux/Adressreducer'
+import { getDefaultadress} from '../Redux/Addressreducer'
 
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { AirbnbRating,Rating } from "react-native-ratings";
@@ -232,7 +232,7 @@ const handlebuynow=()=>{
   if(defaultadress.length>0){
     navigation.navigate('Orderdetails',{from:''})
   }else{
-    navigation.navigate('Addnewadress')
+    navigation.navigate('Addnewadress',{from:''})
     
   }
 }

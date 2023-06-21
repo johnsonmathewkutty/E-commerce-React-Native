@@ -40,7 +40,7 @@ function Home({navigation,route}){
                 Email: email,
                 Password: password,
                 cart:[],
-                Adress:[],
+                Address:[],
                 Defaultadress:[],
               })}
           })

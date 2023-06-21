@@ -1,17 +1,38 @@
-import React,{useEffect,useState}from "react";
-import { View,Text,StyleSheet,FlatList,TouchableOpacity, Alert} from "react-native";
+import React,{useEffect,useState,useLayoutEffect}from "react";
+import { View,Text,StyleSheet,FlatList,TouchableOpacity, Alert,BackHandler} from "react-native";
 
 import { useDispatch, useSelector } from "react-redux";
 import  Icon  from "react-native-vector-icons/MaterialIcons";
-import { getadress,setdefaultaddress,removeadress} from '../Redux/Adressreducer'
+import { getadress,setdefaultaddress,removeadress} from '../Redux/Addressreducer'
 import { useNavigation } from "@react-navigation/native";
 
-const Adress=()=>{
+const Adress=({route})=>{
     const dispatch=useDispatch()
     const userId=useSelector(state=>state.Cartdatas.userid)
     const adressdatas=useSelector(state=>state.Adressdatas.adressdata)
     const defaultadress=useSelector(state=>state.Adressdatas.defaultadress)
     const navigation=useNavigation()
+    const {from}=route.params;
+    useEffect(()=>{
+        const handleBackaction=()=>{
+            if(defaultadress.length>0){
+                navigation.navigate('Orderdetails',{from:''})
+                return true;
+            }else{
+                Alert.alert('please select the adress or add new adress')
+                return true
+            }
+           }
+           setTimeout(() => {
+            BackHandler.addEventListener('hardwareBackPress',handleBackaction)
+            return()=>{
+             BackHandler.removeEventListener('hardwareBackPress',handleBackaction)
+            }
+           }, 2000);
+   
+    },[defaultadress,navigation])
+
+      
     if(defaultadress.length>0){
         navigation.setOptions({
             headerLeft:()=>(
@@ -29,6 +50,7 @@ const Adress=()=>{
             )
         })
     }
+
    const radiobuttonhandle=(item)=>{
     dispatch(setdefaultaddress({item,userId}))
    }
@@ -40,7 +62,7 @@ const Adress=()=>{
    }
     return(
 <View style={styles.container}>
-  <TouchableOpacity style={styles.Addbutton} onPress={()=>navigation.navigate('Addnewadress')}>      
+  <TouchableOpacity style={styles.Addbutton} onPress={()=>navigation.navigate('Addnewadress',{from:from})}>      
 <Icon name="add-box" size={30} color={'blue'}/>
 <Text style={styles.Addtext}>Add New Adress</Text>
 </TouchableOpacity>

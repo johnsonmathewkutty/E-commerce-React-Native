@@ -5,7 +5,7 @@ import firestore from '@react-native-firebase/firestore'
 
 const getadress=createAsyncThunk('address/data',async(userid)=>{
    const user=await firestore().collection('users').doc(userid).get()
-    const data=user.data().Adress
+    const data=user.data().Address
     return data
 })
 
@@ -29,7 +29,7 @@ const AdressSlices=createSlice({
         const data=[item]
         datas.push({...item})
         firestore().collection('users').doc(userId).update({
-            Adress:datas,
+            Address:datas,
             Defaultadress:data
           })
     },

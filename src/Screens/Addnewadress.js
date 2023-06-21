@@ -2,11 +2,12 @@ import { View, Text,StyleSheet,TextInput,TouchableOpacity,KeyboardAvoidingView,S
 import React, { useEffect,useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { getadress,saveadress} from '../Redux/Adressreducer'
+import { getadress,saveadress} from '../Redux/Addressreducer'
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
-const Addnewadress = ({navigation}) => {
+
+const Addnewadress = ({navigation,route}) => {
     const dispatch=useDispatch()
     const userId=useSelector(state=>state.Cartdatas.userid)
     const[name,setname]=useState('')
@@ -17,8 +18,7 @@ const Addnewadress = ({navigation}) => {
     const[pincode,setpincode]=useState('')
     const[phno,setphno]=useState('')
     const[select,setselect]=useState(false)
-   
-  
+    const {from} =route.params;
     const handleButtonPress = () => {
         if (!name||!buildingname||!street||!city||!state ||!pincode ||!phno) {
           Alert.alert('Error', 'Please enter the values');
@@ -26,7 +26,8 @@ const Addnewadress = ({navigation}) => {
           const id = uuidv4(); 
             const items={id,name,buildingname,street,city,state,pincode,phno,select}
           dispatch(saveadress({userId,items}))
-          navigation.navigate('Orderdetails',{from:''})
+            navigation.navigate('Orderdetails',{from:from})
+         
         }
       };
   return (

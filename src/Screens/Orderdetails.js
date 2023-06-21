@@ -2,8 +2,10 @@ import { View, Text ,StyleSheet,FlatList,TouchableOpacity,Image,ScrollView} from
 import React, { useEffect } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { AirbnbRating,Rating } from "react-native-ratings";
-
-import { getadress,setdefaultaddress} from '../Redux/Adressreducer';
+import RazorpayCheckout from 'react-native-razorpay';
+import { getadress,setdefaultaddress} from '../Redux/Addressreducer';
+import firestore from '@react-native-firebase/firestore'
+import Orderstatus from './Orderstatus';
 
 const Orderdetails = ({navigation,route}) => {
   const itemdata=useSelector(state=>state.Datainfo.itemdatas)
@@ -14,8 +16,12 @@ const Orderdetails = ({navigation,route}) => {
   const {from} =route.params;
   useEffect(()=>{
 dispatch(getadress(userId))
+data()
   },[])
- 
+  
+ const data=()=>{
+  
+ }
   const Handleitemdata=()=>{
     if(from =='cart'){
       return (
@@ -127,7 +133,7 @@ const Handlebottomview=()=>{
          <Text style={styles.bottomtext}>View price details</Text>
        </View>
        <View>
-         <TouchableOpacity style={styles.bottombtn}>
+         <TouchableOpacity style={styles.bottombtn}onPress={()=>handlebuynow(item)}>
            <Text style={styles.bottombtntext}>Continue</Text>
          </TouchableOpacity>
        </View>
@@ -145,7 +151,7 @@ const Handlebottomview=()=>{
       <Text style={styles.bottomtext}>View price details</Text>
     </View>
     <View>
-      <TouchableOpacity style={styles.bottombtn}>
+      <TouchableOpacity style={styles.bottombtn}onPress={()=>handlebuynow(item)}>
         <Text style={styles.bottombtntext}>Continue</Text>
       </TouchableOpacity>
     </View>
@@ -153,6 +159,38 @@ const Handlebottomview=()=>{
    )}/>
     )
   }
+}
+
+const handlebuynow=(item)=>{
+  defaultadress.forEach((address) => {
+    const name = address.name;
+    const number=address.phno;
+ const price=item.price
+  var options = {
+    description: 'Credits towards consultation',
+    image: 'https://i.imgur.com/3g7nmJC.jpg',
+    currency: 'USD',
+    key: 'rzp_test_PzYwfvHlE9jZGf',
+    amount:price*100,
+    name:'E-shopping',
+    order_id: '',//Replace this with an order_id created using Orders API.
+    prefill: {
+      contact:number,
+      name:name
+    },
+    theme: {color: '#53a20e'}
+  }
+
+  RazorpayCheckout.open(options).then((data) => {
+    // handle success
+    alert(`Success: ${data.razorpay_payment_id}`);
+    navigation.navigate('Orderstatus',{status:'success'})
+  }).catch((error) => {
+    // handle failure
+    alert(`Error: ${'Their are some error occured',error.code} | ${'some error occured',error.description}`);
+    navigation.navigate('Orderstatus',{status:'failed'})
+  });
+});
 }
   return (
     
@@ -165,7 +203,7 @@ const Handlebottomview=()=>{
       <View style={styles.datasubcontainer}>
           <View style={styles.headcontainer}>
         <Text style={styles.headtext}>Deliver to:</Text>
-        <TouchableOpacity style={styles.adressbtn} onPress={()=>{navigation.navigate('Adress'),dispatch(setdefaultaddress({item,userId}))}}>
+        <TouchableOpacity style={styles.adressbtn} onPress={()=>{navigation.navigate('Adress',{from:from}),dispatch(setdefaultaddress({item,userId}))}}>
           <Text style={styles.adressbtntext}>Change</Text>
         </TouchableOpacity>
       </View>
