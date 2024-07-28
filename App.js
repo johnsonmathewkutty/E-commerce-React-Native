@@ -17,6 +17,52 @@ import Addnewadress from "./src/Screens/Addnewadress";
 import Adress from "./src/Screens/Adress";
 import Orderdetails from "./src/Screens/Orderdetails";
 import Orderstatus from "./src/Screens/Orderstatus";
+import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
+
+
+const toastConfig = {
+  success: (props) => (
+    <BaseToast
+      {...props}
+      style={{borderLeftColor:'#00D100'}}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 18,
+        fontWeight:'400',
+         fontFamily:'Poppins-Thin',
+         color:'#00D100'
+      }}
+      text2Style={{
+        fontSize:15
+      }}
+    renderLeadingIcon={()=>(
+      <Icon name="check-circle" size={30} style={styles.toasterroricon} color={'#00D100'}/>
+    )}
+    />
+  ),
+ 
+  error: (props) => (
+    <ErrorToast
+      {...props}
+      text1Style={{
+        fontSize: 18,
+        color:'red',
+        fontWeight:'200',
+          fontFamily:'Poppins-Thin'
+      }}
+      text2Style={{
+        fontSize: 16,
+        fontFamily:'Poppins-Thin',
+        color:'red'
+      }}
+      renderLeadingIcon={()=>(
+        <Icon name="warning" size={30} style={styles.toasterroricon} color={'red'}/>
+      )}
+    />
+  ),
+};
+
+
 
 function Bottomtabs(){
  const bottomtab=createBottomTabNavigator()
@@ -127,6 +173,12 @@ const App=()=>{
     <NavigationContainer>
       <stack.Navigator>
       <stack.Screen
+      options={{
+        headerShown:false
+      }}
+        name="Bottomtabs"
+        component={Bottomtabs}/>
+      <stack.Screen
         name="Login"
         component={Login}
         options={{
@@ -138,12 +190,6 @@ const App=()=>{
         options={{
           headerShown:false
         }}/>
-      <stack.Screen
-      options={{
-        headerShown:false
-      }}
-        name="Bottomtabs"
-        component={Bottomtabs}/>
         <stack.Screen
         name="Home"
         component={Home}
@@ -178,6 +224,7 @@ const App=()=>{
         headerShown:false
       }}/>
       </stack.Navigator>
+      <Toast config={toastConfig}/>
     </NavigationContainer>
     </Provider>
   )
@@ -201,5 +248,9 @@ const styles=StyleSheet.create({
     color:'#fff',
     fontSize:15,
     fontWeight:'900'
+  },
+  toasterroricon:{
+    marginTop:15,
+    marginLeft:15
   }
 })

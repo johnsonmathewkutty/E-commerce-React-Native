@@ -14,12 +14,19 @@ const getDefaultadress=createAsyncThunk('defaultadress/data',async(userid)=>{
     const datas=user.data().Defaultadress
     return datas
 })
+const getLogindetails=createAsyncThunk('data/Login',async(userid)=>{
+    const user=await firestore().collection('users').doc(userid).get()
+    const logindata=user.data().Fullname
+    return logindata
+})
 
 const AdressSlices=createSlice({
-    name:'Adress',
+    name:'Address',
     initialState:{
    adressdata:[],
    defaultadress:[],
+   updateadress:[],
+   fullname:''
     },
     reducers:{
     saveadress:(state,action)=>{
@@ -36,18 +43,19 @@ const AdressSlices=createSlice({
     setdefaultaddress:(state,action)=>{
          const item=action.payload.item
          const userId=action.payload.userId
-      const itemdata=state.adressdata
+         const dataadress=state.adressdata
       const data=[item]
-        itemdata.map((items)=>{
+    dataadress.forEach((items)=>{
             if(items.id==item.id){
-                items.select=true
+                items.select=true;
             }
             else{
-                items.select=false
+                items.select=false;
             }
         })
         firestore().collection('users').doc(userId).update({
-            Defaultadress:data
+            Defaultadress:data,
+            Address:dataadress
         })
     },
     removeadress:(state,action)=>{
@@ -56,11 +64,12 @@ const AdressSlices=createSlice({
         const itemdata=state.adressdata.filter((itm)=>itm.id !== item.id)
         const removedata=state.defaultadress.filter((itm)=>itm.id !== item.id)
         firestore().collection('users').doc(userId).update({
-            Adress:itemdata,
+            Address:itemdata,
             Defaultadress:removedata
         })
 
-    }
+    },
+  
     },
     extraReducers:(bulider)=>{
         bulider.addCase(getadress.fulfilled,(state,action)=>{
@@ -68,11 +77,14 @@ const AdressSlices=createSlice({
         }),
         bulider.addCase(getDefaultadress.fulfilled,(state,action)=>{
             state.defaultadress=action.payload
+        }),
+        bulider.addCase(getLogindetails.fulfilled,(state,action)=>{
+              state.fullname=action.payload
         })
     }
 })
 
 
-export {getadress,getDefaultadress}
+export {getadress,getDefaultadress,getLogindetails}
 export const {saveadress,setdefaultaddress,removeadress}=AdressSlices.actions
 export default AdressSlices.reducer

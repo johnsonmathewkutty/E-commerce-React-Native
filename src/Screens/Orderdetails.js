@@ -3,30 +3,30 @@ import React, { useEffect } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { AirbnbRating,Rating } from "react-native-ratings";
 import RazorpayCheckout from 'react-native-razorpay';
-import { getadress,setdefaultaddress} from '../Redux/Addressreducer';
+import { getadress,setdefaultaddress,getDefaultadress} from '../Redux/Addressreducer';
 import firestore from '@react-native-firebase/firestore'
 import Orderstatus from './Orderstatus';
 
 const Orderdetails = ({navigation,route}) => {
   const itemdata=useSelector(state=>state.Datainfo.itemdatas)
-  const cartitemdata=useSelector(state=>state.Cartdatas.itemdetails)
+  const cartdatas=useSelector(state=>state.Cartdatas.cartdata)
   const defaultadress=useSelector(state=>state.Adressdatas.defaultadress)
   const userId=useSelector(state=>state.Cartdatas.userid)
+  const totalprice=useSelector(state=>state.Cartdatas.totalprice)
+  const item=useSelector(state=>state.Cartdatas.item)
   const dispatch=useDispatch()
   const {from} =route.params;
   useEffect(()=>{
 dispatch(getadress(userId))
-data()
-  },[])
+dispatch(getDefaultadress(userId))
+  },[defaultadress])
   
- const data=()=>{
-  
- }
+
   const Handleitemdata=()=>{
     if(from =='cart'){
       return (
       <FlatList
-      data={cartitemdata}
+      data={cartdatas}
       renderItem={({item})=>(
         <View>
           <View style={styles.subcontainer}>
@@ -52,31 +52,34 @@ data()
             </View>
           </View>
         </View>
-        <View style={styles.pricesubcontainer}>
-         <View>
-          <Text style={styles.priceheadtext}>Price  details</Text>
-          <Text style={styles.subtextprice}>price({item.quantity}item)</Text>
-          <Text style={styles.subtextprice}>Discount</Text>
-          <Text style={styles.subtextprice}>Delivery charge</Text>
-          <Text  style={styles.subtotalprice}>Total Amount</Text>
-         </View>
-         <View style={styles.pricevaluecontainer}>
-          <Text style={styles.subtextprice}>$499</Text>
-          <Text style={styles.subtextprice}>$256</Text>
-          <Text style={styles.deliverycharge}>Free Delivery</Text>
-          <Text style={styles.subtotalprice}>${item.price}</Text>
-         </View>
-          </View>
         </View>
       )}
-      keyExtractor={item => item.id.toString()} />
+      keyExtractor={item => item.id.toString()} 
+      ListFooterComponent={()=>(
+        <View style={styles.pricesubcontainer}>
+        <View>
+         <Text style={styles.priceheadtext}>Price  details</Text>
+         <Text style={styles.subtextprice}>price ({item}item)</Text>
+         <Text style={styles.subtextprice}>Delivery charge</Text>
+         <Text  style={styles.subtotalprice}>Total Amount</Text>
+        </View>
+        <View>
+        <View style={styles.pricevaluecontainer}>
+         <Text style={styles.subtextprice}>$ {totalprice}</Text>
+         <Text style={styles.deliverycharge}>Free Delivery</Text>
+         <Text style={styles.subtotalprice}>${totalprice}</Text>
+        </View>
+         </View>
+           </View>
+      )}/>
+      
         )
     }else{
       return(
         <FlatList
         data={itemdata}
         renderItem={({item})=>(
-          <View>
+           <View>
             <View style={styles.subcontainer}>
             <View style={styles.imagcontainer}>
            <Image source={{uri:item.image}} style={styles.image}/>
@@ -124,21 +127,17 @@ data()
 const Handlebottomview=()=>{
   if(from =='cart'){
     return(
-      <FlatList
-      data={cartitemdata}
-      renderItem={({item})=>(
-       <View style={styles.bottomtab}>
-       <View>
-         <Text style={styles.bottomprice}>${item.price}</Text>
-         <Text style={styles.bottomtext}>View price details</Text>
-       </View>
-       <View>
-         <TouchableOpacity style={styles.bottombtn}onPress={()=>handlebuynow(item)}>
-           <Text style={styles.bottombtntext}>Continue</Text>
-         </TouchableOpacity>
-       </View>
-       </View>
-      )}/>
+        <View style={styles.bottomtab}>
+        <View>
+          <Text style={styles.bottomprice}>${totalprice}</Text>
+          <Text style={styles.bottomtext}>View price details</Text>
+        </View>
+        <View>
+          <TouchableOpacity style={styles.bottombtn}onPress={()=>handlebuynow(item)}>
+            <Text style={styles.bottombtntext}>Continue</Text>
+          </TouchableOpacity>
+        </View>
+        </View>
     )
   }else{
     return(
@@ -379,7 +378,6 @@ pricesubcontainer:{
   width:'100%',
   height:230,
   borderWidth:1,
-  alignSelf:'center',
   backgroundColor:'#fff',
   borderColor:'#fff',
   flexDirection:'row',
@@ -388,7 +386,8 @@ pricesubcontainer:{
   justifyContent:'space-between',
   paddingLeft:20,
   paddingRight:20,
-  paddingTop:20
+  paddingTop:20,
+  alignItems:'center'
 },
 maincontainer:{
   flex:1
@@ -397,7 +396,7 @@ priceheadtext:{
   fontSize:22,
   color:'#000',
   fontWeight:'700',
-  marginBottom:15
+  marginBottom:20
 },
 subtextprice:{
 fontSize:18,

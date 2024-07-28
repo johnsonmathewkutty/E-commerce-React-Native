@@ -9,48 +9,23 @@ import  Icon  from "react-native-vector-icons/MaterialIcons";
 import firestore from '@react-native-firebase/firestore'
 
 import { Getdatainfo,itemdetails,searchAsync} from "../Redux/Datainforeducer";
-import { additemcount } from "../Redux/Cartreducer";
+import { additemcount} from "../Redux/Cartreducer";
+import { getLogindetails } from "../Redux/Addressreducer";
 
-function Home({navigation,route}){
+function Home({navigation}){
     const dispatch=useDispatch()
     const data=useSelector(state=>state.Datainfo.datas)
     const loading=useSelector(state=>state.Datainfo.loading)
     const error=useSelector(state=>state.Datainfo.error)
     const userId=useSelector(state=>state.Cartdatas.userid)
+    const fullname=useSelector(state=>state.Adressdatas.fullname)
     const mytext=useRef('')
-    const { email } = route.params;
-    const {password}=route.params;
    useEffect(()=>{
     dispatch(Getdatainfo()) 
     dispatch(additemcount(userId))
-    datafirestore()
+    dispatch(getLogindetails(userId))
    },[])
   
-    const datafirestore=()=>{
-        if(email!='' && password!=''){
-        const usersRef = firestore().collection('users');
-        usersRef
-          .where('Email', '==', email || 'Email','!=','')
-          .get()
-          .then((querySnapshot ) => {
-            if (querySnapshot.empty) {
-              // document already exists, do nothing
-             firestore().collection('users').doc(userId)
-              .set({
-                Email: email,
-                Password: password,
-                cart:[],
-                Address:[],
-                Defaultadress:[],
-              })}
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-    
-   }
-
-  }
   
    const additemdetails=(item)=>{
     dispatch(itemdetails(item))
@@ -76,11 +51,39 @@ function Home({navigation,route}){
     return(
         <View style={styles.container}>
            
-                <StatusBar backgroundColor={'#00D100'} />
-                <View style={styles.searchcontainer}>
+                <StatusBar backgroundColor={'#7BD78A'}/>
+                <View style={styles.headercontainer}>
+                    <View style={styles.subcontainer}>
+                        <View style={styles.appnameimg}>
+                        <Image source={require('../images/previewcopy.png')} style={styles.imgapp}/>
+                        </View>
+                        <View>
+                            {userId=='' ?(
+                         <View style={styles.headeraccount}>
+                            <View>
+                            <Icon name="account-circle" size={37}  color={'#fff'}/>
+                        </View>
+                        <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
+                        <Text style={styles.username}>Login</Text>
+                        </TouchableOpacity>
+                        </View>
+
+                        ):(<View style={styles.headeraccount}>
+                            <View>
+                            <Icon name="account-circle" size={37} color={'#fff'}/>
+                        </View>
+                        <TouchableOpacity style={styles.accountbutton} onPress={()=>navigation.navigate('Bottomtabs',{screen:'Account'})}>
+                        <Text  style={styles.username}>{fullname}</Text>
+                        <Icon name="arrow-forward-ios" style={{marginTop:10}} size={18} color={'#fff'}/>
+                        </TouchableOpacity>
+                        </View>
+                        )}
+                        </View>
+                    </View>
+                    <View style={styles.searchcontainer}>
                     <View style={styles.searchbox}>
-                    <TextInput
-                     placeholder='search'
+                    <TextInput style={{color:'#478778'}}
+                     placeholder='search' placeholderTextColor={'#478778'}
                      autoCorrect={false}
                     ref={mytext}
                     clearButtonMode='always'
@@ -92,6 +95,7 @@ function Home({navigation,route}){
                      <TouchableOpacity onPress={handleclearbutton} style={styles.searchclear}>
             <Icon name="close" size={20} color="black" />
           </TouchableOpacity>
+                </View>
                 </View>
                 </View>
         {/* {
@@ -168,12 +172,12 @@ const styles=StyleSheet.create({
         width:'70%',
         height:'65%',
     },
-    searchcontainer:{
+    headercontainer:{
       width:"100%",
-      height:110,
-      backgroundColor:'#00D100',
-      justifyContent:'center',
-      alignItems:'center',
+      height:160,
+      backgroundColor:'#7BD78A',
+      borderBottomLeftRadius:20,
+      borderBottomRightRadius:20
     },
     maincontainer:{
         flexDirection:'row',
@@ -186,9 +190,8 @@ const styles=StyleSheet.create({
     },
     titletext:{
        fontSize:20,
-       fontFamily:'inherit',
        color:'#2E2E2E',
-       fontWeight:'600',
+       fontFamily:'NotoSansSundanese-SemiBold'
     },
     detailscontainer:{
         alignItems:'flex-start',
@@ -226,7 +229,51 @@ const styles=StyleSheet.create({
           display:'flex',
           justifyContent:'space-between',
           alignItems:'center',
-          paddingRight:10
+          paddingRight:10,
+    },
+    subcontainer:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        marginTop:29
+        },
+    headeraccount:{
+        flexDirection:'row',
+        marginRight:30
+    },
+    searchcontainer:{
+        width:'100%',
+        height:70,
+        alignItems:'center',
+        justifyContent:'flex-end'
+    },
+    appname:{
+        fontSize:25,
+         fontFamily:'NotoSansSundanese-Bold',
+         color:'#228B22',
+         marginLeft:15
+    },
+    username:{
+        fontSize:20,
+        fontFamily:'NotoSansSundanese-Bold',
+        marginLeft:5,
+        marginTop:5,
+        color:'#fff',
+    },
+    accountbutton:{
+     width:85,
+     height:35,
+     flexDirection:'row'
+    },
+    appnameimg:{
+        width:'65%',
+        height:40,
+        marginLeft:10,
+        borderRadius:6,
+        borderColor:'red'
+    },
+    imgapp:{
+        width:'75%',
+        height:'80%'
     }
 })
 

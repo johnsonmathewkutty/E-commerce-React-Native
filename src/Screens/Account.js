@@ -4,7 +4,7 @@ import { View,Text,StyleSheet } from "react-native";
 function Account(){
     return(
         <View style={styles.container}>
-            <Text></Text>
+           
         </View>
     )
 }

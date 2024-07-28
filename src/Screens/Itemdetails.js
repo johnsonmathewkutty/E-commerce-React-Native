@@ -4,13 +4,11 @@ import { View,StyleSheet,TouchableOpacity,TextInput,FlatList,Image,Text,ScrollVi
 import { useNavigation,useFocusEffect } from "@react-navigation/native";
 import  Icon  from "react-native-vector-icons/MaterialIcons";
 import { searchbarAsync,itemdetails } from "../Redux/Datainforeducer";
-import { additemcount,cartdataadd,getcartdata} from "../Redux/Cartreducer";
+import { additemcount,cartdataadd,getcartdata,totalpriceaction} from "../Redux/Cartreducer";
 import { getDefaultadress} from '../Redux/Addressreducer'
 
-import { Provider, useDispatch, useSelector } from "react-redux";
+import {  useDispatch, useSelector } from "react-redux";
 import { AirbnbRating,Rating } from "react-native-ratings";
-import firestore from '@react-native-firebase/firestore'
-import Cart from "./Cart";
 
 
 const Itemdetails=()=>{
@@ -44,12 +42,13 @@ const Itemdetails=()=>{
       headerRight:()=>(
         <View style={styles.headericon} >
           <TouchableOpacity style={styles.searchicon} onPress={handlesearchbar} >
-            <Icon name="search" size={38}/>
+            <Icon name="search" size={38} color={'#478778'}/>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>navigation.navigate('Bottomtabs',
-          {screen:'Cart',}
+          <TouchableOpacity  onPress={()=>navigation.navigate('Bottomtabs',
+          {screen:'Cart'
+          }
           )}>
-            <Icon name="shopping-cart" size={34}/>
+            <Icon name="shopping-cart" size={34} color={'#478778'}/>
             <View style={styles.cartcount}>
                 <Text style={styles.textcartcount}>{cartcounts}</Text>
               </View>
@@ -64,13 +63,13 @@ const Itemdetails=()=>{
       headerRight:()=>(
         <View style={styles.headericon} >
           <TouchableOpacity style={styles.searchicon} onPress={handlesearchbar} >
-            <Icon name="search" size={38}/>
+            <Icon name="search" size={38} color={'#478778'}/>
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>navigation.navigate('Bottomtabs',
           {screen:'Cart',
           params:{previousScreen:'previousscreen'}
           })}>
-            <Icon name="shopping-cart" size={34}/>
+            <Icon name="shopping-cart" size={34} color={'#478778'}/>
           </TouchableOpacity>
         </View>
       ),
@@ -82,8 +81,8 @@ const Itemdetails=()=>{
     navigation.setOptions({
       headerRight:()=>(
          <View style={styles.searchbar}>
-          <TextInput
-          placeholder="search"
+          <TextInput style={{color:'#478778'}}
+          placeholder="search" placeholderTextColor={'#000'}
           onChangeText={(text)=>{
             dispatch(searchbarAsync(text))
             setsearch(true)
@@ -91,7 +90,7 @@ const Itemdetails=()=>{
           />
           <TouchableOpacity onPress={()=>{handleclose()
           setsearch(false)}}>
-            <Icon name="close" size={24}/>
+            <Icon name="close" size={24} color={'#478778'}/>
           </TouchableOpacity>
          </View>
       )
@@ -103,12 +102,12 @@ const Itemdetails=()=>{
         headerRight:()=>(
           <View style={styles.headericon} >
             <TouchableOpacity style={styles.searchicon} onPress={()=>{handlesearchbar() }} >
-              <Icon name="search" size={38}/>
+              <Icon name="search" size={38} color={'#478778'}/>
             </TouchableOpacity>
             <TouchableOpacity onPress={()=>navigation.navigate('Bottomtabs',
             {screen:'Cart',
             params:{previousScreen:'previousscreen'}})}>
-              <Icon name="shopping-cart" size={34}/>
+              <Icon name="shopping-cart" size={34} color={'#478778'}/>
               <View style={styles.cartcount}>
                 <Text style={styles.textcartcount}>{cartcounts}</Text>
               </View>
@@ -121,12 +120,12 @@ const Itemdetails=()=>{
           headerRight:()=>(
             <View style={styles.headericon} >
               <TouchableOpacity style={styles.searchicon} onPress={()=>{handlesearchbar() }} >
-                <Icon name="search" size={38}/>
+                <Icon name="search" size={38} color={'#478778'}/>
               </TouchableOpacity>
               <TouchableOpacity onPress={()=>navigation.navigate('Bottomtabs',
               {screen:'Cart',
               params:{previousScreen:'previousscreen'}})}>
-                <Icon name="shopping-cart" size={34}/>
+                <Icon name="shopping-cart" size={34} color={'#478778'}/>
               </TouchableOpacity>
             </View>
           ),
@@ -276,7 +275,7 @@ const handlebuynow=()=>{
           </View>
            <Details/>
            < View style={styles.buttoncontainer}>
-           <TouchableOpacity style={styles.buttonaction} onPress={()=>addcartitem(item)}>
+           <TouchableOpacity style={styles.buttonaction} onPress={()=>{addcartitem(item)}}>
             <Text style={styles.buttontext}>Add To Cart</Text>
            </TouchableOpacity>
            <TouchableOpacity style={styles.buttonaction}onPress={()=>handlebuynow()}>
@@ -297,10 +296,12 @@ const styles=StyleSheet.create({
   },
   headericon:{
  flexDirection:'row',
- marginRight:25
+ marginRight:25,
+ 
   },
   searchicon:{
-    marginRight:10
+    marginRight:10,
+    color:'#478778'
   },
   searchbar:{
     width:'100%',
@@ -383,7 +384,8 @@ images:{
 texttitle:{
   color:'#262626',
   fontSize:18,
-  margin:12
+  margin:12,
+ fontFamily:'NotoSansSundanese-SemiBold'
 },
 ratingcontainer:{
   flexDirection:'row',
@@ -413,7 +415,8 @@ textprice:{
   marginLeft:10,
   fontWeight:'700',
   color:'#878787',
-  textDecorationLine:'line-through'
+  textDecorationLine:'line-through',
+   
 },
 offertext:{
   marginLeft:10,
@@ -422,19 +425,20 @@ offertext:{
   color:'#008000'
 },
 extraoffertext:{
-  fontSize:16,
+  fontSize:14,
   color:'#008000',
-  fontWeight:'500',
   marginTop:30,
   marginLeft:15,
   backgroundColor:'#90ee90',
   width:180,
+   fontFamily:'NotoSansSundanese-Bold'
 },
 textpack:{
   fontSize:16,
   color:'#212121',
   fontWeight:'500',
-  marginLeft:10
+  marginLeft:10,
+  fontFamily:'NotoSansSundanese-Medium'
 },
 infocontainer:{
   width:'100%',
@@ -498,6 +502,7 @@ detailtext:{
   marginTop:5,
   fontSize:18,
   color:'#262626',
+  fontFamily:'NotoSansSundanese-Regular'
 },
 detailheadtext:{
   fontSize:20,

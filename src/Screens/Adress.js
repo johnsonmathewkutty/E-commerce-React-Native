@@ -29,7 +29,6 @@ const Adress=({route})=>{
              BackHandler.removeEventListener('hardwareBackPress',handleBackaction)
             }
            }, 2000);
-   
     },[defaultadress,navigation])
 
       
@@ -71,7 +70,7 @@ const Adress=({route})=>{
    renderItem={({item})=>(
     <View style={styles.innerview}>
       <View>
-        {item.select ==true ?(
+        {item.select == true ?(
              <TouchableOpacity  style={styles.radiobutton}>
               <View style={styles.radioinner}/>
                  </TouchableOpacity>
@@ -89,7 +88,7 @@ const Adress=({route})=>{
      </View>
      <View>
      <TouchableOpacity style={styles.editbutton}onPress={()=>handleremove(item)}>
-        <Text style={{color:'#fff',fontWeight:'600'}}>Remove</Text>
+        <Icon name="delete" size={35} />
      </TouchableOpacity>
      </View>
     </View>
@@ -154,14 +153,8 @@ const styles=StyleSheet.create({
         backgroundColor:'blue'
     },
     editbutton:{
-        width:60,
-        height:30,
-        backgroundColor:'red',
-        borderRadius:3,
-        justifyContent:'center',
-        alignItems:'center',
-        marginLeft:10,
-        marginTop:60
+        marginLeft:25,
+        marginTop:50
     },
     Addbutton:{
         flexDirection:'row',
