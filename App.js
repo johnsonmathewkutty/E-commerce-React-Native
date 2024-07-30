@@ -17,6 +17,7 @@ import Addnewadress from "./src/Screens/Addnewadress";
 import Adress from "./src/Screens/Adress";
 import Orderdetails from "./src/Screens/Orderdetails";
 import Orderstatus from "./src/Screens/Orderstatus";
+import Passwordrecover from "./src/Screens/Passwordrecover";
 import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
 
 
@@ -220,6 +221,12 @@ const App=()=>{
       <stack.Screen
       name="Orderstatus"
       component={Orderstatus}
+      options={{
+        headerShown:false
+      }}/>
+      <stack.Screen
+      name="Passwordrecover"
+      component={Passwordrecover}
       options={{
         headerShown:false
       }}/>
