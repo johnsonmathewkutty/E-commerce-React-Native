@@ -146,27 +146,7 @@ setpasswordvalid(false)
       }
 }
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     const onBackPress = () => {
-  //       navigation.navigate({
-  //         name:'Login',
-  //         params:{
-  //           Fullname:Fullname,
-  //         phnumber:phnumber
-  //         },
-  //         merge:true
-  //       });
-  //       return true;
-  //     };
 
-  //     BackHandler.addEventListener('hardwareBackPress', onBackPress);
-
-  //     return () => {
-  //       BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-  //     };
-  //   }, [Fullname, phnumber])
-  // );
     
   const Apploader=()=>{
     return(
