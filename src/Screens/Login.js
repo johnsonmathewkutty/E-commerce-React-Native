@@ -2,19 +2,17 @@ import { StyleSheet, Text, View,TextInput,TouchableOpacity,Keyboard,ActivityIndi
 import React, { useState } from 'react'
 
 import auth from '@react-native-firebase/auth'
-import firestore from '@react-native-firebase/firestore'
-import { useDispatch } from 'react-redux'
 import Toast from 'react-native-toast-message';
 
 import { firestoreuserid } from '../Redux/Cartreducer'
+import { useDispatch } from 'react-redux'
 
-
-
-const Login = ({navigation,route}) => {
+const Login = ({navigation}) => {
     const [email,setemail]=useState('')
     const [password,setpassword]=useState('')
     const [loading,setloading]=useState(true)
     const dispatch=useDispatch()
+
     const login=async()=>{
       setloading(false)
         if(email !='' && password !=''){
@@ -27,8 +25,8 @@ const Login = ({navigation,route}) => {
 })
 setloading(true)
        const userId=response.user.uid
-       await datafirestore(userId)
-       await dispatch(firestoreuserid(userId))
+       console.log('login',userId)
+       dispatch(firestoreuserid(userId))
     navigation.navigate('Bottomtabs', {
         screen: 'Home'
       })
@@ -77,27 +75,7 @@ else{
 }
     }
 
-    const datafirestore=async(userId)=>{
-        try {
-          const usersRef = firestore().collection('users')
-          const querySnapshot = await usersRef.where('Email', '==', email).get()
-          if (querySnapshot.empty) {
-            const {Fullname,phnumber} =route.params;
-            console.log(Fullname,phnumber)
-            await firestore().collection('users').doc(userId).set({
-              Email: email,
-              Password: password,
-              Fullname:Fullname,
-              PhoneNumber:phnumber,
-              cart: [],
-              Address: [],
-              Defaultaddress: [],
-            })
-          }
-        } catch (error) {
-          console.error(error)
-        }
-  }
+  
    
     const loginhandle=()=>{
       Keyboard.dismiss()
@@ -145,7 +123,7 @@ else{
   )}
   else{
     return(
-      <Text></Text>
+      null
     )}
   } 
    const Apploader=()=>{
@@ -176,6 +154,9 @@ else{
   onChangeText={(text)=>setpassword(text)}
   style={styles.textinput}/>
   <HandlePasswordvalidation/>
+  <TouchableOpacity onPress={()=>navigation.navigate('Passwordrecover')}>
+  <Text style={styles.forgotbtn}>forgot password ?</Text>
+  </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.buttonlogin} onPress={()=>loginhandle()}>
         <Text style={styles.logintext}>Login</Text>
@@ -214,7 +195,7 @@ const styles = StyleSheet.create({
     texthead:{
         fontSize:25,
         fontWeight:'700',
-        color:'#00D100',
+        color:'#7BD78A',
         marginBottom:2,
     },
     subtext:{
@@ -225,7 +206,7 @@ const styles = StyleSheet.create({
     buttonlogin:{
         width:200,
         height:50,
-        backgroundColor:'#00cc00',
+        backgroundColor:'#7BD78A',
         borderRadius:8,
         marginTop:20,
         justifyContent:'center',
@@ -267,5 +248,13 @@ const styles = StyleSheet.create({
     alignItems:'center',
     backgroundColor:'rgba(0,0,0,0.3)',
     zIndex:1
+  },
+  forgotbtn:{
+    alignSelf:'flex-end',
+    marginRight:35,
+    fontSize:18,
+    color:'#4682B4',
+     fontFamily:'NotoSansSundanese-SemiBold',
+     marginTop:5
   }
 })

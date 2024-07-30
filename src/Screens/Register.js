@@ -4,9 +4,13 @@ import React, { useState,useCallback} from 'react'
 import { useFocusEffect } from '@react-navigation/native';
 import auth from '@react-native-firebase/auth'
 import Toast from 'react-native-toast-message';
+import firestore from '@react-native-firebase/firestore'
+
+
 
 
 const Register = ({navigation}) => {
+
     const [email,setemail]=useState('')
     const [password,setpassword]=useState('')
     const [Fullname,setFullname]=useState('')
@@ -16,6 +20,8 @@ const Register = ({navigation}) => {
     const [phnovalid,setphnovalid]=useState(true)
     const [passwordvalid,setpasswordvalid]=useState(true)
     const [loading,setloading]=useState(true)
+   
+
     const handlenamevalidation=(text)=>{
          setFullname(text)
       if(text.length<=2 && text.length>0){
@@ -67,6 +73,9 @@ setpasswordvalid(false)
           Keyboard.dismiss()
           try{
           const res=await auth().createUserWithEmailAndPassword(email,password)
+          const userId=res.user.uid
+          console.log(userId)
+          await datafirestore(userId)
           setloading(true)
         Toast.show({
           type:'success',
@@ -108,7 +117,6 @@ setpasswordvalid(false)
           })
         }
       }else{
-        console.log('its working')
         Toast.show({
           type:'error',
           text2:'some of the fields are empty',
@@ -118,28 +126,47 @@ setpasswordvalid(false)
        
     }
 
-
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        navigation.navigate({
-          name:'Login',
-          params:{
+    const datafirestore=async(userId)=>{
+      try {
+        const usersRef = firestore().collection('users')
+        const querySnapshot = await usersRef.where('Email', '==', email).get()
+        if (querySnapshot.empty) {
+          await firestore().collection('users').doc(userId).set({
+            Email: email,
+            Password: password,
             Fullname:Fullname,
-          phnumber:phnumber
-          },
-          merge:true
-        });
-        return true;
-      };
+            PhoneNumber:phnumber,
+            cart: [],
+            Address: [],
+            Defaultaddress: [],
+          })
+        }
+      } catch (error) {
+        console.error(error)
+      }
+}
 
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     const onBackPress = () => {
+  //       navigation.navigate({
+  //         name:'Login',
+  //         params:{
+  //           Fullname:Fullname,
+  //         phnumber:phnumber
+  //         },
+  //         merge:true
+  //       });
+  //       return true;
+  //     };
 
-      return () => {
-        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-      };
-    }, [Fullname, phnumber])
-  );
+  //     BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+  //     return () => {
+  //       BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+  //     };
+  //   }, [Fullname, phnumber])
+  // );
     
   const Apploader=()=>{
     return(
@@ -194,10 +221,7 @@ setpasswordvalid(false)
       </TouchableOpacity>
       <View style={styles.signupcontainer}>
         <Text style={styles.signuptext}>Already have an account?</Text>
-        <TouchableOpacity onPress={()=>navigation.navigate('Login',{
-            Fullname:Fullname,
-            phnumber:phnumber,
-        })}>
+        <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
             <Text style={styles.buttontextsignup}>Sign in</Text>
         </TouchableOpacity>
       </View>
@@ -226,7 +250,7 @@ const styles = StyleSheet.create({
     texthead:{
         fontSize:25,
         fontWeight:'700',
-        color:'#00D100',
+        color:'#7BD78A',
         marginBottom:2
     },
     subtext:{
@@ -237,7 +261,7 @@ const styles = StyleSheet.create({
     buttonlogin:{
         width:200,
         height:50,
-        backgroundColor:'#00cc00',
+        backgroundColor:'#7BD78A',
         borderRadius:8,
         marginTop:10,
         justifyContent:'center',
