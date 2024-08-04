@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View,TextInput,TouchableOpacity,BackHandler,Keyboard,ActivityIndicator} from 'react-native'
 import React, { useState,useCallback} from 'react'
 
-import { useFocusEffect } from '@react-navigation/native';
+
 import auth from '@react-native-firebase/auth'
 import Toast from 'react-native-toast-message';
 import firestore from '@react-native-firebase/firestore'

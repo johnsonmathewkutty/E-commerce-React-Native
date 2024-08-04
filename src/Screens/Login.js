@@ -4,8 +4,9 @@ import React, { useState } from 'react'
 import auth from '@react-native-firebase/auth'
 import Toast from 'react-native-toast-message';
 
-import { firestoreuserid } from '../Redux/Cartreducer'
+import { firestoreuserid} from '../Redux/Cartreducer'
 import { useDispatch } from 'react-redux'
+import { getLogindetails } from "../Redux/Addressreducer";
 
 const Login = ({navigation}) => {
     const [email,setemail]=useState('')
@@ -27,6 +28,7 @@ setloading(true)
        const userId=response.user.uid
        console.log('login',userId)
        dispatch(firestoreuserid(userId))
+       dispatch(getLogindetails(userId))
     navigation.navigate('Bottomtabs', {
         screen: 'Home'
       })

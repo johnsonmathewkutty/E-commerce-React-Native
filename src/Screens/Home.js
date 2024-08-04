@@ -1,4 +1,4 @@
-import React, { useEffect,useRef} from "react";
+import React, { useEffect,useRef,useState} from "react";
 import { View,Text,StyleSheet,
   ActivityIndicator,Image,
 StatusBar,FlatList, TextInput,
@@ -6,11 +6,12 @@ TouchableOpacity} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { AirbnbRating,Rating } from "react-native-ratings";
 import  Icon  from "react-native-vector-icons/MaterialIcons";
-import firestore from '@react-native-firebase/firestore'
+
 
 import { Getdatainfo,itemdetails,searchAsync} from "../Redux/Datainforeducer";
 import { additemcount} from "../Redux/Cartreducer";
-import { getLogindetails } from "../Redux/Addressreducer";
+import Networkstatus from "../Networkstatus";
+
 
 function Home({navigation}){
     const dispatch=useDispatch()
@@ -20,12 +21,12 @@ function Home({navigation}){
     const userId=useSelector(state=>state.Cartdatas.userid)
     const fullname=useSelector(state=>state.Adressdatas.fullname)
     const mytext=useRef('')
+    
    useEffect(()=>{
-    dispatch(Getdatainfo()) 
-    dispatch(additemcount(userId))
-    dispatch(getLogindetails(userId))
+        dispatch(Getdatainfo()) 
+    dispatch(additemcount(userId)) 
    },[])
-  
+
   
    const additemdetails=(item)=>{
     dispatch(itemdetails(item))
@@ -39,14 +40,17 @@ function Home({navigation}){
    <Text style={styles.errortext}>{error}</Text>
    </View>
    )}
-   if(loading){ return(
-    <View style={styles.errorcontainer}>
-        <StatusBar backgroundColor={'#00D100'} />
-   <ActivityIndicator size={60} color={'blue'} style={styles.indicator}/>
-   </View>
-   )}
+
    const handleclearbutton=()=>{
     mytext.current.clear();
+}
+const Apploader=()=>{
+    return(
+        <View style={[styles.errorcontainer,StyleSheet.absoluteFillObject]}>
+            <StatusBar backgroundColor={'#00D100'} />
+       <ActivityIndicator size={60} color={'blue'}/>
+       </View>
+       ) 
 }
     return(
         <View style={styles.container}>
@@ -57,7 +61,7 @@ function Home({navigation}){
                         <View style={styles.appnameimg}>
                         <Image source={require('../images/previewcopy.png')} style={styles.imgapp}/>
                         </View>
-                        <View>
+                        <View style={{marginLeft:-25}}>
                             {userId=='' ?(
                          <View style={styles.headeraccount}>
                             <View>
@@ -68,11 +72,11 @@ function Home({navigation}){
                         </TouchableOpacity>
                         </View>
 
-                        ):(<View style={styles.headeraccount}>
+                        ):(<View style={styles.headeruseraccount}>
                             <View>
                             <Icon name="account-circle" size={37} color={'#fff'}/>
                         </View>
-                        <TouchableOpacity style={styles.accountbutton} onPress={()=>navigation.navigate('Bottomtabs',{screen:'Account'})}>
+                        <TouchableOpacity style={styles.accountbutton} onPress={()=>navigation.navigate('Bottomtabs',{screen:'Profile'})}>
                         <Text  style={styles.username}>{fullname}</Text>
                         <Icon name="arrow-forward-ios" style={{marginTop:10}} size={18} color={'#fff'}/>
                         </TouchableOpacity>
@@ -138,7 +142,8 @@ function Home({navigation}){
         {/* //     )
         // })
     // } */}
-       
+       {loading ? <Apploader/> : null}
+       <Networkstatus/>
         </View>
     )
 }
@@ -151,16 +156,11 @@ const styles=StyleSheet.create({
     errorcontainer:{
         flex:1,
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
     },
     errortext:{
       fontSize:25,
       fontWeight:'600'
-    },
-    indicator:{
-        width:'30%',
-        height:100,
-        backgroundColor:'#fff'
     },
     imgcontainer:{
         width:'50%',
@@ -238,13 +238,19 @@ const styles=StyleSheet.create({
         },
     headeraccount:{
         flexDirection:'row',
-        marginRight:30
+        marginRight:25,
+        marginBottom:23
+    },
+    headeruseraccount:{
+        flexDirection:'row',
+        marginRight:50,
+        marginBottom:23
     },
     searchcontainer:{
         width:'100%',
         height:70,
         alignItems:'center',
-        justifyContent:'flex-end'
+        justifyContent:'flex-start'
     },
     appname:{
         fontSize:25,

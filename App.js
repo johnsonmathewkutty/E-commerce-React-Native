@@ -8,7 +8,7 @@ import { Provider,useSelector} from "react-redux";
 import Home from "./src/Screens/Home";
 import Cart from "./src/Screens/Cart";
 import Order from "./src/Screens/Order";
-import Account from "./src/Screens/Account";
+import Account from "./src/Screens/Profile";
 import Store from "./src/Redux/Store";
 import Itemdetails from "./src/Screens/Itemdetails";
 import Login from "./src/Screens/Login";
@@ -19,6 +19,7 @@ import Orderdetails from "./src/Screens/Orderdetails";
 import Orderstatus from "./src/Screens/Orderstatus";
 import Passwordrecover from "./src/Screens/Passwordrecover";
 import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
+import Profile from "./src/Screens/Profile";
 
 
 const toastConfig = {
@@ -144,10 +145,9 @@ function Bottomtabs(){
 
     }}/>
     <bottomtab.Screen
-    name="Account"
-    component={Account}
+    name="Profile"
+    component={Profile}
     options={{
-      headerShown:false,
       tabBarActiveTintColor:'#000C66',
       tabBarInactiveTintColor:'#87ACA3',
       tabBarLabelStyle:{
