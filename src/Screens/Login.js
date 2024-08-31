@@ -26,7 +26,6 @@ const Login = ({navigation}) => {
 })
 setloading(true)
        const userId=response.user.uid
-       console.log('login',userId)
        dispatch(firestoreuserid(userId))
        dispatch(getLogindetails(userId))
     navigation.navigate('Bottomtabs', {

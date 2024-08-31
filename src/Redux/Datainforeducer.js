@@ -20,21 +20,6 @@ try{
     return rejectWithValue(`Error ${error.response.status}: ${error.message}`);
   
 }
-      //  return axios.get('https://fakestoreapi.com/products')
-      //   .then((response)=>{
-      //     console.log('its working')
-      //     return (response.data)
-          
-      //   })
-      //   .catch(error => {
-      //       if (!error.response) {
-      //           return rejectWithValue('Network error: Please check your internet connection.');
-      //         }else{
-      //         return rejectWithValue(`Error ${error.response.status}: ${error.message}`);
-      //         }
-              
-        // });
-        
     
 })
 
@@ -66,8 +51,7 @@ const DatainfoSlice=createSlice({
       loading:false,
       error:'',
       itemdatas:[],
-      searchdata:[]
-     
+      searchdata:[],
   },
   reducers:{
     itemdetails:(state,action)=>{
@@ -82,13 +66,12 @@ const DatainfoSlice=createSlice({
          state.itemdatas.push({...action.payload,quantity:1})
         }
            
-    }
+    },
  },
     extraReducers:(builder)=>{
         builder.addCase(Getdatainfo.fulfilled,(state,action)=>{
             state.loading=false;
             state.datas=action.payload
-             state.error=''
         }),
         builder.addCase(Getdatainfo.pending,(state,action)=>{
             state.loading=true;

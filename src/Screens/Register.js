@@ -5,7 +5,7 @@ import React, { useState,useCallback} from 'react'
 import auth from '@react-native-firebase/auth'
 import Toast from 'react-native-toast-message';
 import firestore from '@react-native-firebase/firestore'
-
+import Networkstatus from '../Networkstatus';
 
 
 
@@ -205,7 +205,7 @@ setpasswordvalid(false)
             <Text style={styles.buttontextsignup}>Sign in</Text>
         </TouchableOpacity>
       </View>
-   {!loading && <Apploader/>} 
+   {!loading && <Apploader/>}
     </View> 
   )
 }

@@ -1,7 +1,8 @@
 import React,{useEffect, useState} from "react";
 import { View,StyleSheet,TouchableOpacity,TextInput,FlatList,Image,Text,ScrollView,TouchableHighlight, Alert} from "react-native";
 
-import { useNavigation,useFocusEffect } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
 import  Icon  from "react-native-vector-icons/MaterialIcons";
 import { searchbarAsync,itemdetails } from "../Redux/Datainforeducer";
 import { additemcount,cartdataadd,getcartdata,totalpriceaction} from "../Redux/Cartreducer";
@@ -216,9 +217,18 @@ const Itemdetails=()=>{
  
 const addcartitem=(item)=>{
   if(userId==''){
-    Alert.alert('Login to continue')
+  Toast.show({
+      type:'error',
+      text1:'Login to continue',
+      visibilityTime:4000
+  })
     navigation.navigate('Login')
   }else{
+    Toast.show({
+      type:'success',
+      text1:'Item added to cart',
+      visibilityTime:4000
+    })
     dispatch(cartdataadd({item,userId}))
   }
   
@@ -228,12 +238,21 @@ const addcartitem=(item)=>{
 }
 
 const handlebuynow=()=>{
-  if(defaultadress.length>0){
+  if(userId!=''){
+  if(defaultadress){
     navigation.navigate('Orderdetails',{from:''})
   }else{
     navigation.navigate('Addnewadress',{from:''})
     
   }
+}else{
+  Toast.show({
+    type:'error',
+    text1:'Login to continue',
+    visibilityTime:4000
+  })
+  navigation.navigate('Login')
+}
 }
   return(
     <View style={styles.container}>
@@ -512,7 +531,7 @@ detailheadtext:{
 buttonaction:{
   width:'90%',
   height:50,
-  backgroundColor:'#00cc00',
+  backgroundColor:'#7BD78A',
   alignSelf:'center',
   marginTop:20,
   borderRadius:8,

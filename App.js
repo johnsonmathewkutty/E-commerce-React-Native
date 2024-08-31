@@ -20,6 +20,7 @@ import Orderstatus from "./src/Screens/Orderstatus";
 import Passwordrecover from "./src/Screens/Passwordrecover";
 import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
 import Profile from "./src/Screens/Profile";
+import Networkstatus from "./src/Networkstatus";
 
 
 const toastConfig = {
@@ -231,6 +232,7 @@ const App=()=>{
         headerShown:false
       }}/>
       </stack.Navigator>
+      <Networkstatus/>
       <Toast config={toastConfig}/>
     </NavigationContainer>
     </Provider>

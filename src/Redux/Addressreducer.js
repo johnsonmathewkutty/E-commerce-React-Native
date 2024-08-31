@@ -16,8 +16,9 @@ const getDefaultadress=createAsyncThunk('defaultadress/data',async(userid)=>{
 })
 const getLogindetails=createAsyncThunk('data/Login',async(userid)=>{
     const user=await firestore().collection('users').doc(userid).get()
-    const logindata=user.data().Fullname
-    return logindata
+    const name=user.data().Fullname
+    const phnumber=user.data().PhoneNumber
+    return {name,phnumber}
 })
 
 const AdressSlices=createSlice({
@@ -26,7 +27,8 @@ const AdressSlices=createSlice({
    adressdata:[],
    defaultadress:[],
    updateadress:[],
-   fullname:''
+   fullname:'',
+   phonenumber:''
     },
     reducers:{
     saveadress:(state,action)=>{
@@ -79,7 +81,9 @@ const AdressSlices=createSlice({
             state.defaultadress=action.payload
         }),
         bulider.addCase(getLogindetails.fulfilled,(state,action)=>{
-              state.fullname=action.payload
+            console.log(action.payload)
+              state.fullname=action.payload.name,
+              state.phonenumber=action.payload.phnumber
         })
     }
 })

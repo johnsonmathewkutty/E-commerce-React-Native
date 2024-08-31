@@ -103,9 +103,12 @@ firestoreuserid:(state,action)=>{
         }
     )
     state.totalprice=state.price.reduce((acc, curr) => acc + curr, 0);
-    }
-
     },
+    clearuserdatas:(state,action)=>{
+      state.userid='',
+      state.cartcount=0
+    },
+},
     extraReducers:(builder)=>{
       builder.addCase(additemcount.fulfilled,(state,action)=>{
         state.cartcount=action.payload
@@ -117,5 +120,5 @@ firestoreuserid:(state,action)=>{
     }
 })
 export{additemcount,getcartdata}
-export const {firestoreuserid,cartdataadd,addquantity,decreasequantity,deleteitem,buynowaction,totalpriceaction}=CartreducerSlice.actions
+export const {firestoreuserid,cartdataadd,addquantity,decreasequantity,deleteitem,buynowaction,totalpriceaction,clearuserdatas}=CartreducerSlice.actions
 export default CartreducerSlice.reducer;

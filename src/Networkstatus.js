@@ -1,38 +1,55 @@
 import { View, Text,StyleSheet,Image,TouchableOpacity} from 'react-native'
 import React,{useEffect,useState} from 'react'
 
-import {useNetInfo} from '@react-native-community/netinfo';
-import Netinfo from '@react-native-community/netinfo'
+import NetInfo from "@react-native-community/netinfo";
+import { useNavigation } from "@react-navigation/native";
+import { Header } from '@react-navigation/stack';
+
 const Networkstatus = () => {
-  const { isConnected, isInternetReachable } = useNetInfo();
- console.log(isConnected)
- console.log(isInternetReachable)
-    // useEffect(() => {
-    //     // const unsubscribe = useNetInfo.addEventListener(state => {
-    //     //   setIsConnected(state.isConnected);
-    //     //   console.log(state.isConnected)
-    //     //   console.log(state.type)
-    //     });
+  const [isConnect, setIsConnected] = useState(true)
+  const [refresh, setRefresh] = useState(false);  
+  const navigation=useNavigation() 
+  useEffect(()=>{
+    const unsubscribe = NetInfo.addEventListener(state => {
+       setIsConnected(state.isConnected)
+       if(!state.isConnected){
+        setRefresh(true)
+       }
+
+    });
     
-    //     // // Clean up subscription on unmount
-    //     // return () => unsubscribe();
-    //   }, []);
+    // Unsubscribe
+    return()=>{
+    unsubscribe();
+    }
+ 
+   
+  },[setIsConnected,setRefresh])
 
-      const checkNetworkStatus =() => {
-        Netinfo.fetch().then(state => {
-          console.log("Connection type", state.type);
-          console.log("Is connected?", state.isConnected);
-        });
-      };
+ 
 
+  const handlenetworkstatus=()=>{
+    NetInfo.fetch().then(state => {
+      setIsConnected(state.isConnected)
+      if (state.isConnected) {
+        setRefresh(false)
+      }
+    });
+
+  }
   return (
-  isConnected ? ( <View style={[styles.maincontainer,StyleSheet.absoluteFillObject]}>
+   !isConnect || refresh ? ( <View style={[styles.maincontainer,StyleSheet.absoluteFillObject]}>
+    <View style={styles.headercontainer}>
+      <View style={styles.iconcontainer}>
+      <Image source={require('../src/images/appicon.png')} style={styles.iconimg}/>
+      </View>
+        </View>
       <View style={styles.imgcontainer}>
-        <Image source={require('../src/images/NetworkError.jpg') } style={styles.img}/>
+        <Image source={require('../src/images/NoNetwork.jpg') } style={styles.img}/>
       </View>
       <Text style={styles.maintext}>No connection</Text>
       <Text style={styles.subtext}>Please check your internet connectivity and try again</Text>
-      <TouchableOpacity style={styles.button} onPress={checkNetworkStatus()}>
+      <TouchableOpacity style={styles.button} onPress={handlenetworkstatus}>
         <Text style={styles.btntext}>Retry</Text>
       </TouchableOpacity>
     </View> )
@@ -40,30 +57,30 @@ const Networkstatus = () => {
   )
 }
 
-export default Networkstatus
+export default Networkstatus;
 
 
 const styles=StyleSheet.create({
     maincontainer:{
         flex:1,
         backgroundColor:'#fff',
-        justifyContent:'center',
         alignItems:'center'
     },
     imgcontainer:{
-      width:'100%',
+      width:'90%',
       height:250,
-      alignItems:'center'
+      alignItems:'center',
+      marginTop:110
     },
     img:{
-      width:'100%',
-      height:'100%'
+      width:'90%',
+      height:'90%'
     },
     maintext:{
       fontSize:30,
       color:'#3b312f',
       fontFamily:'NotoSansSundanese-Bold',
-      marginTop:20
+      marginTop:10
     },
     subtext:{
       fontSize:15,
@@ -87,5 +104,21 @@ const styles=StyleSheet.create({
       color:'#fff',
       fontSize:20,
       fontWeight:'700'
+    },
+    headercontainer:{
+      width:'100%',
+      height:60,
+      backgroundColor:'#7BD78A',
+      justifyContent:'center',
+    },
+    iconcontainer:{
+      width:'60%',
+      height:50,
+    justifyContent:'center',
+   marginLeft:15,
+    },
+    iconimg:{
+      width:'80%',
+      height:'60%'
     }
 })

@@ -133,7 +133,7 @@ const Handlebottomview=()=>{
           <Text style={styles.bottomtext}>View price details</Text>
         </View>
         <View>
-          <TouchableOpacity style={styles.bottombtn}onPress={()=>handlebuynow(item)}>
+          <TouchableOpacity style={styles.bottombtn}onPress={()=>handlecartbuynow(item)}>
             <Text style={styles.bottombtntext}>Continue</Text>
           </TouchableOpacity>
         </View>
@@ -183,6 +183,39 @@ const handlebuynow=(item)=>{
   RazorpayCheckout.open(options).then((data) => {
     // handle success
     alert(`Success: ${data.razorpay_payment_id}`);
+    navigation.navigate('Orderstatus',{status:'success'})
+  }).catch((error) => {
+    // handle failure
+    alert(`Error: ${'Their are some error occured',error.code} | ${'some error occured',error.description}`);
+    navigation.navigate('Orderstatus',{status:'failed'})
+  });
+});
+}
+
+
+const handlecartbuynow=(item)=>{
+  defaultadress.forEach((address) => {
+    const name = address.name;
+    const number=address.phno;
+ const price=totalprice
+  var options = {
+    description: 'Credits towards consultation',
+    image: 'https://i.imgur.com/3g7nmJC.jpg',
+    currency: 'USD',
+    key: 'rzp_test_PzYwfvHlE9jZGf',
+    amount:price*100,
+    name:'E-shopping',
+    order_id: '',//Replace this with an order_id created using Orders API.
+    prefill: {
+      contact:number,
+      name:name
+    },
+    theme: {color: '#53a20e'}
+  }
+
+  RazorpayCheckout.open(options).then((data) => {
+    // // handle success
+    // alert(`Success: ${data.razorpay_payment_id}`);
     navigation.navigate('Orderstatus',{status:'success'})
   }).catch((error) => {
     // handle failure
@@ -253,15 +286,15 @@ const styles=StyleSheet.create({
   },
   adressbtntext:{
     color:'blue',
-    fontWeight:'500',
-    fontSize:15
+    fontSize:15,
+    fontFamily:'NotoSansSundanese-Bold'
   },
   headtext:{
     color:'#212121',
     fontSize:22,
-    fontWeight:'800',
     fontFamily:'Arial,sansserif',
-    marginTop:3
+    marginTop:3,
+    fontFamily:'NotoSansSundanese-Bold'
   },
   datasubcontainer:{
     width:'80%',
@@ -270,22 +303,23 @@ const styles=StyleSheet.create({
   },
   nametext:{
     fontSize:18,
-    fontWeight:'700',
     color:'#212121',
     marginBottom:5,
-    marginLeft:5
+    marginLeft:5,
+    fontFamily:'NotoSansSundanese-Bold'
   },
   textdetails:{
     fontSize:16,
     color:'#212121',
-    fontWeight:'400',
-    marginLeft:5
+    marginLeft:5,
+    fontFamily:'NotoSansSundanese-Medium'
   },
   phnotext:{
     color:'#212121',
     marginTop:5,
     fontSize:17,
-    marginLeft:5
+    marginLeft:5,
+    fontFamily:'NotoSansSundanese-Medium'
   },
   subcontainer:{
     width:'100%',
@@ -340,39 +374,38 @@ const styles=StyleSheet.create({
   },
   titletext:{
     fontSize:18,
-    fontWeight:'600',
     color:'#2E2E2E',
-    fontFamily:'inherit'
+    fontFamily:'NotoSansSundanese-SemiBold'
   },
   ratingtext:{
     marginLeft:6,
     color:'green',
     fontWeight:'600',
-    fontSize:16
+    fontSize:16,
   },
   priceoffer:{
     fontSize:18,
-    fontWeight:'700',
     color:'#008000',
-    marginRight:8
+    marginRight:8,
+    fontFamily:'NotoSansSundanese-SemiBold'
   },
   pricetext:{
     fontSize:18,
 marginRight:8,
-fontWeight:'700',
 color:'#878787',
-textDecorationLine:'line-through'
+textDecorationLine:'line-through',
+fontFamily:'NotoSansSundanese-Bold'
   },
   offerprice:{
     fontSize:20,
     marginLeft:5,
-    fontWeight:'700',
-    color:'#212121'
+    color:'#212121',
+    fontFamily:'NotoSansSundanese-Bold'
   },
   quantitytext:{
     fontSize:18,
-    fontWeight:'700',
-    color:'#212121'
+    color:'#212121',
+    fontFamily:'NotoSansSundanese-Medium'
   },
 pricesubcontainer:{
   width:'100%',
@@ -395,28 +428,28 @@ maincontainer:{
 priceheadtext:{
   fontSize:22,
   color:'#000',
-  fontWeight:'700',
-  marginBottom:20
+  marginBottom:20,
+  fontFamily:'NotoSansSundanese-Bold'
 },
 subtextprice:{
 fontSize:18,
-fontWeight:'500',
 marginBottom:10,
+fontFamily:'NotoSansSundanese-SemiBold'
 },
 subtotalprice:{
   fontSize:19,
-fontWeight:'500',
 color:'#000',
-marginTop:10
+marginTop:10,
+fontFamily:'NotoSansSundanese-SemiBold'
 },
 pricevaluecontainer:{
   marginTop:45
 },
 deliverycharge:{
   fontSize:18,
-fontWeight:'500',
 marginBottom:10,
-color:'#00cc00'
+color:'#00cc00',
+fontFamily:'NotoSansSundanese-SemiBold'
 },
 bottombtn:{
   width:190,
@@ -439,19 +472,19 @@ bottomtab:{
 },
  bottombtntext:{
   color:'#fff',
-  fontWeight:'700',
-  fontSize:20
+  fontSize:20,
+  fontFamily:'NotoSansSundanese-Bold'
  },
  bottomprice:{
   fontSize:24,
   color:'#000',
-  fontWeight:'700',
-  marginLeft:15
+  marginLeft:15,
+  fontFamily:'NotoSansSundanese-Bold'
  },
  bottomtext:{
   marginLeft:16,
   color:'blue',
-  fontWeight:'700',
-  fontSize:15
+  fontSize:15,
+  fontFamily:'NotoSansSundanese-SemiBold'
  }
 })
