@@ -8,13 +8,12 @@ import { Provider,useSelector} from "react-redux";
 import Home from "./src/Screens/Home";
 import Cart from "./src/Screens/Cart";
 import Order from "./src/Screens/Order";
-import Account from "./src/Screens/Profile";
 import Store from "./src/Redux/Store";
 import Itemdetails from "./src/Screens/Itemdetails";
 import Login from "./src/Screens/Login";
 import Register from "./src/Screens/Register";
-import Addnewadress from "./src/Screens/Addnewadress";
-import Adress from "./src/Screens/Adress";
+import Addnewaddress from "./src/Screens/Addnewaddress";
+import Address from "./src/Screens/Address";
 import Orderdetails from "./src/Screens/Orderdetails";
 import Orderstatus from "./src/Screens/Orderstatus";
 import Passwordrecover from "./src/Screens/Passwordrecover";
@@ -211,11 +210,11 @@ const App=()=>{
         component={Cart}
       />
       <stack.Screen
-      name="Addnewadress"
-      component={Addnewadress}/>
+      name="Addnewaddress"
+      component={Addnewaddress}/>
       <stack.Screen
-      name="Adress"
-      component={Adress}/>
+      name="Address"
+      component={Address}/>
       <stack.Screen 
       name="Orderdetails"
       component={Orderdetails}/>

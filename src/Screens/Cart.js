@@ -7,14 +7,14 @@ import firestore from '@react-native-firebase/firestore'
 import  Icon  from "react-native-vector-icons/MaterialIcons";
 
 import { getcartdata,addquantity,decreasequantity,deleteitem,buynowaction,setloading, totalpriceaction} from "../Redux/Cartreducer";
-import { getDefaultadress } from "../Redux/Addressreducer";
+import { getDefaultaddress } from "../Redux/Addressreducer";
 
 
 function Cart(){
   const userId=useSelector(state=>state.Cartdatas.userid)
    const cartdatas=useSelector(state=>state.Cartdatas.cartdata)
    const loading=useSelector(state=>state.Cartdatas.loading)
-   const defaultadress=useSelector(state=>state.Adressdatas.defaultadress)
+   const defaultaddress=useSelector(state=>state.Adressdatas.defaultaddress)
    const totalprice=useSelector(state=>state.Cartdatas.totalprice)
    const item=useSelector(state=>state.Cartdatas.item)
    const data=useSelector(state=>state.Datainfo.datas)
@@ -22,7 +22,7 @@ function Cart(){
    const navigation=useNavigation()
    useEffect(() => {
       dispatch(getcartdata(userId))
-    dispatch(getDefaultadress(userId))
+    dispatch(getDefaultaddress(userId))
     // dispatch(totalpriceaction())
   }, [loading]);
 
@@ -75,10 +75,10 @@ const deleteitems=(items)=>{
      }
       
      const handlebuynow=(item)=>{
-     if(defaultadress && defaultadress.length>0){
+     if(defaultaddress && defaultaddress.length>0){
       navigation.navigate('Orderdetails',{from:'cart'})
      }else{
-      navigation.navigate('Addnewadress',{from:'cart'})
+      navigation.navigate('Addnewaddress',{from:'cart'})
      }
      }
 

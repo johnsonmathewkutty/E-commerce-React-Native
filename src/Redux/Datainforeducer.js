@@ -1,5 +1,4 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
-import { response } from "express";
 import  axios  from "react-native-axios";
  
 const TIMEOUT = 10000;

@@ -6,7 +6,7 @@ import Toast from "react-native-toast-message";
 import  Icon  from "react-native-vector-icons/MaterialIcons";
 import { searchbarAsync,itemdetails } from "../Redux/Datainforeducer";
 import { additemcount,cartdataadd,getcartdata,totalpriceaction} from "../Redux/Cartreducer";
-import { getDefaultadress} from '../Redux/Addressreducer'
+import { getDefaultaddress} from '../Redux/Addressreducer'
 
 import {  useDispatch, useSelector } from "react-redux";
 import { AirbnbRating,Rating } from "react-native-ratings";
@@ -18,7 +18,7 @@ const Itemdetails=()=>{
  const searchtext=useSelector(state=>state.Datainfo.searchdata)
  const itemdata=useSelector(state=>state.Datainfo.itemdatas)
  const cartcounts=useSelector(state=>state.Cartdatas.cartcount)
- const defaultadress=useSelector(state=>state.Adressdatas.defaultadress)
+ const defaultaddress=useSelector(state=>state.Adressdatas.defaultaddress)
   const navigation=useNavigation()
   const[search,setsearch]=useState(false)
   const[display,setdisplay]=useState(false)
@@ -26,7 +26,7 @@ const Itemdetails=()=>{
   useEffect(()=>{
     dispatch(additemcount(userId)),
     dispatch(getcartdata(userId)),
-    dispatch(getDefaultadress(userId))
+    dispatch(getDefaultaddress(userId))
     Headershow()
     navigation.setOptions({
       headerLeft:()=>(
@@ -239,10 +239,10 @@ const addcartitem=(item)=>{
 
 const handlebuynow=()=>{
   if(userId!=''){
-  if(defaultadress){
+  if(defaultaddress && defaultaddress.length>0){
     navigation.navigate('Orderdetails',{from:''})
   }else{
-    navigation.navigate('Addnewadress',{from:''})
+    navigation.navigate('Addnewaddress',{from:''})
     
   }
 }else{

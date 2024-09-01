@@ -3,23 +3,28 @@ import { View,Text,StyleSheet,FlatList,TouchableOpacity, Alert,BackHandler} from
 
 import { useDispatch, useSelector } from "react-redux";
 import  Icon  from "react-native-vector-icons/MaterialIcons";
-import { getadress,setdefaultaddress,removeadress} from '../Redux/Addressreducer'
+import { getaddress,setdefaultaddress,removeaddress} from '../Redux/Addressreducer'
 import { useNavigation } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
 
 const Adress=({route})=>{
     const dispatch=useDispatch()
     const userId=useSelector(state=>state.Cartdatas.userid)
-    const adressdatas=useSelector(state=>state.Adressdatas.adressdata)
-    const defaultadress=useSelector(state=>state.Adressdatas.defaultadress)
+    const addressdatas=useSelector(state=>state.Adressdatas.addressdata)
+    const defaultaddress=useSelector(state=>state.Adressdatas.defaultaddress)
     const navigation=useNavigation()
     const {from}=route.params;
     useEffect(()=>{
         const handleBackaction=()=>{
-            if(defaultadress.length>0){
+            if(defaultaddress.length>0){
                 navigation.navigate('Orderdetails',{from:''})
                 return true;
             }else{
-                Alert.alert('please select the adress or add new adress')
+                Toast.show({
+                    type:'error',
+                    text1:'Select or Add New Address',
+                    visibilityTime:3000
+                  })
                 return true
             }
            }
@@ -29,10 +34,10 @@ const Adress=({route})=>{
              BackHandler.removeEventListener('hardwareBackPress',handleBackaction)
             }
            }, 2000);
-    },[defaultadress,navigation])
+    },[defaultaddress,navigation])
 
       
-    if(defaultadress.length>0){
+    if(defaultaddress.length>0){
         navigation.setOptions({
             headerLeft:()=>(
                 <View>
@@ -44,7 +49,12 @@ const Adress=({route})=>{
         navigation.setOptions({
             headerLeft:()=>(
                 <View>
-                    <Icon size={24} name="arrow-back" color={'#000'} onPress={()=>Alert.alert('pelase select the adress or add new adress')}/>
+                    <Icon size={24} name="arrow-back" color={'#000'} onPress={()=>
+                    Toast.show({
+                    type:'error',
+                    text1:'Select or Add New Address',
+                    visibilityTime:3000
+                  })}/>
                 </View>
             )
         })
@@ -54,19 +64,19 @@ const Adress=({route})=>{
     dispatch(setdefaultaddress({item,userId}))
    }
    const handleremove=(item)=>{
-   dispatch(removeadress({userId,item}))
+   dispatch(removeaddress({userId,item}))
    setTimeout(() => {
-    dispatch(getadress(userId))
+    dispatch(getaddress(userId))
    },2000);
    }
     return(
 <View style={styles.container}>
-  <TouchableOpacity style={styles.Addbutton} onPress={()=>navigation.navigate('Addnewadress',{from:from})}>      
+  <TouchableOpacity style={styles.Addbutton} onPress={()=>navigation.navigate('Addnewaddress',{from:from})}>      
 <Icon name="add-box" size={30} color={'blue'}/>
 <Text style={styles.Addtext}>Add New Adress</Text>
 </TouchableOpacity>
    <FlatList 
-   data={adressdatas}
+   data={addressdatas}
    renderItem={({item})=>(
     <View style={styles.innerview}>
       <View>
@@ -122,17 +132,19 @@ const styles=StyleSheet.create({
     nametext:{
      fontSize:21,
      color:'#000',
-     fontWeight:'700'
+     fontFamily:'NotoSansSundanese-SemiBold',
     },
     detailstext:{
         fontSize:17,
         marginTop:5,
         color:'#191919',
+        fontFamily:'NotoSansSundanese-Regular',
     },
     phno:{
         fontSize:16,
         marginTop:5,
-        color:'#191919'
+        color:'#191919',
+        fontFamily:'NotoSansSundanese-Regular',
     },
     radiobutton:{
         width:22,
@@ -143,7 +155,7 @@ const styles=StyleSheet.create({
         marginTop:20,
       borderColor:'blue',
       justifyContent:'center',
-      alignItems:'center'
+      alignItems:'center',
     },
     radioinner:{
         width:12,
@@ -171,6 +183,7 @@ const styles=StyleSheet.create({
         fontSize:20,
         fontWeight:'900',
         marginLeft:10,
-        color:'blue'
+        color:'blue',
+        fontFamily:'NotoSansSundanese-Bold',
     }
 })

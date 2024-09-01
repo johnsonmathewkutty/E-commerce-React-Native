@@ -1,8 +1,10 @@
 import { View, Text,StyleSheet,Image,TouchableOpacity} from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
+
 
 const Orderstatus = ({route,navigation}) => {
    const {status}= route.params;
+ 
    if(status=='success'){
     return (
         <View style={styles.container}>

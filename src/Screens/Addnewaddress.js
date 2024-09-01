@@ -4,7 +4,7 @@ import React, { useEffect,useState,useRef} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 
-import { getadress,saveadress} from '../Redux/Addressreducer'
+import { getaddress,saveaddress} from '../Redux/Addressreducer'
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import  Icon from 'react-native-vector-icons/MaterialIcons'
@@ -244,7 +244,7 @@ const handleButtonPress = () => {
   } else {
     const id = uuidv4(); 
       const items={id,name,buildingname,street,city,pincode,phno}
-    dispatch(saveadress({userId,items}))
+    dispatch(saveaddress({userId,items}))
     Toast.show({
       type:'success',
       text1:'Address added sucessfully',

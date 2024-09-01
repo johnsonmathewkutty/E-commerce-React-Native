@@ -3,23 +3,24 @@ import React, { useEffect } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { AirbnbRating,Rating } from "react-native-ratings";
 import RazorpayCheckout from 'react-native-razorpay';
-import { getadress,setdefaultaddress,getDefaultadress} from '../Redux/Addressreducer';
+import { getaddress,setdefaultaddress,getDefaultaddress} from '../Redux/Addressreducer';
 import firestore from '@react-native-firebase/firestore'
-import Orderstatus from './Orderstatus';
+import { saveorderdata } from '../Redux/Orderreducer';
+
 
 const Orderdetails = ({navigation,route}) => {
   const itemdata=useSelector(state=>state.Datainfo.itemdatas)
   const cartdatas=useSelector(state=>state.Cartdatas.cartdata)
-  const defaultadress=useSelector(state=>state.Adressdatas.defaultadress)
+  const defaultaddress=useSelector(state=>state.Adressdatas.defaultaddress)
   const userId=useSelector(state=>state.Cartdatas.userid)
   const totalprice=useSelector(state=>state.Cartdatas.totalprice)
   const item=useSelector(state=>state.Cartdatas.item)
   const dispatch=useDispatch()
   const {from} =route.params;
   useEffect(()=>{
-dispatch(getadress(userId))
-dispatch(getDefaultadress(userId))
-  },[defaultadress])
+dispatch(getaddress(userId))
+dispatch(getDefaultaddress(userId))
+  },[defaultaddress])
   
 
   const Handleitemdata=()=>{
@@ -161,7 +162,7 @@ const Handlebottomview=()=>{
 }
 
 const handlebuynow=(item)=>{
-  defaultadress.forEach((address) => {
+  defaultaddress.forEach((address) => {
     const name = address.name;
     const number=address.phno;
  const price=item.price
@@ -182,19 +183,24 @@ const handlebuynow=(item)=>{
 
   RazorpayCheckout.open(options).then((data) => {
     // handle success
-    alert(`Success: ${data.razorpay_payment_id}`);
-    navigation.navigate('Orderstatus',{status:'success'})
+    // alert(`Success: ${data.razorpay_payment_id}`);
+    let status='success'
+    dispatch(saveorderdata({userId,item,status}))
+    navigation.navigate('Orderstatus',{status})
   }).catch((error) => {
     // handle failure
-    alert(`Error: ${'Their are some error occured',error.code} | ${'some error occured',error.description}`);
-    navigation.navigate('Orderstatus',{status:'failed'})
+    let status='failed'
+    // alert(`Error: ${'Their are some error occured',error.code} | ${'some error occured',error.description}`);
+   dispatch(saveorderdata({userId,item,status}))
+    navigation.navigate('Orderstatus',{status})
+
   });
 });
 }
 
 
 const handlecartbuynow=(item)=>{
-  defaultadress.forEach((address) => {
+  defaultaddress.forEach((address) => {
     const name = address.name;
     const number=address.phno;
  const price=totalprice
@@ -216,11 +222,15 @@ const handlecartbuynow=(item)=>{
   RazorpayCheckout.open(options).then((data) => {
     // // handle success
     // alert(`Success: ${data.razorpay_payment_id}`);
-    navigation.navigate('Orderstatus',{status:'success'})
+    let status='success'
+    dispatch(saveorderdata({userId,item,status}))
+    navigation.navigate('Orderstatus',{status})
   }).catch((error) => {
     // handle failure
-    alert(`Error: ${'Their are some error occured',error.code} | ${'some error occured',error.description}`);
-    navigation.navigate('Orderstatus',{status:'failed'})
+    let status='failed'
+    // alert(`Error: ${'Their are some error occured',error.code} | ${'some error occured',error.description}`);
+   dispatch(saveorderdata({userId,item,status}))
+    navigation.navigate('Orderstatus',{status})
   });
 });
 }
@@ -230,12 +240,12 @@ const handlecartbuynow=(item)=>{
        <View style={styles.maincontainer}>
      <View style={styles.adresscontainer}>
      <FlatList
-     data={defaultadress}
+     data={defaultaddress}
      renderItem={({item})=>(
       <View style={styles.datasubcontainer}>
           <View style={styles.headcontainer}>
         <Text style={styles.headtext}>Deliver to:</Text>
-        <TouchableOpacity style={styles.adressbtn} onPress={()=>{navigation.navigate('Adress',{from:from}),dispatch(setdefaultaddress({item,userId}))}}>
+        <TouchableOpacity style={styles.adressbtn} onPress={()=>{navigation.navigate('Address',{from:from}),dispatch(setdefaultaddress({item,userId}))}}>
           <Text style={styles.adressbtntext}>Change</Text>
         </TouchableOpacity>
       </View>
