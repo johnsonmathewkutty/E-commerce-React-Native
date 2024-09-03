@@ -72,7 +72,7 @@ const onRefresh = useCallback(() => {
 const Apploader=()=>{
     return(
         <View style={[styles.loadercontainer,StyleSheet.absoluteFillObject]}>
-            <StatusBar backgroundColor={'#00D100'} />
+            <StatusBar backgroundColor={'#7BD78A'} />
        <ActivityIndicator size={60} color={'blue'}/>
        </View>
        ) 

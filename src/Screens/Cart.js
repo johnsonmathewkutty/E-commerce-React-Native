@@ -10,7 +10,7 @@ import { getcartdata,addquantity,decreasequantity,deleteitem,buynowaction,setloa
 import { getDefaultaddress } from "../Redux/Addressreducer";
 
 
-function Cart(){
+function Cart({route}){
   const userId=useSelector(state=>state.Cartdatas.userid)
    const cartdatas=useSelector(state=>state.Cartdatas.cartdata)
    const loading=useSelector(state=>state.Cartdatas.loading)
@@ -30,7 +30,7 @@ function Cart(){
     // Re-fetch the total price whenever cart data changes
     dispatch(totalpriceaction());
   }, [cartdatas, dispatch]);
-
+ 
  const additem=(items)=>{
    dispatch(addquantity({items,userId}))
 }

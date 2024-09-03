@@ -13,24 +13,6 @@ function Profile(){
     const userId=useSelector(state=>state.Cartdatas.userid)
     const navigation=useNavigation()
     const dispatch = useDispatch();
-   navigation.setOptions({
-        headerTitleStyle:{
-           fontFamily:'NotoSansSundanese-Bold',
-           fontSize:23,
-        },
-    headerLeft:()=>(
-     <View>
-        <TouchableOpacity onPress={()=>navigation.navigate('Bottomtabs',{
-           screen:'Home'
-        })}>
-        <Icon  name="arrow-back" size={35} color={'#000'}/>
-        </TouchableOpacity>
-     </View>
-    ),
-    headerStyle:{
-        borderWidth:1
-    }
-    })
     
     const logout = async () => {
         try {
@@ -65,7 +47,7 @@ function Profile(){
         }
       };
       
-     const Uerlogin=()=>{
+     const Userlogin=()=>{
         return(
             <View style={[styles.logincontainer,StyleSheet.absoluteFillObject]}>
              <View style={styles.imgcontainer}>
@@ -111,7 +93,7 @@ function Profile(){
             <Icon name="arrow-forward-ios" size={20} color={'#3b312f'} style={{marginRight:10}}/>
            </TouchableOpacity>
            </View>
-           {!userId ? <Uerlogin/> : null}
+           {!userId ? <Userlogin/> : null}
         </View>
     )
 }
@@ -191,19 +173,19 @@ const styles=StyleSheet.create({
         alignItems:'center'
     },
     imgcontainer:{
-        width:'85%',
-        height:300,
+        width:'90%',
+        height:250,
         alignItems:'center'
     },
     img:{
-        width:'90%',
-        height:'93%'
+        width:'85%',
+        height:'100%'
     },
    subtext:{
     fontSize:20,
     fontFamily:'NotoSansSundanese-Bold',
     color:'#4682B4',
-    marginTop:5,
+    marginTop:20,
     textAlign:'center'
    },
    buttontext:{

@@ -1,5 +1,5 @@
 import React from "react";
-import { View,StyleSheet,Text} from "react-native";
+import { View,StyleSheet,Text,TouchableOpacity} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -20,7 +20,7 @@ import Passwordrecover from "./src/Screens/Passwordrecover";
 import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
 import Profile from "./src/Screens/Profile";
 import Networkstatus from "./src/Networkstatus";
-
+import { useNavigation } from "@react-navigation/native";
 
 const toastConfig = {
   success: (props) => (
@@ -70,6 +70,7 @@ function Bottomtabs(){
  const bottomtab=createBottomTabNavigator()
  const cartcounts=useSelector(state=>state.Cartdatas.cartcount)
  const  previous_Screen=''
+ const navigation=useNavigation()
   return(
   <bottomtab.Navigator>
     <bottomtab.Screen
@@ -122,14 +123,17 @@ function Bottomtabs(){
       tabBarIconStyle:{
         marginTop:5
       },
-
+        headerTitleStyle:{
+            fontFamily:'NotoSansSundanese-Bold',
+            fontSize:23,
+         },
     })}
     />
     <bottomtab.Screen
     name="Order"
     component={Order}
     options={{
-      headerShown:false,
+      headerShown:true,
       tabBarActiveTintColor:'#000C66',
       tabBarInactiveTintColor:'#87ACA3',
       tabBarLabelStyle:{
@@ -142,7 +146,13 @@ function Bottomtabs(){
       tabBarIconStyle:{
         marginTop:5
       },
-
+        headerTitleStyle:{
+            fontFamily:'NotoSansSundanese-Bold',
+            fontSize:23,
+         },
+         headerStyle:{
+          borderBottomWidth:1
+      }
     }}/>
     <bottomtab.Screen
     name="Profile"
@@ -160,6 +170,22 @@ function Bottomtabs(){
       tabBarIconStyle:{
         marginTop:5
       },
+      headerTitleStyle:{
+        fontFamily:'NotoSansSundanese-Bold',
+        fontSize:23,
+     },
+     headerLeft:()=>(
+      <View>
+         <TouchableOpacity onPress={()=>navigation.navigate('Bottomtabs',{
+            screen:'Home'
+         })}>
+         <Icon  name="arrow-back" size={35} color={'#000'}/>
+         </TouchableOpacity>
+      </View>
+     ),
+     headerStyle:{
+      borderBottomWidth:1
+     }
     }}/>
   </bottomtab.Navigator>
   )
@@ -230,6 +256,10 @@ const App=()=>{
       options={{
         headerShown:false
       }}/>
+      <stack.Screen
+      name="Order"
+      component={Order}
+      />
       </stack.Navigator>
       <Networkstatus/>
       <Toast config={toastConfig}/>

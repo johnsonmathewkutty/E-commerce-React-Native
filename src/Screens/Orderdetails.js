@@ -5,7 +5,7 @@ import { AirbnbRating,Rating } from "react-native-ratings";
 import RazorpayCheckout from 'react-native-razorpay';
 import { getaddress,setdefaultaddress,getDefaultaddress} from '../Redux/Addressreducer';
 import firestore from '@react-native-firebase/firestore'
-import { saveorderdata } from '../Redux/Orderreducer';
+
 
 
 const Orderdetails = ({navigation,route}) => {
@@ -14,7 +14,9 @@ const Orderdetails = ({navigation,route}) => {
   const defaultaddress=useSelector(state=>state.Adressdatas.defaultaddress)
   const userId=useSelector(state=>state.Cartdatas.userid)
   const totalprice=useSelector(state=>state.Cartdatas.totalprice)
-  const item=useSelector(state=>state.Cartdatas.item)
+  const items=useSelector(state=>state.Cartdatas.item)
+  const fullname=useSelector(state=>state.Adressdatas.fullname)
+  const phonenumber=useSelector(state=>state.Adressdatas.phonenumber)
   const dispatch=useDispatch()
   const {from} =route.params;
   useEffect(()=>{
@@ -54,13 +56,12 @@ dispatch(getDefaultaddress(userId))
           </View>
         </View>
         </View>
-      )}
-      keyExtractor={item => item.id.toString()} 
+      )} 
       ListFooterComponent={()=>(
         <View style={styles.pricesubcontainer}>
         <View>
          <Text style={styles.priceheadtext}>Price  details</Text>
-         <Text style={styles.subtextprice}>price ({item}item)</Text>
+         <Text style={styles.subtextprice}>price ({items}item)</Text>
          <Text style={styles.subtextprice}>Delivery charge</Text>
          <Text  style={styles.subtotalprice}>Total Amount</Text>
         </View>
@@ -121,7 +122,7 @@ dispatch(getDefaultaddress(userId))
           </View>
           </View>
         )}
-        keyExtractor={item => item.id.toString()} />
+      />
       )
     }
   }
@@ -134,7 +135,7 @@ const Handlebottomview=()=>{
           <Text style={styles.bottomtext}>View price details</Text>
         </View>
         <View>
-          <TouchableOpacity style={styles.bottombtn}onPress={()=>handlecartbuynow(item)}>
+          <TouchableOpacity style={styles.bottombtn}onPress={()=>handlecartbuynow(cartdatas)}>
             <Text style={styles.bottombtntext}>Continue</Text>
           </TouchableOpacity>
         </View>
@@ -156,16 +157,15 @@ const Handlebottomview=()=>{
       </TouchableOpacity>
     </View>
     </View>
-   )}/>
+   )}
+   />
     )
   }
 }
 
 const handlebuynow=(item)=>{
-  defaultaddress.forEach((address) => {
-    const name = address.name;
-    const number=address.phno;
  const price=item.price
+ const data=itemdata
   var options = {
     description: 'Credits towards consultation',
     image: 'https://i.imgur.com/3g7nmJC.jpg',
@@ -175,64 +175,53 @@ const handlebuynow=(item)=>{
     name:'E-shopping',
     order_id: '',//Replace this with an order_id created using Orders API.
     prefill: {
-      contact:number,
-      name:name
+      contact:phonenumber,
+      name:fullname
     },
     theme: {color: '#53a20e'}
   }
 
-  RazorpayCheckout.open(options).then((data) => {
+  RazorpayCheckout.open(options).then((datas) => {
     // handle success
     // alert(`Success: ${data.razorpay_payment_id}`);
-    let status='success'
-    dispatch(saveorderdata({userId,item,status}))
-    navigation.navigate('Orderstatus',{status})
+    // dispatch(saveorderdata({userId,data,status:'success'}))
+    navigation.navigate('Orderstatus',{status:'success',data})
   }).catch((error) => {
     // handle failure
-    let status='failed'
     // alert(`Error: ${'Their are some error occured',error.code} | ${'some error occured',error.description}`);
-   dispatch(saveorderdata({userId,item,status}))
-    navigation.navigate('Orderstatus',{status})
-
+  //  dispatch(saveorderdata({userId,data,status:'failed'}))
+    navigation.navigate('Orderstatus',{status:'failed',data})
   });
-});
 }
 
 
-const handlecartbuynow=(item)=>{
-  defaultaddress.forEach((address) => {
-    const name = address.name;
-    const number=address.phno;
- const price=totalprice
+const handlecartbuynow=(data)=>{
   var options = {
     description: 'Credits towards consultation',
     image: 'https://i.imgur.com/3g7nmJC.jpg',
     currency: 'USD',
     key: 'rzp_test_PzYwfvHlE9jZGf',
-    amount:price*100,
+    amount:totalprice*100,
     name:'E-shopping',
     order_id: '',//Replace this with an order_id created using Orders API.
     prefill: {
-      contact:number,
-      name:name
+      contact:phonenumber,
+      name:fullname
     },
     theme: {color: '#53a20e'}
   }
 
-  RazorpayCheckout.open(options).then((data) => {
+  RazorpayCheckout.open(options).then((datas) => {
     // // handle success
     // alert(`Success: ${data.razorpay_payment_id}`);
-    let status='success'
-    dispatch(saveorderdata({userId,item,status}))
-    navigation.navigate('Orderstatus',{status})
+    // dispatch(saveorderdata({userId,data,status:'success'}))
+    navigation.navigate('Orderstatus',{status:'success',data})
   }).catch((error) => {
     // handle failure
-    let status='failed'
     // alert(`Error: ${'Their are some error occured',error.code} | ${'some error occured',error.description}`);
-   dispatch(saveorderdata({userId,item,status}))
-    navigation.navigate('Orderstatus',{status})
+  //  dispatch(saveorderdata({userId,data,status:'failed'}))
+    navigation.navigate('Orderstatus',{status:'failed',data})
   });
-});
 }
   return (
     
@@ -254,7 +243,8 @@ const handlecartbuynow=(item)=>{
        {item.pincode}</Text>
        <Text style={styles.phnotext}>{item.phno}</Text>
       </View>
-     )}/>
+     )}
+/>
      </View>
     <View style={{ flex: 1 }}>{Handleitemdata()}</View>
    <View>{Handlebottomview()}</View>

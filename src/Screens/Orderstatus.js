@@ -1,10 +1,18 @@
 import { View, Text,StyleSheet,Image,TouchableOpacity} from 'react-native'
 import React, { useEffect } from 'react'
+import { useSelector,useDispatch } from 'react-redux';
 
+import { saveorderdata } from '../Redux/Orderreducer';
 
 const Orderstatus = ({route,navigation}) => {
-   const {status}= route.params;
- 
+   const {status,data}= route.params;
+   const userId=useSelector(state=>state.Cartdatas.userid)
+   const dispatch=useDispatch()
+   console.log(status)
+   console.log(data)
+   useEffect(()=>{
+    dispatch(saveorderdata({status,data,userId}))
+   },[])
    if(status=='success'){
     return (
         <View style={styles.container}>

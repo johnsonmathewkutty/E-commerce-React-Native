@@ -8,7 +8,6 @@ import { Header } from '@react-navigation/stack';
 const Networkstatus = () => {
   const [isConnect, setIsConnected] = useState(true)
   const [refresh, setRefresh] = useState(false);  
-  const navigation=useNavigation() 
   useEffect(()=>{
     const unsubscribe = NetInfo.addEventListener(state => {
        setIsConnected(state.isConnected)

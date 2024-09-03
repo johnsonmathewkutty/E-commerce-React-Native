@@ -46,7 +46,7 @@ const Itemdetails=()=>{
             <Icon name="search" size={38} color={'#478778'}/>
           </TouchableOpacity>
           <TouchableOpacity  onPress={()=>navigation.navigate('Bottomtabs',
-          {screen:'Cart'
+          {screen:'Cart',
           }
           )}>
             <Icon name="shopping-cart" size={34} color={'#478778'}/>
