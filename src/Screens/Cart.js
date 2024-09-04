@@ -20,6 +20,7 @@ function Cart({route}){
    const data=useSelector(state=>state.Datainfo.datas)
    const dispatch=useDispatch()
    const navigation=useNavigation()
+   const reversedata=[...cartdatas].reverse()
    useEffect(() => {
       dispatch(getcartdata(userId))
     dispatch(getDefaultaddress(userId))
@@ -76,7 +77,7 @@ const deleteitems=(items)=>{
       
      const handlebuynow=(item)=>{
      if(defaultaddress && defaultaddress.length>0){
-      navigation.navigate('Orderdetails',{from:'cart'})
+      navigation.navigate('Order Summary',{from:'cart'})
      }else{
       navigation.navigate('Addnewaddress',{from:'cart'})
      }
@@ -92,7 +93,7 @@ const deleteitems=(items)=>{
     return(
       <View style={styles.container}>
         <FlatList
-        data={cartdatas}
+        data={reversedata}
         renderItem={({item, index})=>(
           <TouchableOpacity onPress={()=>navigation.navigate('Itemdetails')}>
          <View style={styles.subcontainer}>

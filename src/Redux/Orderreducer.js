@@ -23,13 +23,17 @@ const Orderslice=createSlice({
     },
     reducers:{
       saveorderdata:(state,action)=>{
-       const item=action.payload.data
+       const itemdata=action.payload.data
        const status=action.payload.status
-       console.log('reducer',status)
        const userId=action.payload.userId
-   const data = item.map(items => ({ ...items, status: status, id: uuidv4() }));
-    const updatadata=[...state.orderdatas,...data]
-       updateFirestoreData(updatadata,userId)
+       itemdata.forEach(item=>{
+       const value=state.orderdatas.filter((items)=>items.id !== item.id)
+         const data = itemdata.map(items => ({ ...items, status: status, id: uuidv4() }));
+        const updatadata=[...value,...data]
+        updateFirestoreData(updatadata,userId)
+      })
+  
+       
       }
     
     },

@@ -240,7 +240,7 @@ const addcartitem=(item)=>{
 const handlebuynow=()=>{
   if(userId!=''){
   if(defaultaddress && defaultaddress.length>0){
-    navigation.navigate('Orderdetails',{from:''})
+    navigation.navigate('Order Summary',{from:''})
   }else{
     navigation.navigate('Addnewaddress',{from:''})
     

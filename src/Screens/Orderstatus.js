@@ -8,8 +8,6 @@ const Orderstatus = ({route,navigation}) => {
    const {status,data}= route.params;
    const userId=useSelector(state=>state.Cartdatas.userid)
    const dispatch=useDispatch()
-   console.log(status)
-   console.log(data)
    useEffect(()=>{
     dispatch(saveorderdata({status,data,userId}))
    },[])

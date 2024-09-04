@@ -14,12 +14,13 @@ import Login from "./src/Screens/Login";
 import Register from "./src/Screens/Register";
 import Addnewaddress from "./src/Screens/Addnewaddress";
 import Address from "./src/Screens/Address";
-import Orderdetails from "./src/Screens/Orderdetails";
 import Orderstatus from "./src/Screens/Orderstatus";
 import Passwordrecover from "./src/Screens/Passwordrecover";
 import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
 import Profile from "./src/Screens/Profile";
 import Networkstatus from "./src/Networkstatus";
+import Ordersummary from "./src/Screens/Ordersummary";
+import Orderdetails from "./src/Screens/Orderdetails";
 import { useNavigation } from "@react-navigation/native";
 
 const toastConfig = {
@@ -242,8 +243,17 @@ const App=()=>{
       name="Address"
       component={Address}/>
       <stack.Screen 
-      name="Orderdetails"
-      component={Orderdetails}/>
+      name="Order details"
+      component={Orderdetails}
+      options={{
+        headerStyle:{
+          borderBottomWidth:1
+         },
+         headerTitleStyle:{
+          fontFamily:'NotoSansSundanese-Bold',
+          fontSize:21,
+       },
+      }}/>
       <stack.Screen
       name="Orderstatus"
       component={Orderstatus}
@@ -260,6 +270,17 @@ const App=()=>{
       name="Order"
       component={Order}
       />
+      <stack.Screen
+      name="Order Summary"
+      component={Ordersummary}
+      options={{
+        headerStyle:{
+          borderBottomWidth:1
+         },
+         headerTitleStyle:{
+          fontFamily:'NotoSansSundanese-Bold',
+          fontSize:21,
+       },}}/>
       </stack.Navigator>
       <Networkstatus/>
       <Toast config={toastConfig}/>

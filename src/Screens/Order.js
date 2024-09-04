@@ -9,6 +9,7 @@ function Order({navigation}){
     const userId=useSelector(state=>state.Cartdatas.userid)
     const orderdata=useSelector(state=>state.Orderdata.orderdatas)
     const dispatch=useDispatch()
+    const reversedData = [...orderdata].reverse();
     useEffect(()=>{
         dispatch(Getorderdata(userId))
     },[orderdata])
@@ -43,10 +44,10 @@ function Order({navigation}){
     return(
         <View style={styles.container}>
         <FlatList
-         data={orderdata}
+         data={reversedData}
          renderItem={({item})=>(
          <View>
-            {item.status=='failed' ?
+            {item.status=='failed' &&
             <View style={styles.subcontainer}>
                 <View style={styles.imgcontainer}>
                 <Image source={{uri:item.image}} style={styles.img}/>
@@ -55,11 +56,11 @@ function Order({navigation}){
             <Text style={styles.headtextfail}>Order Not Placed</Text>
             <Text style={styles.titletext}>{item.title}</Text>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>navigation.navigate('Order details',{item,status:item.status})}>
                 <Icon name="arrow-forward-ios" size={20} color={'#0d0301'}/>
             </TouchableOpacity>
-            </View>
-        :
+            </View>}
+        {item.status=='success' &&
         <View style={styles.subcontainer}>
             <View style={styles.imgcontainer}>
                 <Image source={{uri:item.image}} style={styles.img}/>
@@ -68,7 +69,7 @@ function Order({navigation}){
             <Text style={styles.headtext}>Order Placed</Text>
             <Text style={styles.titletext}>{item.title}</Text>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity  onPress={()=>navigation.navigate('Order details',{item,status:item.status})}>
                 <Icon name="arrow-forward-ios" size={20} color={'#0d0301'}/>
             </TouchableOpacity>
             </View>}
@@ -76,8 +77,8 @@ function Order({navigation}){
          )
         }
         />
-        {orderdata=='' || !orderdata && <Emptypage/>}
-        {userId=='' || !userId  && <Loginuser/>}
+        {orderdata=='' && <Emptypage/>}
+        {userId==''  && <Loginuser/>}
         </View>
     )
 }
