@@ -2,8 +2,6 @@ import { View, Text,StyleSheet,Image,TouchableOpacity} from 'react-native'
 import React,{useEffect,useState} from 'react'
 
 import NetInfo from "@react-native-community/netinfo";
-import { useNavigation } from "@react-navigation/native";
-import { Header } from '@react-navigation/stack';
 
 const Networkstatus = () => {
   const [isConnect, setIsConnected] = useState(true)

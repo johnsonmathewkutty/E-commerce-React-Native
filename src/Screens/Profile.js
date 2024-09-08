@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { View,Text,StyleSheet,TouchableOpacity,Image } from "react-native";
 
 import Icon  from "react-native-vector-icons/MaterialIcons";
@@ -8,12 +8,20 @@ import auth from'@react-native-firebase/auth'
 import Toast from "react-native-toast-message";
 import  {clearuserdatas}  from '../Redux/Cartreducer'
 
+import {
+    initialize,
+    showMessaging,
+  } from '@robbywh/react-native-zendesk-messaging'
+
 function Profile(){
     const fullname=useSelector(state=>state.Adressdatas.fullname)
     const userId=useSelector(state=>state.Cartdatas.userid)
     const navigation=useNavigation()
     const dispatch = useDispatch();
-    
+
+    useEffect(() => {
+        initialize('eyJzZXR0aW5nc191cmwiOiJodHRwczovL3RzbTY2MTIuemVuZGVzay5jb20vbW9iaWxlX3Nka19hcGkvc2V0dGluZ3MvMDFKNzNKOEs0OEE5MURaUEZCSkNBMzdBUlAuanNvbiJ9');
+      }, []);
     const logout = async () => {
         try {
            await auth().signOut();
@@ -54,41 +62,41 @@ function Profile(){
                 <Image source={require('../images/Loginimage.jpg')}   style={styles.img}/>
              </View>
              <Text style={styles.subtext}>Login for the best experience</Text>
-             <TouchableOpacity style={styles.btn} onPress={()=>navigation.navigate('Login')}>
+             <TouchableOpacity style={styles.btn} activeOpacity={0.8} onPress={()=>navigation.navigate('Login')}>
                 <Text style={styles.buttontext}>Login</Text>
              </TouchableOpacity>
             </View>
         )
      }
-    
+   
     return(
         <View style={styles.container}>
            <View style={styles.accountcontainer}>
                <Icon name="account-circle" size={60} color={'#4682B4'} style={{marginLeft:10}}/>
                <View>
                <Text style={styles.username}>{fullname}</Text>
-               <TouchableOpacity style={styles.prfbtn}>
-                    <Text style={styles.pfbtntext}>View Profile</Text>
+               <TouchableOpacity activeOpacity={0.8} style={styles.prfbtn} onPress={()=>navigation.navigate('Edit Profile')}>
+                    <Text style={styles.pfbtntext}>Edit Profile</Text>
                     <Icon name="double-arrow" size={22} color={'#7BD78A'} style={{marginTop:0}}/>
                  </TouchableOpacity>
                </View>
            </View>
            <View style={styles.listview}>
-           <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Bottomtabs',{
+           <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={()=>navigation.navigate('Bottomtabs',{
            screen: 'Order'
            })}>
             <Text style={styles.btntext}>Your Orders</Text>
             <Icon name="arrow-forward-ios" size={20} color={'#3b312f'} style={{marginRight:10}}/>
            </TouchableOpacity>
-           <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Bottomtabs',{screen:'Cart'})}>
+           <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={()=>navigation.navigate('Bottomtabs',{screen:'Cart'})}>
             <Text style={styles.btntext}>Cart</Text>
             <Icon name="arrow-forward-ios" size={20} color={'#3b312f'} style={{marginRight:10}}/>
            </TouchableOpacity>
-           <TouchableOpacity style={styles.button}>
+           <TouchableOpacity activeOpacity={0.8} style={styles.button}  onPress={() => showMessaging()}>
             <Text style={styles.btntext}>Customer Care</Text>
             <Icon name="arrow-forward-ios" size={20} color={'#3b312f'} style={{marginRight:10}}/>
            </TouchableOpacity>
-           <TouchableOpacity style={styles.buttonlog} onPress={logout}>
+           <TouchableOpacity activeOpacity={0.8} style={styles.buttonlog} onPress={logout}>
             <Text style={styles.btntext}>Logout</Text>
             <Icon name="arrow-forward-ios" size={20} color={'#3b312f'} style={{marginRight:10}}/>
            </TouchableOpacity>

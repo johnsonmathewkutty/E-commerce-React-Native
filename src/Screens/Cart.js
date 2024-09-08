@@ -39,8 +39,8 @@ function Cart({route}){
 const removeitem=(items)=>{
 dispatch(decreasequantity({items,userId}))
 }
-const deleteitems=(items)=>{
-  dispatch(deleteitem({items,userId}))
+const deleteitems=(data)=>{
+  dispatch(deleteitem({data,userId}))
 }
      if(userId==''){
       return(
@@ -50,7 +50,7 @@ const deleteitems=(items)=>{
         </View>
        <Text style={styles.emptytext}>Missing Cart Items</Text>
        <Text style={styles.emptysubtext}>Login to see the items you added previously</Text>
-      <TouchableOpacity style={styles.buttonempty} onPress={()=>navigation.navigate('Login')}>
+      <TouchableOpacity activeOpacity={0.9} style={styles.buttonempty} onPress={()=>navigation.navigate('Login')}>
         <Text style={styles.emptybuttontext}>Login</Text>
       </TouchableOpacity>
       </View>
@@ -64,7 +64,7 @@ const deleteitems=(items)=>{
           </View>
          <Text style={styles.emptytext}>your cart is empty !</Text>
          <Text style={styles.emptysubtext}>Add item to it now</Text>
-        <TouchableOpacity style={styles.buttonempty} onPress={()=>navigation.navigate('Bottomtabs',
+        <TouchableOpacity activeOpacity={0.9} style={styles.buttonempty} onPress={()=>navigation.navigate('Bottomtabs',
         {screen:'Home',
         params:{email:'',password:''}
         }
@@ -95,13 +95,13 @@ const deleteitems=(items)=>{
         <FlatList
         data={reversedata}
         renderItem={({item, index})=>(
-          <TouchableOpacity onPress={()=>navigation.navigate('Itemdetails')}>
+          <TouchableOpacity activeOpacity={0.8} onPress={()=>navigation.navigate('Itemdetails')}>
          <View style={styles.subcontainer}>
           <View style={styles.imagcontainer}>
          <Image source={{uri:item.image}} style={styles.image}/>
          <View style={styles.quantitycontainer}>
           
-              <TouchableOpacity onPress={()=>{
+              <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                 if(item.quantity>1){
                   removeitem(item)
                 }else{
@@ -116,7 +116,7 @@ const deleteitems=(items)=>{
               <Text style={styles.quantitytext}>{item.quantity}</Text>
               </View>
              
-              <TouchableOpacity onPress={()=>additem(item)}>
+              <TouchableOpacity activeOpacity={0.7} onPress={()=>additem(item)}>
               <View style={styles.quantityvaluebuttonadd}>
                 <Text style={styles.quantitytext}>+</Text>
                 </View>
@@ -138,7 +138,7 @@ const deleteitems=(items)=>{
               <Text style={styles.offerprice}>${item.price}</Text>
             </View>
             <View style={styles.buttoncontainer}>
-              <TouchableOpacity style={styles.button} onPress={()=>{deleteitems(item)}}>
+              <TouchableOpacity activeOpacity={0.8}style={styles.button} onPress={()=>{deleteitems(item)}}>
               <Icon name="delete" size={23} color={'#000'}/>
                 <Text style={styles.buttontext}>Delete</Text>
                </TouchableOpacity>            
@@ -181,7 +181,7 @@ const deleteitems=(items)=>{
           <Text style={styles.btnpricetext}>$ {totalprice}</Text>
           </View>
           <View>
-          <TouchableOpacity style={styles.buybutton} onPress={()=>handlebuynow()}>
+          <TouchableOpacity style={styles.buybutton}  activeOpacity={0.9} onPress={()=>handlebuynow()}>
             <Text style={styles.buybuttontext}>Buy Now</Text>
           </TouchableOpacity>
           </View>

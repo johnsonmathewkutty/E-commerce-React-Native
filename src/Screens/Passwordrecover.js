@@ -96,10 +96,10 @@ const Passwordrecover=({navigation})=>{
       onChangeText={(text)=>handleemailvalidation(text)}/>
       {!emailvalid ?  <Text style={styles.validtext}>Please enter a valid email address</Text> : null}
        <Text style={styles.subtext}>We’ll send a link to this email  if it matches an existing account.</Text>
-     <TouchableOpacity style={styles.buttonsend} onPress={()=>sendhandle()}>
+     <TouchableOpacity activeOpacity={0.8} style={styles.buttonsend} onPress={()=>sendhandle()}>
         <Text style={styles.sendtext}>Send</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
+      <TouchableOpacity activeOpacity={0.8} onPress={()=>navigation.navigate('Login')}>
             <Text style={styles.buttontextsback}>Back</Text>
         </TouchableOpacity>
             </View>

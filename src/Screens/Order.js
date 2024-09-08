@@ -21,7 +21,7 @@ function Order({navigation}){
             <Image source={require('../images/ordernow.jpg')} style={styles.image}/>
           </View>
           <Text style={styles.emptytext}>you haven't placed any order yet!</Text>
-          <TouchableOpacity style={styles.btncontainer} onPress={()=>navigation.navigate('Bottomtabs',{screen:'Home'})}>
+          <TouchableOpacity style={styles.btncontainer} activeOpacity={0.9} onPress={()=>navigation.navigate('Bottomtabs',{screen:'Home'})}>
             <Text style={styles.btntext}>Order now</Text>
           </TouchableOpacity>
         </View>
@@ -35,7 +35,7 @@ function Order({navigation}){
           </View>
           <Text style={styles.headlogintext}>Missing order Details</Text>
           <Text style={styles.sublogintext}>Login to see the orders you already done</Text>
-          <TouchableOpacity style={styles.btncontainer} onPress={()=>navigation.navigate('Login')}>
+          <TouchableOpacity style={styles.btncontainer} activeOpacity={0.9} onPress={()=>navigation.navigate('Login')}>
             <Text style={styles.btntext}>Login</Text>
           </TouchableOpacity>
         </View>
@@ -56,7 +56,7 @@ function Order({navigation}){
             <Text style={styles.headtextfail}>Order Not Placed</Text>
             <Text style={styles.titletext}>{item.title}</Text>
             </View>
-            <TouchableOpacity onPress={()=>navigation.navigate('Order details',{item,status:item.status})}>
+            <TouchableOpacity activeOpacity={0.6} onPress={()=>navigation.navigate('Order details',{item,status:item.status})}>
                 <Icon name="arrow-forward-ios" size={20} color={'#0d0301'}/>
             </TouchableOpacity>
             </View>}
@@ -69,7 +69,20 @@ function Order({navigation}){
             <Text style={styles.headtext}>Order Placed</Text>
             <Text style={styles.titletext}>{item.title}</Text>
             </View>
-            <TouchableOpacity  onPress={()=>navigation.navigate('Order details',{item,status:item.status})}>
+            <TouchableOpacity activeOpacity={0.6}  onPress={()=>navigation.navigate('Order details',{item,status:item.status})}>
+                <Icon name="arrow-forward-ios" size={20} color={'#0d0301'}/>
+            </TouchableOpacity>
+            </View>}
+            {item.status=='Cancel' &&
+        <View style={styles.subcontainer}>
+            <View style={styles.imgcontainer}>
+                <Image source={{uri:item.image}} style={styles.img}/>
+                </View>
+                <View style={styles.textcontainer}>
+            <Text style={styles.headcanceltext}>Order Cancelled</Text>
+            <Text style={styles.titletext}>{item.title}</Text>
+            </View>
+            <TouchableOpacity  activeOpacity={0.6} onPress={()=>navigation.navigate('Order details',{item,status:item.status})}>
                 <Icon name="arrow-forward-ios" size={20} color={'#0d0301'}/>
             </TouchableOpacity>
             </View>}
@@ -131,6 +144,11 @@ const styles=StyleSheet.create({
         fontSize:20,
         fontFamily:'NotoSansSundanese-SemiBold',
         color:'#f1c40f' 
+    },
+    headcanceltext:{
+        fontSize:20,
+        fontFamily:'NotoSansSundanese-SemiBold',
+        color:'#e74c3c'
     },
     image:{
         width:'100%',

@@ -71,7 +71,7 @@ const Adress=({route})=>{
    }
     return(
 <View style={styles.container}>
-  <TouchableOpacity style={styles.Addbutton} onPress={()=>navigation.navigate('Addnewaddress',{from:from})}>      
+  <TouchableOpacity activeOpacity={0.8} style={styles.Addbutton} onPress={()=>navigation.navigate('Addnewaddress',{from:from})}>      
 <Icon name="add-box" size={30} color={'blue'}/>
 <Text style={styles.Addtext}>Add New Adress</Text>
 </TouchableOpacity>
@@ -81,11 +81,11 @@ const Adress=({route})=>{
     <View style={styles.innerview}>
       <View>
         {item.select == true ?(
-             <TouchableOpacity  style={styles.radiobutton}>
+             <TouchableOpacity activeOpacity={0.6} style={styles.radiobutton}>
               <View style={styles.radioinner}/>
                  </TouchableOpacity>
         ):(
-            <TouchableOpacity  style={styles.radiobutton} onPress={()=>radiobuttonhandle(item)}>
+            <TouchableOpacity activeOpacity={0.6}  style={styles.radiobutton} onPress={()=>radiobuttonhandle(item)}>
             <View/>
                 </TouchableOpacity>
         )}
@@ -97,7 +97,7 @@ const Adress=({route})=>{
         <Text style={styles.phno}>ph no:{item.phno}</Text>
      </View>
      <View>
-     <TouchableOpacity style={styles.editbutton}onPress={()=>handleremove(item)}>
+     <TouchableOpacity activeOpacity={0.8} style={styles.editbutton}onPress={()=>handleremove(item)}>
         <Icon name="delete" size={35} />
      </TouchableOpacity>
      </View>

@@ -22,6 +22,8 @@ import Networkstatus from "./src/Networkstatus";
 import Ordersummary from "./src/Screens/Ordersummary";
 import Orderdetails from "./src/Screens/Orderdetails";
 import { useNavigation } from "@react-navigation/native";
+import Editprofile from "./src/Screens/Editprofile";
+
 
 const toastConfig = {
   success: (props) => (
@@ -194,8 +196,7 @@ function Bottomtabs(){
 
 
 const App=()=>{
-  const stack=createStackNavigator()
-  
+  const stack=createStackNavigator() 
   return(
     <Provider store={Store}>
     <NavigationContainer>
@@ -281,6 +282,9 @@ const App=()=>{
           fontFamily:'NotoSansSundanese-Bold',
           fontSize:21,
        },}}/>
+       <stack.Screen
+       name="Edit Profile"
+       component={Editprofile}/>
       </stack.Navigator>
       <Networkstatus/>
       <Toast config={toastConfig}/>

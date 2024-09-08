@@ -19,6 +19,7 @@
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/stack": "^6.3.16",
     "@reduxjs/toolkit": "^1.9.5",
+    "@robbywh/react-native-zendesk-messaging": "^1.1.1",
     "react": "17.0.2",
     "react-native": "0.68.2",
     "react-native-axios": "^0.17.1",

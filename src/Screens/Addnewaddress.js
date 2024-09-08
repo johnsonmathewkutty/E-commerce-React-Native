@@ -243,7 +243,7 @@ const handleButtonPress = () => {
     })
   } else {
     const id = uuidv4(); 
-      const items={id,name,buildingname,street,city,pincode,phno}
+      const items={id,name,buildingname,street,landmark,city,pincode,phno}
     dispatch(saveaddress({userId,items}))
     Toast.show({
       type:'success',
@@ -273,7 +273,7 @@ const handleButtonPress = () => {
    ref={myname}
      />
      {fullnameview &&
-     <TouchableOpacity onPress={()=>{handleclearbutton('name')}}>
+     <TouchableOpacity activeOpacity={0.6} onPress={()=>{handleclearbutton('name')}}>
             <Icon name="close" size={25} color="black"/>
           </TouchableOpacity>
     }
@@ -294,7 +294,7 @@ const handleButtonPress = () => {
      onChangeText={(text)=>phnoviewhandle(text)}
      />
    {phnoview &&
-     <TouchableOpacity onPress={()=>handleclearbutton('phno')}>
+     <TouchableOpacity activeOpacity={0.6} onPress={()=>handleclearbutton('phno')}>
             <Icon name="close" size={25} color="black" />
           </TouchableOpacity>
     } 
@@ -315,7 +315,7 @@ const handleButtonPress = () => {
         clearButtonMode='never'
      />
      {buildingnameview &&
-     <TouchableOpacity onPress={()=>handleclearbutton('buildingname')}>
+     <TouchableOpacity activeOpacity={0.6} onPress={()=>handleclearbutton('buildingname')}>
             <Icon name="close" size={25} color="black" />
           </TouchableOpacity>
      }
@@ -335,7 +335,7 @@ const handleButtonPress = () => {
         ref={mystreet}
      />
      {streetview &&
-     <TouchableOpacity onPress={()=>handleclearbutton('street')}>
+     <TouchableOpacity activeOpacity={0.6} onPress={()=>handleclearbutton('street')}>
             <Icon name="close" size={25} color="black" />
           </TouchableOpacity>
      }
@@ -355,7 +355,7 @@ const handleButtonPress = () => {
         ref={mylandmark}
      />
      {landmarkview &&
-     <TouchableOpacity onPress={()=>handleclearbutton('landmark')}>
+     <TouchableOpacity activeOpacity={0.6} onPress={()=>handleclearbutton('landmark')}>
             <Icon name="close" size={25} color="black" />
           </TouchableOpacity>
      }
@@ -378,7 +378,7 @@ const handleButtonPress = () => {
         ref={mypincode}
      />
      {pincodeview &&
-     <TouchableOpacity onPress={()=>handleclearbutton('pincode')}>
+     <TouchableOpacity activeOpacity={0.6} onPress={()=>handleclearbutton('pincode')}>
             <Icon name="close" size={25} color="black" />
           </TouchableOpacity>
     }
@@ -400,7 +400,7 @@ const handleButtonPress = () => {
         ref={mycity}
      />
       {cityview &&
-     <TouchableOpacity onPress={()=>handleclearbutton('city')}>
+     <TouchableOpacity activeOpacity={0.6} onPress={()=>handleclearbutton('city')}>
             <Icon name="close" size={25} color="black" />
           </TouchableOpacity>}
      </View>
@@ -412,7 +412,7 @@ const handleButtonPress = () => {
             }
      </View>
      </View>
-     <TouchableOpacity style={styles.button} onPress={()=>{handleButtonPress()}}>
+     <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={()=>{handleButtonPress()}}>
         <Text style={styles.buttontext}>Add New Adress</Text>
      </TouchableOpacity>
      </ScrollView>

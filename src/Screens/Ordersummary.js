@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { AirbnbRating,Rating } from "react-native-ratings";
 import RazorpayCheckout from 'react-native-razorpay';
-import { getaddress,setdefaultaddress,getDefaultaddress} from '../Redux/Addressreducer';
+import { getaddress,setdefaultaddress} from '../Redux/Addressreducer';
 import firestore from '@react-native-firebase/firestore'
 
 
@@ -21,7 +21,7 @@ const Ordersummary = ({navigation,route}) => {
   const {from} =route.params;
   useEffect(()=>{
 dispatch(getaddress(userId))
-dispatch(getDefaultaddress(userId))
+
   },[defaultaddress])
   
 
@@ -135,7 +135,7 @@ const Handlebottomview=()=>{
           <Text style={styles.bottomtext}>View price details</Text>
         </View>
         <View>
-          <TouchableOpacity style={styles.bottombtn}onPress={()=>handlecartbuynow(cartdatas)}>
+          <TouchableOpacity style={styles.bottombtn} activeOpacity={0.9} onPress={()=>handlecartbuynow(cartdatas)}>
             <Text style={styles.bottombtntext}>Continue</Text>
           </TouchableOpacity>
         </View>
@@ -152,7 +152,7 @@ const Handlebottomview=()=>{
       <Text style={styles.bottomtext}>View price details</Text>
     </View>
     <View>
-      <TouchableOpacity style={styles.bottombtn}onPress={()=>handlebuynow(item)}>
+      <TouchableOpacity style={styles.bottombtn} activeOpacity={0.9} onPress={()=>handlebuynow(item)}>
         <Text style={styles.bottombtntext}>Continue</Text>
       </TouchableOpacity>
     </View>
@@ -185,12 +185,12 @@ const handlebuynow=(item)=>{
     // handle success
     // alert(`Success: ${data.razorpay_payment_id}`);
     // dispatch(saveorderdata({userId,data,status:'success'}))
-    navigation.navigate('Orderstatus',{status:'success',data})
+    navigation.navigate('Orderstatus',{status:'success',data,from})
   }).catch((error) => {
     // handle failure
     // alert(`Error: ${'Their are some error occured',error.code} | ${'some error occured',error.description}`);
   //  dispatch(saveorderdata({userId,data,status:'failed'}))
-    navigation.navigate('Orderstatus',{status:'failed',data})
+    navigation.navigate('Orderstatus',{status:'failed',data,from})
   });
 }
 
@@ -234,7 +234,7 @@ const handlecartbuynow=(data)=>{
       <View style={styles.datasubcontainer}>
           <View style={styles.headcontainer}>
         <Text style={styles.headtext}>Deliver to:</Text>
-        <TouchableOpacity style={styles.adressbtn} onPress={()=>{navigation.navigate('Address',{from:from}),dispatch(setdefaultaddress({item,userId}))}}>
+        <TouchableOpacity style={styles.adressbtn} activeOpacity={0.7} onPress={()=>{navigation.navigate('Address',{from:from}),dispatch(setdefaultaddress({item,userId}))}}>
           <Text style={styles.adressbtntext}>Change</Text>
         </TouchableOpacity>
       </View>

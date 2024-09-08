@@ -75,11 +75,18 @@ firestoreuserid:(state,action)=>{
       updateFirestoreData(userId, itemdata);
     },
     deleteitem:(state,action)=>{
-       const item=action.payload.items
+       const itemdata=action.payload.data
        const userId=action.payload.userId
         state.loading=true
-       const datas=state.cartdata.filter((items)=>items.id !== item.id)
+        if(Array.isArray(itemdata)){
+           itemdata.forEach(items=>{
+             const datas=state.cartdata.filter((item)=>item.id !== items.id)
+             updateFirestoreData(userId,datas);
+           })
+        }else{
+          const datas=state.cartdata.filter((items)=>items.id !== itemdata.id)
        updateFirestoreData(userId,datas);
+        }
     },
     buynowaction:(state,action)=>{
       const data=state.cartdata.filter((itm)=>itm.id == action.payload.id)
@@ -114,8 +121,8 @@ firestoreuserid:(state,action)=>{
         state.cartcount=action.payload
       }),
       builder.addCase(getcartdata.fulfilled,(state,action)=>{
-        state.cartdata=action.payload
         state.loading=false
+        state.cartdata=action.payload
       })
     }
 })

@@ -11,7 +11,7 @@ import auth from '@react-native-firebase/auth'
 
 import { Getdatainfo,itemdetails,searchAsync} from "../Redux/Datainforeducer";
 import { additemcount,firestoreuserid} from "../Redux/Cartreducer";
-import { getLogindetails } from "../Redux/Addressreducer";
+import { getLogindetails,getDefaultaddress} from "../Redux/Addressreducer";
 
 
 
@@ -19,9 +19,9 @@ function Home({navigation}){
     const dispatch=useDispatch()
     const data=useSelector(state=>state.Datainfo.datas)
     const loading=useSelector(state=>state.Datainfo.loading)
-    const error=useSelector(state=>state.Datainfo.error)
     const userId=useSelector(state=>state.Cartdatas.userid)
     const fullname=useSelector(state=>state.Adressdatas.fullname)
+    const error=useSelector(state=>state.Datainfo.error)
     const [refresh,setreFresh]=useState(false)
     const mytext=useRef('')
     
@@ -35,6 +35,7 @@ function Home({navigation}){
         dispatch(getLogindetails(user.uid));
         dispatch(Getdatainfo()) 
         dispatch(additemcount(user.uid)) 
+        dispatch(getDefaultaddress(user.uid))
       } else {
         dispatch(Getdatainfo())
       }
@@ -44,14 +45,18 @@ function Home({navigation}){
     } 
    },[])
 
+
    useEffect(()=>{
     if(error){
       setreFresh(true)
-      console.log('its working',refresh)
-      console.log('its working',error)
-      console.log('its working',userId)
   } 
    },[error,refresh])
+
+   const onRefresh = useCallback(() => {
+    setreFresh(false)
+        
+  }, []);
+
   
    const additemdetails=(item)=>{
     dispatch(itemdetails(item))
@@ -64,11 +69,6 @@ function Home({navigation}){
     mytext.current.clear();
 }
 
-const onRefresh = useCallback(() => {
-    setreFresh(false)
-        
-  }, []);
-
 const Apploader=()=>{
     return(
         <View style={[styles.loadercontainer,StyleSheet.absoluteFillObject]}>
@@ -80,23 +80,28 @@ const Apploader=()=>{
 
   
 const Errorpage=()=>{
-    return(
-        <View style={[styles.errorcontainer,StyleSheet.absoluteFillObject]}>
-             <View style={styles.headericoncontainer}>
-      <View style={styles.iconcontainer}>
-      <Image source={require('../images/appicon.png')} style={styles.iconimg}/>
+    
+   
+
+  return(
+      <View style={[styles.errorcontainer,StyleSheet.absoluteFillObject]}>
+           <View style={styles.headericoncontainer}>
+    <View style={styles.iconcontainer}>
+    <Image source={require('../images/appicon.png')} style={styles.iconimg}/>
+    </View>
       </View>
-        </View>
-           <View style={styles.errorimgcontainer}>
-        <Image source={require('../images/NetworkError.jpg') } style={styles.imgerror}/>
+         <View style={styles.errorimgcontainer}>
+      <Image source={require('../images/NetworkError.jpg') } style={styles.imgerror}/>
+    </View>
+    <Text style={styles.subtexterror}>Something went wrong.Please try again later</Text>
+    <TouchableOpacity style={styles.buttonerror} onPress={onRefresh}>
+      <Text style={styles.btntexterror}>Refresh</Text>
+    </TouchableOpacity>
       </View>
-      <Text style={styles.subtexterror}>Something went wrong.Please try again later</Text>
-      <TouchableOpacity style={styles.buttonerror} onPress={onRefresh}>
-        <Text style={styles.btntexterror}>Refresh</Text>
-      </TouchableOpacity>
-        </View>
-    )
+  )
 }
+
+
     return(
         <View style={styles.container}>
            
@@ -121,7 +126,7 @@ const Errorpage=()=>{
                             <View>
                             <Icon name="account-circle" size={37} color={'#fff'}/>
                         </View>
-                        <TouchableOpacity style={styles.accountbutton} onPress={()=>navigation.navigate('Bottomtabs',{screen:'Profile'})}>
+                        <TouchableOpacity style={styles.accountbutton} activeOpacity={0.9} onPress={()=>navigation.navigate('Bottomtabs',{screen:'Profile'})}>
                         <Text  style={styles.username}>{fullname}</Text>
                         <Icon name="arrow-forward-ios" style={{marginTop:10}} size={18} color={'#fff'}/>
                         </TouchableOpacity>
@@ -141,7 +146,7 @@ const Errorpage=()=>{
                     })}
 
                     />
-                     <TouchableOpacity onPress={handleclearbutton} style={styles.searchclear}>
+                     <TouchableOpacity activeOpacity={0.5} onPress={handleclearbutton} style={styles.searchclear}>
             <Icon name="close" size={20} color="black" />
           </TouchableOpacity>
                 </View>
@@ -153,7 +158,7 @@ const Errorpage=()=>{
                 <FlatList
                 data={data}
              renderItem={({item})=>(
-               <TouchableOpacity
+               <TouchableOpacity activeOpacity={0.9}
                 onPress={() =>
              navigation.navigate('Itemdetails',additemdetails(item))}
              >
@@ -184,9 +189,6 @@ const Errorpage=()=>{
              </View>
              </TouchableOpacity>
                 )}
-                refreshControl={
-                    <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
-                  }
                 />
         {/* //     )
         // })
@@ -368,22 +370,57 @@ const styles=StyleSheet.create({
         fontSize:20,
         fontWeight:'700'
       },
-      headericoncontainer:{
-        width:'100%',
-        height:60,
-        backgroundColor:'#7BD78A',
-        justifyContent:'center'
-      },
-      iconcontainer:{
-        width:'60%',
-        height:50,
+      
+    headericoncontainer:{
+      width:'100%',
+      height:60,
+      backgroundColor:'#7BD78A',
+      justifyContent:'center'
+    },
+    iconcontainer:{
+      width:'60%',
+      height:50,
+    justifyContent:'center',
+   marginLeft:9
+    },
+    iconimg:{
+      width:'80%',
+      height:'60%'
+    } ,
+    errorimgcontainer:{
+      width:'100%',
+      height:250,
+      alignItems:'center',
+      marginTop:100
+    },
+    imgerror:{
+      width:'100%',
+      height:'100%'
+    },
+    subtexterror:{
+      fontSize:18,
+      fontFamily:'NotoSansSundanese-Bold',
+      color:'#4682B4',
+      marginTop:15,
+      marginLeft:30,
+      marginRight:30,
+      textAlign:'center'
+    },
+    buttonerror:{
+      width:200,
+      height:50,
+      backgroundColor:'#7BD78A',
+      borderRadius:8,
+      marginTop:30,
       justifyContent:'center',
-     marginLeft:9
-      },
-      iconimg:{
-        width:'80%',
-        height:'60%'
-      }
+      alignItems:'center',
+      alignSelf:'center'
+    },
+    btntexterror:{
+      color:'#fff',
+      fontSize:20,
+      fontWeight:'700'
+    },
 })
 
 

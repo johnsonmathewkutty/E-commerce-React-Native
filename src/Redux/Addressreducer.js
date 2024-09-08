@@ -18,7 +18,8 @@ const getLogindetails=createAsyncThunk('data/Login',async(userid)=>{
     const user=await firestore().collection('users').doc(userid).get()
     const name=user.data().Fullname
     const phnumber=user.data().PhoneNumber
-    return {name,phnumber}
+    const email=user.data().Email
+    return {name,phnumber,email}
 })
 
 const AddressSlices=createSlice({
@@ -28,7 +29,8 @@ const AddressSlices=createSlice({
    defaultaddress:[],
    updateaddress:[],
    fullname:'',
-   phonenumber:''
+   phonenumber:'',
+   email:''
     },
     reducers:{
     saveaddress:(state,action)=>{
@@ -42,6 +44,23 @@ const AddressSlices=createSlice({
             Defaultaddress:data
           })
     },
+    editaddress:(state,action)=>{
+        const  item=action.payload.items
+         const userId=action.payload.userId
+         const fullname=action.payload.name
+         const phonenumber=action.payload.phno
+         const Email=action.payload.email
+          const datas=state.addressdata
+          const data=[item]
+          datas.push({...item})
+          firestore().collection('users').doc(userId).update({
+              Address:datas,
+              Defaultaddress:data,
+              Fullname:fullname,
+              PhoneNumber:phonenumber,
+              Email:Email
+            })
+      },
     setdefaultaddress:(state,action)=>{
          const item=action.payload.item
          const userId=action.payload.userId
@@ -84,11 +103,12 @@ const AddressSlices=createSlice({
             console.log(action.payload)
               state.fullname=action.payload.name,
               state.phonenumber=action.payload.phnumber
+              state.email=action.payload.email
         })
     }
 })
 
 
 export {getaddress,getDefaultaddress,getLogindetails}
-export const {saveaddress,setdefaultaddress,removeaddress}=AddressSlices.actions
+export const {saveaddress,setdefaultaddress,removeaddress,editaddress}=AddressSlices.actions
 export default AddressSlices.reducer

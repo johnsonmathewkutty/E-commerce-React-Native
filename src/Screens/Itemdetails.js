@@ -30,7 +30,7 @@ const Itemdetails=()=>{
     Headershow()
     navigation.setOptions({
       headerLeft:()=>(
-        <TouchableOpacity onPress={()=>navigation.navigate('Bottomtabs',{screen:'Home'})}>
+        <TouchableOpacity activeOpacity={0.7} onPress={()=>navigation.navigate('Bottomtabs',{screen:'Home'})}>
         <Icon name="arrow-back" size={24} color={'#000'}/>
       </TouchableOpacity>  
       )
@@ -42,10 +42,10 @@ const Itemdetails=()=>{
     navigation.setOptions({
       headerRight:()=>(
         <View style={styles.headericon} >
-          <TouchableOpacity style={styles.searchicon} onPress={handlesearchbar} >
+          <TouchableOpacity activeOpacity={0.7} style={styles.searchicon} onPress={handlesearchbar} >
             <Icon name="search" size={38} color={'#478778'}/>
           </TouchableOpacity>
-          <TouchableOpacity  onPress={()=>navigation.navigate('Bottomtabs',
+          <TouchableOpacity activeOpacity={0.7} onPress={()=>navigation.navigate('Bottomtabs',
           {screen:'Cart',
           }
           )}>
@@ -63,10 +63,10 @@ const Itemdetails=()=>{
     navigation.setOptions({
       headerRight:()=>(
         <View style={styles.headericon} >
-          <TouchableOpacity style={styles.searchicon} onPress={handlesearchbar} >
+          <TouchableOpacity style={styles.searchicon} activeOpacity={0.7} onPress={handlesearchbar} >
             <Icon name="search" size={38} color={'#478778'}/>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>navigation.navigate('Bottomtabs',
+          <TouchableOpacity activeOpacity={0.7} onPress={()=>navigation.navigate('Bottomtabs',
           {screen:'Cart',
           params:{previousScreen:'previousscreen'}
           })}>
@@ -89,7 +89,7 @@ const Itemdetails=()=>{
             setsearch(true)
           }}
           />
-          <TouchableOpacity onPress={()=>{handleclose()
+          <TouchableOpacity activeOpacity={0.7} onPress={()=>{handleclose()
           setsearch(false)}}>
             <Icon name="close" size={24} color={'#478778'}/>
           </TouchableOpacity>
@@ -102,10 +102,10 @@ const Itemdetails=()=>{
        navigation.setOptions({
         headerRight:()=>(
           <View style={styles.headericon} >
-            <TouchableOpacity style={styles.searchicon} onPress={()=>{handlesearchbar() }} >
+            <TouchableOpacity style={styles.searchicon}activeOpacity={0.7} onPress={()=>{handlesearchbar() }} >
               <Icon name="search" size={38} color={'#478778'}/>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>navigation.navigate('Bottomtabs',
+            <TouchableOpacity activeOpacity={0.7} onPress={()=>navigation.navigate('Bottomtabs',
             {screen:'Cart',
             params:{previousScreen:'previousscreen'}})}>
               <Icon name="shopping-cart" size={34} color={'#478778'}/>
@@ -120,10 +120,10 @@ const Itemdetails=()=>{
         navigation.setOptions({
           headerRight:()=>(
             <View style={styles.headericon} >
-              <TouchableOpacity style={styles.searchicon} onPress={()=>{handlesearchbar() }} >
+              <TouchableOpacity activeOpacity={0.7} style={styles.searchicon} onPress={()=>{handlesearchbar() }} >
                 <Icon name="search" size={38} color={'#478778'}/>
               </TouchableOpacity>
-              <TouchableOpacity onPress={()=>navigation.navigate('Bottomtabs',
+              <TouchableOpacity activeOpacity={0.7} onPress={()=>navigation.navigate('Bottomtabs',
               {screen:'Cart',
               params:{previousScreen:'previousscreen'}})}>
                 <Icon name="shopping-cart" size={34} color={'#478778'}/>
@@ -144,7 +144,7 @@ const Itemdetails=()=>{
  <FlatList
             data={searchtext}
             renderItem={({item})=>(
-           <TouchableOpacity onPress={()=>
+           <TouchableOpacity activeOpacity={0.7} onPress={()=>
           (additemdetails(item),setsearch(false),handleclose())} 
            >
          <View style={styles.searchmaincontainer}>
@@ -187,7 +187,7 @@ const Itemdetails=()=>{
     <View style={styles.detailedcontainer}>
     <Text style={styles.detailheadtext}>Highlights:</Text>
     <Text style={styles.detailtext}>{item.description}</Text>
-    <TouchableOpacity onPress={()=>setdisplay(false)}>
+    <TouchableOpacity activeOpacity={0.7} onPress={()=>setdisplay(false)}>
         <Text  style={styles.buttontextdetail}>Read Less</Text>
       </TouchableOpacity>
   </View>
@@ -205,7 +205,7 @@ const Itemdetails=()=>{
       <Text style={styles.detailheadtext}>Highlights:</Text>
       <Text style={styles.detailtext}>{item.description}</Text>
     </View>
-    <TouchableOpacity onPress={()=>setdisplay(true)}>
+    <TouchableOpacity activeOpacity={0.7} onPress={()=>setdisplay(true)}>
         <Text style={styles.buttontextdetail}>Read More</Text>
       </TouchableOpacity>
       </View>
@@ -294,10 +294,10 @@ const handlebuynow=()=>{
           </View>
            <Details/>
            < View style={styles.buttoncontainer}>
-           <TouchableOpacity style={styles.buttonaction} onPress={()=>{addcartitem(item)}}>
+           <TouchableOpacity activeOpacity={0.9} style={styles.buttonaction} onPress={()=>{addcartitem(item)}}>
             <Text style={styles.buttontext}>Add To Cart</Text>
            </TouchableOpacity>
-           <TouchableOpacity style={styles.buttonaction}onPress={()=>handlebuynow()}>
+           <TouchableOpacity activeOpacity={0.9} style={styles.buttonaction}onPress={()=>handlebuynow()}>
             <Text style={styles.buttontext}>Buy Now</Text>
            </TouchableOpacity></View>
           

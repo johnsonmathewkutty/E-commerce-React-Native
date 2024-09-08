@@ -26,13 +26,21 @@ const Orderslice=createSlice({
        const itemdata=action.payload.data
        const status=action.payload.status
        const userId=action.payload.userId
-       itemdata.forEach(item=>{
-       const value=state.orderdatas.filter((items)=>items.id !== item.id)
-         const data = itemdata.map(items => ({ ...items, status: status, id: uuidv4() }));
-        const updatadata=[...value,...data]
+       if(Array.isArray(itemdata)){
+        itemdata.forEach(item=>{
+          const value=state.orderdatas.filter((items)=>items.id !== item.id)
+            const data = itemdata.map(items => ({ ...items, status: status, id: uuidv4() }));
+           const updatadata=[...value,...data]
+           updateFirestoreData(updatadata,userId)
+         })
+       }else{
+        const value=state.orderdatas.findIndex((items)=>items.id == itemdata.id)
+        if(value !== -1){
+             state.orderdatas[value].status=status
+        }
+        const updatadata=[...state.orderdatas]
         updateFirestoreData(updatadata,userId)
-      })
-  
+       }
        
       }
     

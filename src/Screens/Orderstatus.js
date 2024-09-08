@@ -3,20 +3,26 @@ import React, { useEffect } from 'react'
 import { useSelector,useDispatch } from 'react-redux';
 
 import { saveorderdata } from '../Redux/Orderreducer';
-
+import { deleteitem } from '../Redux/Cartreducer';
 const Orderstatus = ({route,navigation}) => {
-   const {status,data}= route.params;
+   const {status,data,from}= route.params;
    const userId=useSelector(state=>state.Cartdatas.userid)
    const dispatch=useDispatch()
    useEffect(()=>{
-    dispatch(saveorderdata({status,data,userId}))
+    if(from==''){
+        dispatch(saveorderdata({status,data,userId}))
+    }else{
+        dispatch(saveorderdata({status,data,userId}))
+        dispatch(deleteitem({data,userId}))
+    }
+    
    },[])
    if(status=='success'){
     return (
         <View style={styles.container}>
          <Image source={require('../images/successful.gif')} style={styles.gif}/>
          <Text style={styles.text}>Order placed successfully !!</Text>
-         <TouchableOpacity style={styles.buttonsuccess} onPress={()=>navigation.navigate('Bottomtabs',{screen:'Home'})}>
+         <TouchableOpacity activeOpacity={0.9} style={styles.buttonsuccess} onPress={()=>navigation.navigate('Bottomtabs',{screen:'Home'})}>
             <Text style={styles.btntext}>Back to Home</Text>
             </TouchableOpacity>
         </View>
@@ -27,7 +33,19 @@ const Orderstatus = ({route,navigation}) => {
         <View style={styles.container}>
          <Image source={require('../images/errorfailed.gif')} style={styles.gif}/>
          <Text style={styles.text}>Order Failed !!</Text>
-         <TouchableOpacity style={styles.buttonfailed} onPress={()=>navigation.navigate('Bottomtabs',{screen:'Home'})}>
+         <TouchableOpacity activeOpacity={0.9} style={styles.buttonfailed} onPress={()=>navigation.navigate('Bottomtabs',{screen:'Home'})}>
+            <Text style={styles.btntext}>Back to Home</Text>
+            </TouchableOpacity>
+        </View>
+      )
+   }
+
+   if(status=='Cancel'){
+    return (
+        <View style={styles.container}>
+         <Image source={require('../images/successful.gif')} style={styles.gif}/>
+         <Text style={styles.text}>Order Cancelled successfully !!</Text>
+         <TouchableOpacity activeOpacity={0.9} style={styles.buttonsuccess} onPress={()=>navigation.navigate('Bottomtabs',{screen:'Home'})}>
             <Text style={styles.btntext}>Back to Home</Text>
             </TouchableOpacity>
         </View>
