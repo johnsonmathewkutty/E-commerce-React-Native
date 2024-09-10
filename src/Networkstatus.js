@@ -46,7 +46,7 @@ const Networkstatus = () => {
       </View>
       <Text style={styles.maintext}>No connection</Text>
       <Text style={styles.subtext}>Please check your internet connectivity and try again</Text>
-      <TouchableOpacity style={styles.button} onPress={handlenetworkstatus}>
+      <TouchableOpacity activeOpacity={1} style={styles.button} onPress={handlenetworkstatus}>
         <Text style={styles.btntext}>Retry</Text>
       </TouchableOpacity>
     </View> )

@@ -80,38 +80,47 @@ const Editprofile=()=>{
   
   
       const handleclearbutton = (field) => {
+        const text=''
         switch (field) {
           case 'name':
            myname.current.clear()
            myname.current.focus()
+           fullnameviewhandle(text)
             break;
           case 'phno':
            myphno.current.clear();
            myphno.current.focus()
+           phnoviewhandle(text)
             break;
             case 'email':
                 myemail.current.clear();
                 myemail.current.focus()
+                emailviewhandle(text)
                  break;
           case 'buildingname': 
             mybuildingname.current.clear()
             mybuildingname.current.focus()
+            buildingnameviewhandle(text)
             break;
           case 'street':
             mystreet.current.clear();
             mystreet.current.focus()
+            streetviewhandle(text)
             break;
           case 'landmark':
             mylandmark.current.clear();
             mylandmark.current.focus()
+            landmarkviewhandle(text)
             break;
           case 'pincode':
             mypincode.current.clear();
             mypincode.current.focus()
+            pincodeviewhandle(text)
             break;
           case 'city':
             mycity.current.clear();
             mycity.current.focus()
+            cityviewhandle(text)
             break;
           default:
             break;
@@ -504,13 +513,14 @@ export default Editprofile;
           height:50,
           fontSize:16,
           fontFamily:'NotoSansSundanese-SemiBold',
-          paddingTop:20
+          paddingTop:20,
+          color:'#000',
       },
       button:{
           height:50,
           width:'90%',
           alignSelf:'center',
-          backgroundColor:'#00cc00',
+          backgroundColor:'#7BD78A',
           alignItems:'center',
           justifyContent:'center',
           marginTop:40,
@@ -544,6 +554,8 @@ export default Editprofile;
       textinput2:{
         width:'94%',
         height:50,
+        color:'#000',
+        fontFamily:'NotoSansSundanese-SemiBold',
       },
       inputmaincontainer:{
         flexDirection:'row',

@@ -99,7 +99,7 @@ const Passwordrecover=({navigation})=>{
      <TouchableOpacity activeOpacity={0.8} style={styles.buttonsend} onPress={()=>sendhandle()}>
         <Text style={styles.sendtext}>Send</Text>
       </TouchableOpacity>
-      <TouchableOpacity activeOpacity={0.8} onPress={()=>navigation.navigate('Login')}>
+      <TouchableOpacity activeOpacity={0.8} onPress={()=>navigation.goBack()}>
             <Text style={styles.buttontextsback}>Back</Text>
         </TouchableOpacity>
             </View>

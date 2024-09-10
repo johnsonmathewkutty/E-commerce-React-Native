@@ -155,16 +155,16 @@ else{
   onChangeText={(text)=>setpassword(text)}
   style={styles.textinput}/>
   <HandlePasswordvalidation/>
-  <TouchableOpacity onPress={()=>navigation.navigate('Passwordrecover')}>
+  <TouchableOpacity activeOpacity={0.9} onPress={()=>navigation.navigate('Passwordrecover')}>
   <Text style={styles.forgotbtn}>forgot password ?</Text>
   </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.buttonlogin} onPress={()=>loginhandle()}>
+      <TouchableOpacity activeOpacity={1} style={styles.buttonlogin} onPress={()=>loginhandle()}>
         <Text style={styles.logintext}>Login</Text>
       </TouchableOpacity>
       <View style={styles.signupcontainer}>
         <Text style={styles.signuptext}>Don't have an account?</Text>
-        <TouchableOpacity onPress={()=>navigation.navigate('Register')}>
+        <TouchableOpacity activeOpacity={0.9} onPress={()=>navigation.navigate('Register')}>
             <Text style={styles.buttontextsignup}>Sign up</Text>
         </TouchableOpacity>
       </View>
@@ -191,7 +191,8 @@ const styles = StyleSheet.create({
         borderColor:'green',
         marginTop:15,
         color:'#000',
-        alignSelf:'center'
+        alignSelf:'center',
+        fontFamily:'NotoSansSundanese-Regular',
     },
     texthead:{
         fontSize:25,

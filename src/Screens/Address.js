@@ -16,8 +16,8 @@ const Adress=({route})=>{
     const {from}=route.params;
     useEffect(()=>{
         const handleBackaction=()=>{
-            if(defaultaddress.length>0){
-                navigation.navigate('Orderdetails',{from:''})
+            if(defaultaddress.length>0 && addressdatas.length>0){
+                navigation.navigate('Order Summary',{from:from})
                 return true;
             }else{
                 Toast.show({
@@ -28,38 +28,38 @@ const Adress=({route})=>{
                 return true
             }
            }
-           setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress',handleBackaction)
             return()=>{
              BackHandler.removeEventListener('hardwareBackPress',handleBackaction)
             }
-           }, 2000);
-    },[defaultaddress,navigation])
+    },[defaultaddress,navigation,addressdatas])
 
-      
-    if(defaultaddress.length>0){
-        navigation.setOptions({
-            headerLeft:()=>(
-                <View>
-                    <Icon name="arrow-back" size={24} color={'#000'} onPress={()=>navigation.goBack()}/>
-                </View>
-            )
-        })
-    }else{
-        navigation.setOptions({
-            headerLeft:()=>(
-                <View>
-                    <Icon size={24} name="arrow-back" color={'#000'} onPress={()=>
-                    Toast.show({
-                    type:'error',
-                    text1:'Select or Add New Address',
-                    visibilityTime:3000
-                  })}/>
-                </View>
-            )
-        })
-    }
-
+      useLayoutEffect(()=>{
+        if(defaultaddress.length>0 && addressdatas.length>0){
+            navigation.setOptions({
+                headerLeft:()=>(
+                    <View>
+                        <Icon name="arrow-back" size={24} color={'#000'} onPress={()=>navigation.goBack()}/>
+                    </View>
+                )
+            })
+        }else{
+            navigation.setOptions({
+                headerLeft:()=>(
+                    <View>
+                        <Icon size={24} name="arrow-back" color={'#000'} onPress={()=>
+                        Toast.show({
+                        type:'error',
+                        text1:'Select or Add New Address',
+                        visibilityTime:3000
+                      })}/>
+                    </View>
+                )
+            })
+        }
+    
+      },[defaultaddress,navigation,addressdatas])
+  
    const radiobuttonhandle=(item)=>{
     dispatch(setdefaultaddress({item,userId}))
    }
@@ -93,12 +93,12 @@ const Adress=({route})=>{
      <View style={styles.textcontainer}>
         <Text style={styles.nametext}>{item.name}</Text>
         <Text style={styles.detailstext}>{item.bulidingname},
-        {item.street},{item.city},{item.state}-{item.pincode}</Text>
+        {item.street},{item.landmark},{item.city}-{item.pincode}</Text>
         <Text style={styles.phno}>ph no:{item.phno}</Text>
      </View>
      <View>
      <TouchableOpacity activeOpacity={0.8} style={styles.editbutton}onPress={()=>handleremove(item)}>
-        <Icon name="delete" size={35} />
+        <Icon name="delete" size={35} color={'#478778'} />
      </TouchableOpacity>
      </View>
     </View>
@@ -116,7 +116,7 @@ const styles=StyleSheet.create({
         flex:1
     },
     innerview:{
-        height:140,
+        height:165,
         width:'95%',
         backgroundColor:'#fff',
         alignSelf:'center',
@@ -125,9 +125,9 @@ const styles=StyleSheet.create({
         flexDirection:'row'
     },
     textcontainer:{
-        width:'70%',
+        width:'80%',
        paddingLeft:15,
-       paddingTop:15
+       paddingTop:15,
     },
     nametext:{
      fontSize:21,
@@ -165,8 +165,8 @@ const styles=StyleSheet.create({
         backgroundColor:'blue'
     },
     editbutton:{
-        marginLeft:25,
-        marginTop:50
+        marginLeft:-8,
+        marginTop:60
     },
     Addbutton:{
         flexDirection:'row',

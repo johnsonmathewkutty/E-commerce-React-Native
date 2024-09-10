@@ -96,6 +96,10 @@ function Profile(){
             <Text style={styles.btntext}>Customer Care</Text>
             <Icon name="arrow-forward-ios" size={20} color={'#3b312f'} style={{marginRight:10}}/>
            </TouchableOpacity>
+           <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={()=>navigation.navigate('Passwordrecover')}>
+            <Text style={styles.btntext}>Change password</Text>
+            <Icon name="arrow-forward-ios" size={20} color={'#3b312f'} style={{marginRight:10}}/>
+           </TouchableOpacity>
            <TouchableOpacity activeOpacity={0.8} style={styles.buttonlog} onPress={logout}>
             <Text style={styles.btntext}>Logout</Text>
             <Icon name="arrow-forward-ios" size={20} color={'#3b312f'} style={{marginRight:10}}/>
@@ -142,7 +146,7 @@ const styles=StyleSheet.create({
     },
     listview:{
         width:'97%',
-        height:223,
+        height:278,
         backgroundColor:'#fff',
         marginTop:35,
         borderWidth:1,

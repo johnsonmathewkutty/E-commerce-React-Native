@@ -2,9 +2,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import firestore from '@react-native-firebase/firestore'
 
 
-const updateFirestoreData =async(userId,data) => {
+const updateFirestoreData =async(userId,datas) => {
  firestore().collection('users').doc(userId).update({
-    cart:data
+    cart:datas
   }) 
 }
 const additemcount=createAsyncThunk('cart/count',async(userid)=>{
@@ -80,8 +80,8 @@ firestoreuserid:(state,action)=>{
         state.loading=true
         if(Array.isArray(itemdata)){
            itemdata.forEach(items=>{
-             const datas=state.cartdata.filter((item)=>item.id !== items.id)
-             updateFirestoreData(userId,datas);
+              datas=[]
+              updateFirestoreData(userId,datas);
            })
         }else{
           const datas=state.cartdata.filter((items)=>items.id !== itemdata.id)

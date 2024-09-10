@@ -73,7 +73,7 @@ const Apploader=()=>{
     return(
         <View style={[styles.loadercontainer,StyleSheet.absoluteFillObject]}>
             <StatusBar backgroundColor={'#7BD78A'} />
-       <ActivityIndicator size={60} color={'blue'}/>
+       <ActivityIndicator size={60} color={'#7BD78A'}/>
        </View>
        ) 
 }
@@ -117,7 +117,7 @@ const Errorpage=()=>{
                             <View>
                             <Icon name="account-circle" size={37}  color={'#fff'}/>
                         </View>
-                        <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
+                        <TouchableOpacity activeOpacity={0.9} onPress={()=>navigation.navigate('Login')}>
                         <Text style={styles.username}>Login</Text>
                         </TouchableOpacity>
                         </View>

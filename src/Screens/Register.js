@@ -197,12 +197,12 @@ setpasswordvalid(false)
      {passwordvalid ? <Text></Text> :<Text style={styles.validtext}>  Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter,
      one digit, and one special character</Text>}
       </View>
-      <TouchableOpacity style={styles.buttonlogin} onPress={handleregister}>
+      <TouchableOpacity style={styles.buttonlogin} activeOpacity={1} onPress={handleregister}>
         <Text style={styles.logintext}>Register</Text>
       </TouchableOpacity>
       <View style={styles.signupcontainer}>
         <Text style={styles.signuptext}>Already have an account?</Text>
-        <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
+        <TouchableOpacity activeOpacity={0.9} onPress={()=>navigation.navigate('Login')}>
             <Text style={styles.buttontextsignup}>Sign in</Text>
         </TouchableOpacity>
       </View>
@@ -227,6 +227,8 @@ const styles = StyleSheet.create({
         paddingLeft:10,
         borderColor:'green',
         alignSelf:'center',
+        color:'#000',
+        fontFamily:'NotoSansSundanese-Regular',
     },
     texthead:{
         fontSize:25,

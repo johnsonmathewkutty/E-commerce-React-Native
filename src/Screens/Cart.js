@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from "react";
-import { View,Text,StyleSheet,FlatList,TouchableOpacity,Image,Button,ActivityIndicator, ScrollView} from "react-native";
+import { View,Text,StyleSheet,FlatList,TouchableOpacity,Image,Button,ActivityIndicator,StatusBar} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation,useIsFocused} from "@react-navigation/native";
 import { Rating } from "react-native-ratings";
@@ -50,7 +50,7 @@ const deleteitems=(data)=>{
         </View>
        <Text style={styles.emptytext}>Missing Cart Items</Text>
        <Text style={styles.emptysubtext}>Login to see the items you added previously</Text>
-      <TouchableOpacity activeOpacity={0.9} style={styles.buttonempty} onPress={()=>navigation.navigate('Login')}>
+      <TouchableOpacity activeOpacity={1} style={styles.buttonempty} onPress={()=>navigation.navigate('Login')}>
         <Text style={styles.emptybuttontext}>Login</Text>
       </TouchableOpacity>
       </View>
@@ -64,7 +64,7 @@ const deleteitems=(data)=>{
           </View>
          <Text style={styles.emptytext}>your cart is empty !</Text>
          <Text style={styles.emptysubtext}>Add item to it now</Text>
-        <TouchableOpacity activeOpacity={0.9} style={styles.buttonempty} onPress={()=>navigation.navigate('Bottomtabs',
+        <TouchableOpacity activeOpacity={1} style={styles.buttonempty} onPress={()=>navigation.navigate('Bottomtabs',
         {screen:'Home',
         params:{email:'',password:''}
         }
@@ -83,13 +83,15 @@ const deleteitems=(data)=>{
      }
      }
 
-     if(loading){
-      return(
-        <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
-          <ActivityIndicator size={50} color={'blue'} style={{width:100,height:100,backgroundColor:'#fff'}}/>
-        </View>
-      )
-     }
+     
+const Apploader=()=>{
+  return(
+      <View style={[styles.loadercontainer,StyleSheet.absoluteFillObject]}>
+          <StatusBar backgroundColor={'#7BD78A'} />
+     <ActivityIndicator size={60} color={'#7BD78A'}/>
+     </View>
+     ) 
+}
     return(
       <View style={styles.container}>
         <FlatList
@@ -186,7 +188,7 @@ const deleteitems=(data)=>{
           </TouchableOpacity>
           </View>
       </View>
-     
+     {loading &&<Apploader/>}
        </View>
     )
 }
@@ -350,7 +352,7 @@ const styles=StyleSheet.create({
     buttonempty:{
       width:200,
       height:50,
-      backgroundColor:'#00cc00',
+      backgroundColor:'#7BD78A',
       alignItems:'center',
       justifyContent:'center',
       marginTop:15,
@@ -453,7 +455,7 @@ const styles=StyleSheet.create({
     width:160,
     height:40,
     borderRadius:6,
-    backgroundColor:'#00cc00',
+    backgroundColor:'#7BD78A',
     alignItems:'center',
     justifyContent:'center'
    },
@@ -467,7 +469,11 @@ const styles=StyleSheet.create({
     fontWeight:'700',
     color:'#000'
    },
-  
+   loadercontainer:{
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center',
+   },
 })
 
 

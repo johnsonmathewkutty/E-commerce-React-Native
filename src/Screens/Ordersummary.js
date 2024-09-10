@@ -1,9 +1,9 @@
-import { View, Text ,StyleSheet,FlatList,TouchableOpacity,Image,ScrollView} from 'react-native'
+import { View, Text ,StyleSheet,FlatList,TouchableOpacity,Image,ScrollView,BackHandler} from 'react-native'
 import React, { useEffect } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { AirbnbRating,Rating } from "react-native-ratings";
 import RazorpayCheckout from 'react-native-razorpay';
-import { getaddress,setdefaultaddress} from '../Redux/Addressreducer';
+import { getaddress,setdefaultaddress,getDefaultaddress} from '../Redux/Addressreducer';
 import firestore from '@react-native-firebase/firestore'
 
 
@@ -21,7 +21,7 @@ const Ordersummary = ({navigation,route}) => {
   const {from} =route.params;
   useEffect(()=>{
 dispatch(getaddress(userId))
-
+dispatch(getDefaultaddress(userId))
   },[defaultaddress])
   
 
@@ -215,12 +215,12 @@ const handlecartbuynow=(data)=>{
     // // handle success
     // alert(`Success: ${data.razorpay_payment_id}`);
     // dispatch(saveorderdata({userId,data,status:'success'}))
-    navigation.navigate('Orderstatus',{status:'success',data})
+    navigation.navigate('Orderstatus',{status:'success',data,from})
   }).catch((error) => {
     // handle failure
     // alert(`Error: ${'Their are some error occured',error.code} | ${'some error occured',error.description}`);
   //  dispatch(saveorderdata({userId,data,status:'failed'}))
-    navigation.navigate('Orderstatus',{status:'failed',data})
+    navigation.navigate('Orderstatus',{status:'failed',data,from})
   });
 }
   return (
@@ -434,7 +434,8 @@ priceheadtext:{
 subtextprice:{
 fontSize:18,
 marginBottom:10,
-fontFamily:'NotoSansSundanese-SemiBold'
+fontFamily:'NotoSansSundanese-SemiBold',
+color:'#478778'
 },
 subtotalprice:{
   fontSize:19,
@@ -454,7 +455,7 @@ fontFamily:'NotoSansSundanese-SemiBold'
 bottombtn:{
   width:190,
   height:48,
-  backgroundColor:'#00cc00',
+  backgroundColor:'#7BD78A',
   justifyContent:'center',
   alignItems:'center',
   marginRight:12,

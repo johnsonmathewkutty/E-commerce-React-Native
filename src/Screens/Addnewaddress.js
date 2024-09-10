@@ -16,8 +16,8 @@ const Addnewadress = ({route}) => {
     const dispatch=useDispatch()
     const userId=useSelector(state=>state.Cartdatas.userid)
 
-    const[name,setname]=useState(fullname)
-    const[phno,setphno]=useState(phonenumber)
+    const[name,setname]=useState(fullname || '')
+    const[phno,setphno]=useState(phonenumber || '')
     const[buildingname,setbuildingname]=useState('')
     const[street,setstreet]=useState('')
     const[landmark,setlandmark]=useState('')
@@ -53,7 +53,7 @@ const Addnewadress = ({route}) => {
           borderWidth:1,
            borderColor:'#B2BEB5'
         },
-        title:'Your addresses',
+        title:'Your address',
         headerTitleStyle:{
           fontFamily:'NotoSansSundanese-Bold',
         }
@@ -64,41 +64,42 @@ const Addnewadress = ({route}) => {
 
 
     const handleclearbutton = (field) => {
+       const text=''
       switch (field) {
         case 'name':
          myname.current.clear()
          myname.current.focus()
-         fullnameviewhandle(myname)
+         fullnameviewhandle(text)
           break;
         case 'phno':
          myphno.current.clear();
          myphno.current.focus()
-         phnoviewhandle(myphno)
+         phnoviewhandle(text)
           break;
         case 'buildingname':
           mybuildingname.current.clear();
           mybuildingname.current.focus()
-          buildingnameviewhandle(mybuildingname)
+          buildingnameviewhandle(text)
           break;
         case 'street':
           mystreet.current.clear();
           mystreet.current.focus(),
-          streetviewhandle(mystreet)
+          streetviewhandle(text)
           break;
         case 'landmark':
           mylandmark.current.clear();
           mylandmark.current.focus()
-          landmarkviewhandle(mylandmark)
+          landmarkviewhandle(text)
           break;
         case 'pincode':
           mypincode.current.clear();
           mypincode.current.focus()
-          pincodeviewhandle(mypincode)
+          pincodeviewhandle(text)
           break;
         case 'city':
           mycity.current.clear();
           mycity.current.focus()
-          cityviewhandle(mycity)
+          cityviewhandle(text)
           break;
         default:
           break;
@@ -250,7 +251,7 @@ const handleButtonPress = () => {
       text1:'Address added sucessfully',
       visibilityTime:3000
     })
-      navigation.navigate('Orderdetails',{from:from})
+      navigation.navigate('Order Summary',{from:from})
    
   }
 };
@@ -267,7 +268,8 @@ const handleButtonPress = () => {
       <Text style={styles.subtext}>full name(First and Last name)</Text>
    <View style={styles.inputmaincontainer}>
      <TextInput style={styles.textinput}
-     value={name}
+     value={name ||''}
+     placeholderTextColor={'#000'}
      onChangeText={(text)=>fullnameviewhandle(text)}
      clearButtonMode='never'
    ref={myname}
@@ -288,7 +290,7 @@ const handleButtonPress = () => {
     <Text style={styles.subtext}>Mobile number</Text>
     <View style={styles.inputmaincontainer}>
       <TextInput style={styles.textinput}
-     value={phno}
+     value={phno || ''}
      clearButtonMode='never'
      ref={myphno}
      onChangeText={(text)=>phnoviewhandle(text)}
@@ -308,7 +310,7 @@ const handleButtonPress = () => {
      <Text style={styles.subtext}>Flat,House no..,Buliding,company</Text>
      <View style={styles.inputmaincontainer}>
      <TextInput style={styles.textinput}
-     value={buildingname}
+     value={buildingname || ''}
      onChangeText={(text)=>buildingnameviewhandle(text)}
         autoCapitalize='words'
         ref={mybuildingname}
@@ -329,7 +331,7 @@ const handleButtonPress = () => {
      <Text style={styles.subtext}>Area,Street,Sector,Village</Text>
      <View style={styles.inputmaincontainer}>
      <TextInput style={styles.textinput}
-     value={street}
+     value={street || ''}
      onChangeText={(text)=>streetviewhandle(text)}
         autoCapitalize='words'
         ref={mystreet}
@@ -349,7 +351,7 @@ const handleButtonPress = () => {
      <Text style={styles.subtext}>Landmark</Text>
      <View style={styles.inputmaincontainer}>
       <TextInput style={styles.textinput}
-     value={landmark}
+     value={landmark ||''}
      onChangeText={(text)=>landmarkviewhandle(text)}
         autoCapitalize='words'
         ref={mylandmark}
@@ -372,7 +374,7 @@ const handleButtonPress = () => {
      <Text style={styles.subtext}>Pincode</Text>
      <View style={styles.inputmaincontainer}>
       <TextInput style={styles.textinput2}
-     value={pincode}
+     value={pincode ||''}
      onChangeText={(text)=>pincodeviewhandle(text)}
         autoCapitalize='words'
         ref={mypincode}
@@ -394,7 +396,7 @@ const handleButtonPress = () => {
       <Text style={styles.subtext}>Town/City</Text>
       <View style={styles.inputmaincontainer}>
       <TextInput style={styles.textinput2}
-     value={city}
+     value={city ||''}
      onChangeText={(text)=>cityviewhandle(text)}
         autoCapitalize='words'
         ref={mycity}
@@ -412,8 +414,8 @@ const handleButtonPress = () => {
             }
      </View>
      </View>
-     <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={()=>{handleButtonPress()}}>
-        <Text style={styles.buttontext}>Add New Adress</Text>
+     <TouchableOpacity activeOpacity={1} style={styles.button} onPress={()=>{handleButtonPress()}}>
+        <Text style={styles.buttontext}>Add New Address</Text>
      </TouchableOpacity>
      </ScrollView>
     </View>
@@ -434,12 +436,13 @@ const styles=StyleSheet.create({
         paddingLeft:15,
         fontSize:16,
         fontFamily:'NotoSansSundanese-SemiBold',
+        color:'#000',
     },
     button:{
         height:50,
         width:'90%',
         alignSelf:'center',
-        backgroundColor:'#00cc00',
+        backgroundColor:'#7BD78A',
         alignItems:'center',
         justifyContent:'center',
         marginTop:40,
@@ -473,6 +476,7 @@ const styles=StyleSheet.create({
     textinput2:{
       width:'94%',
       height:50,
+      color:'#000',
     },
     inputmaincontainer:{
       flexDirection:'row',

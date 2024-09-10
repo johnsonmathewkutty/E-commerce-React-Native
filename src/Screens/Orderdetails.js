@@ -22,23 +22,28 @@ const Orderdetails = ({ route, navigation }) => {
     const progress2 = useRef(new Animated.Value(0)).current;
     const progress3 = useRef(new Animated.Value(0)).current;
     useEffect(() => {
-        handlestatus()
-    }, [handlestatus])
-
-    const handlestatus = () => {
-        setselectstep(1)
-        setTimeout(() => {
-            setselectstep(2)
-        }, 3000);
-        // setTimeout(() => {
-        //     setselectstep(3)
-        // }, 6000);
-        // setTimeout(() => {
-        //     setselectstep(4)
-        // }, 9000);
-
-
-    }
+        let isMounted = true; // Track if the component is mounted
+    
+        const handlestatus = () => {
+            if (isMounted) setselectstep(1);
+            const timer1 = setTimeout(() => {
+                if (isMounted) setselectstep(2);
+            }, 3000);
+            
+            // Add more timeouts or async tasks as needed
+    
+            return () => {
+                clearTimeout(timer1); // Cleanup on unmount
+                isMounted = false; // Update the flag when unmounting
+            };
+        };
+    
+        handlestatus();
+    
+        return () => {
+            isMounted = false; // Ensure to cancel any pending updates
+        };
+    }, [])
     useEffect(() => {
         initialize('eyJzZXR0aW5nc191cmwiOiJodHRwczovL3RzbTY2MTIuemVuZGVzay5jb20vbW9iaWxlX3Nka19hcGkvc2V0dGluZ3MvMDFKNzNKOEs0OEE5MURaUEZCSkNBMzdBUlAuanNvbiJ9');
       }, []);
@@ -354,7 +359,7 @@ const styles = StyleSheet.create({
     },
     reasonview: {
         width: '100%',
-        height: 270,
+        height: 310,
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center'
@@ -527,14 +532,14 @@ const styles = StyleSheet.create({
     },
     addresscontainer:{
         width:'100%',
-        height:180,
+        height:200,
         marginTop:10
     },
     addressdetails:{
         flexDirection:'row',
         backgroundColor:'#fff',
         width:'100%',
-        height:130,
+        height:180,
         marginTop:1,
         paddingTop:20,
         paddingLeft:25
@@ -591,22 +596,23 @@ const styles = StyleSheet.create({
       
     },
     Cancelcontainer:{
-        alignItems:'center',
         backgroundColor:'rgba(0,0,0,0.3)',
         zIndex:1,
-        justifyContent:'flex-end'
+        justifyContent:'flex-end',
+        marginBottom:30
       },
       cancelbottomview:{
         width:'100%',
         height:150,
-        backgroundColor:'#fff'
+        backgroundColor:'#fff',
       },
       canceltxt:{
         fontSize:15,
         fontFamily: 'NotoSansSundanese-SemiBold',
         marginLeft:15,
         marginRight:15,
-        marginTop:25
+        marginTop:25,
+        color:'#478778'
       },
       cancelbuttoncontainer:{
         width:'100%',
