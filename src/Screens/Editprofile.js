@@ -1,16 +1,16 @@
 
 import { View, Text,StyleSheet,TextInput,TouchableOpacity,
     KeyboardAvoidingView,ScrollView,Alert,TouchableWithoutFeedback,Keyboard,Image} from 'react-native'
-  import React, { useEffect,useState,useRef} from 'react'
+  import React, { useEffect,useState,useRef,} from 'react'
   import { useDispatch, useSelector } from 'react-redux'
-  import { useNavigation } from '@react-navigation/native'
+  import { useNavigation,useFocusEffect } from '@react-navigation/native'
   
   import {editaddress} from '../Redux/Addressreducer'
   import 'react-native-get-random-values';
   import { v4 as uuidv4 } from 'uuid';
   import  Icon from 'react-native-vector-icons/MaterialIcons'
   import Toast from 'react-native-toast-message'
-import { text } from 'express'
+import { getDefaultaddress } from '../Redux/Addressreducer'
   
 
 
@@ -20,6 +20,7 @@ const Editprofile=()=>{
     const phonenumber=useSelector(state=>state.Adressdatas.phonenumber)
     const Email=useSelector(state=>state.Adressdatas.email)
     const defaultaddress=useSelector(state=>state.Adressdatas.defaultaddress)
+    const loading=useSelector(state=>state.Adressdatas.loading)
     const data=defaultaddress[0] || {}
       const dispatch=useDispatch()
       const userId=useSelector(state=>state.Cartdatas.userid)
@@ -32,7 +33,7 @@ const Editprofile=()=>{
       const[landmark,setlandmark]=useState(data.landmark)
       const[pincode,setpincode]=useState(data.pincode)
       const[city,setcity]=useState(data.city)
-  
+      
       const navigation=useNavigation()
   
       const myname=useRef(null)
@@ -55,9 +56,9 @@ const Editprofile=()=>{
       const[cityview,setcityview]=useState(false)
   
       const [errors, setErrors] = useState({});
-  
       
       useEffect(()=>{
+       
         navigation.setOptions({
           headerStyle:{
             borderWidth:1,
@@ -77,7 +78,21 @@ const Editprofile=()=>{
         pincodeviewhandle(pincode)
         cityviewhandle(city)
       },[])
-  
+      
+      useFocusEffect(
+        React.useCallback(() => {
+          // Set the latest Redux data to the state
+          setname(fullname);
+          setphno(phonenumber);
+          setemail(Email);
+          setbuildingname(data.buildingname);
+          setstreet(data.street);
+          setlandmark(data.landmark);
+          setpincode(data.pincode);
+          setcity(data.city);
+        }, [defaultaddress,Email,fullname,phonenumber])
+      );
+    
   
       const handleclearbutton = (field) => {
         const text=''
@@ -278,7 +293,7 @@ const Editprofile=()=>{
         visibilityTime:4000
       })
     } else {
-      const id = uuidv4(); 
+      const id=data.id
         const items={id,name,buildingname,street,landmark,city,pincode,phno}
       dispatch(editaddress({userId,items,name,phno,email}))
       Toast.show({
@@ -290,6 +305,13 @@ const Editprofile=()=>{
     }
   };
   
+  const Apploader=()=>{
+    return(
+      <View style={[styles.loadercontainer,StyleSheet.absoluteFillObject]}>
+        <ActivityIndicator size={80}/>
+      </View>
+    )
+  }
   
   
     return(
@@ -474,6 +496,7 @@ const Editprofile=()=>{
        
       </View>
       </ScrollView>
+      {loading && <Apploader/>}
         </View>
     )
 }
@@ -578,5 +601,11 @@ export default Editprofile;
           flexDirection: 'row',
           marginTop:4,
           marginLeft:18
+      },
+      loadercontainer:{
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor:'rgba(0,0,0,0.3)',
+        zIndex:1
       },
   })

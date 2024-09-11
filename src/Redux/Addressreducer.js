@@ -30,7 +30,8 @@ const AddressSlices=createSlice({
    updateaddress:[],
    fullname:'',
    phonenumber:'',
-   email:''
+   email:'',
+   loading:false
     },
     reducers:{
     saveaddress:(state,action)=>{
@@ -50,9 +51,9 @@ const AddressSlices=createSlice({
          const fullname=action.payload.name
          const phonenumber=action.payload.phno
          const Email=action.payload.email
-          const datas=state.addressdata
+          const filterdatas=state.addressdata.filter((items)=>items.id !== item.id)
           const data=[item]
-          datas.push({...item})
+        const  datas=[...filterdatas,...data]
           firestore().collection('users').doc(userId).update({
               Address:datas,
               Defaultaddress:data,
@@ -100,7 +101,6 @@ const AddressSlices=createSlice({
             state.defaultaddress=action.payload
         }),
         bulider.addCase(getLogindetails.fulfilled,(state,action)=>{
-            console.log(action.payload)
               state.fullname=action.payload.name,
               state.phonenumber=action.payload.phnumber
               state.email=action.payload.email

@@ -13,6 +13,8 @@ import {
     showMessaging,
   } from '@robbywh/react-native-zendesk-messaging'
 
+  import { getDefaultaddress,getLogindetails } from "../Redux/Addressreducer";
+
 function Profile(){
     const fullname=useSelector(state=>state.Adressdatas.fullname)
     const userId=useSelector(state=>state.Cartdatas.userid)
@@ -21,6 +23,7 @@ function Profile(){
 
     useEffect(() => {
         initialize('eyJzZXR0aW5nc191cmwiOiJodHRwczovL3RzbTY2MTIuemVuZGVzay5jb20vbW9iaWxlX3Nka19hcGkvc2V0dGluZ3MvMDFKNzNKOEs0OEE5MURaUEZCSkNBMzdBUlAuanNvbiJ9');
+      
       }, []);
     const logout = async () => {
         try {
@@ -75,7 +78,7 @@ function Profile(){
                <Icon name="account-circle" size={60} color={'#4682B4'} style={{marginLeft:10}}/>
                <View>
                <Text style={styles.username}>{fullname}</Text>
-               <TouchableOpacity activeOpacity={0.8} style={styles.prfbtn} onPress={()=>navigation.navigate('Edit Profile')}>
+               <TouchableOpacity activeOpacity={0.8} style={styles.prfbtn} onPress={()=>{navigation.navigate('Edit Profile'),dispatch(getDefaultaddress(userId),dispatch(getLogindetails(userId)))}}>
                     <Text style={styles.pfbtntext}>Edit Profile</Text>
                     <Icon name="double-arrow" size={22} color={'#7BD78A'} style={{marginTop:0}}/>
                  </TouchableOpacity>

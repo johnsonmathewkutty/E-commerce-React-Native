@@ -239,7 +239,7 @@ const handlecartbuynow=(data)=>{
         </TouchableOpacity>
       </View>
        <Text style={styles.nametext}>{item.name}</Text>
-       <Text style={styles.textdetails}>{item.buildingname},{item.street},{item.city},{item.state}-
+       <Text style={styles.textdetails}>{item.buildingname},{item.street},{item.landmark},{item.city}-
        {item.pincode}</Text>
        <Text style={styles.phnotext}>{item.phno}</Text>
       </View>
